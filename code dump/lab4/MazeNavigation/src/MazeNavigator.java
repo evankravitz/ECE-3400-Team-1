@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 
-public class Maze_Navigator {
+import javax.swing.JFrame;
+
+public class MazeNavigator {
 
 	
 	String[][] actualMaze = new String[7][9];
@@ -12,38 +14,75 @@ public class Maze_Navigator {
 	int[] currPos = new int[2];
 	HashSet<String> frontierSet= new HashSet<String>();
 	Deque<int[]> visitedStack = new ArrayDeque<int[]>();
+	JFrame frame = new JFrame();
+	MazeDrawer oldMaze;
 
 	
 	
 	/**
 	 * 	Note that elements with odd x and odd y
 	 * indices don't actually represent maze data.
-	 * These are extraneous elements. Keep this in mind
-	 * When creating a GUI.
+	 * These are extraneous elements. 
 	 * 
 	 * Also note that to convert from the 4x5 coordinates
 	 * To this coordinate system, multiply the x index and y index by 2.
+	 * @throws InterruptedException 
 	 */
-	public Maze_Navigator() {
+	public MazeNavigator() throws InterruptedException {
 		resetMaze();
 		initializeCurrentPosition();
 		frontierSet.add(Arrays.toString(currPos));
 		initializeActualMaze();
 		visitedStack.push(currPos);
+		createJFrame();
+		displayActualMaze();
 		while (!frontierSet.isEmpty()){
+			updateJFrame();
+			Thread.sleep(1000);
 			maze[currPos[0]][currPos[1]] = "Explored";
-			System.out.println(Arrays.toString(currPos));
+			//System.out.println(Arrays.toString(currPos));
 			removeCurrentPosFromFrontier();
 			ArrayList<int[]> reachableCells = getReachableCellsAndAddWalls();
 			addUnvisitedSurroundingNodesToFrontier(reachableCells);
 			updateCurrPosAndVisitedSet(reachableCells);
+			updateJFrame();
+
 		}
-		printMaze();
+		//printMaze();
 		
 		
 		
 		
 
+	}
+	
+	
+	private void displayActualMaze() {
+		JFrame otherFrame = new JFrame();
+		otherFrame.add(new MazeDrawer(actualMaze, new int[]{30, 30}));
+		otherFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		otherFrame.pack();
+		otherFrame.setLocationRelativeTo(null);
+		otherFrame.setVisible(true);
+	}
+
+
+	private void updateJFrame(){
+		 frame.remove(oldMaze);
+		 MazeDrawer newMaze = new MazeDrawer(maze, currPos);
+		 frame.add(newMaze);
+		 oldMaze = newMaze;
+		 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	     frame.pack();
+	    // frame.setLocationRelativeTo(null);
+	     frame.setVisible(true);
+	}
+	
+	private void createJFrame(){
+		frame = new JFrame();
+		oldMaze = new MazeDrawer(maze, currPos);
+		frame.add(oldMaze);
+		
 	}
 	
 	private void printMaze() {
@@ -64,6 +103,9 @@ public class Maze_Navigator {
 				actualMaze[i][j] = "No Wall";
 			}
 		}
+		
+		actualMaze[0][1] = "Wall";
+
 		actualMaze[1][0] = "Wall";
 		actualMaze[1][1] = "Wall";
 		actualMaze[1][2] = "Wall";
@@ -75,6 +117,14 @@ public class Maze_Navigator {
 		actualMaze[4][3] = "Wall";
 		actualMaze[5][3] = "Wall";
 		actualMaze[6][3] = "Wall";
+		actualMaze[3][6] = "Wall";
+		actualMaze[5][2] = "Wall";
+		actualMaze[0][2] = "Wall";
+		actualMaze[3][2] = "Wall";
+
+		actualMaze[2][5] = "Wall";
+		actualMaze[4][5] = "Wall";
+		//actualMaze[6][5] = "Wall";
 
 
 
@@ -137,7 +187,7 @@ public class Maze_Navigator {
 
 
 	private int[] findReachableCell(int[] validCoord) {
-		int dx = validCoord[0]-currPos[0];
+		int dx = validCoord[0]- currPos[0];
 		int dy = validCoord[1] - currPos[1];
 		int[] reachableCell;
 		if (dx == 1){
