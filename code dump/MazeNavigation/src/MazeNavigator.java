@@ -38,17 +38,18 @@ public class MazeNavigator {
 		displayActualMaze();
 		while (!frontierSet.isEmpty()){
 			updateJFrame();
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			maze[currPos[0]][currPos[1]] = "Explored";
 			//System.out.println(Arrays.toString(currPos));
 			removeCurrentPosFromFrontier();
 			ArrayList<int[]> reachableCells = getReachableCellsAndAddWalls();
 			addUnvisitedSurroundingNodesToFrontier(reachableCells);
 			updateCurrPosAndVisitedSet(reachableCells);
-			updateJFrame();
-
+			if (!frontierSet.isEmpty()){
+				updateJFrame();
+			}
 		}
-		//printMaze();
+		printDone();
 		
 		
 		
@@ -57,6 +58,17 @@ public class MazeNavigator {
 	}
 	
 	
+	private void printDone() {
+		frame.remove(oldMaze);
+		EndScreen endScreen = new EndScreen(500, 500);
+		frame.add(endScreen);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.pack();
+	    frame.setVisible(true);
+		
+	}
+
+
 	private void displayActualMaze() {
 		JFrame otherFrame = new JFrame();
 		otherFrame.add(new MazeDrawer(actualMaze, new int[]{30, 30}));
