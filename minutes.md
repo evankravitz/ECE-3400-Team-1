@@ -65,7 +65,7 @@ Absent: None
 	* Working to combine the VGA and wireless communication teams
 	* Need to do integration part, update maze part
 	* Idea is to send 2 8-bit arrays
-2. Milestone 3 due Monday Oct 30th
+2. Milestone 3 due Monday Nov 6th
 	* Need:
 		* Working algorithm that explores maze
 		* Indication that robot is done
@@ -85,4 +85,34 @@ Seconded: Evan
 
 MEETING ADJOURNED at 12:05 PM
 
+### 10/27 Meeting
+11:20 AM, Hollister B11
+
+Present: Frannie, Radhika, Katherine, Michael
+
+Absent: Evan, TJ.
+
+1. Discussed Milestone 3.
+	* Done:
+		* Simulation of working algorithm that explores maze using DFS in Java -Evan & TJ 
+		* Simulation that indicates that robot is done - Evan & TJ
+		* Editing chassis - Michael & Frannie 
+		* Started work on PCB - Michael & Frannie
+		* Continued work on robot using new wall sensors - Katherine & Radhika
+	* To do:
+		* Line sensing, following and turning - Katherine and Radhika
+		* Implementing wall sensors - Michael, Frannie
+		* Compiling code for full robot - TJ, Evan
+		* Transferring the java code for the simulation into Arduino language to implement the real- life 
+		aspect of Milestone 3 - Evan, TJ, Frannie 
+3. Future work
+	* PCB stuff - Michael, TJ, Katherine
+	* Algorithm - Radhika, Frannie
+	* Update website - Katherine, Evan
+
+Motion to Adjourn: Katherine
+
+Seconded: Frannie 
+
+MEETING ADJOURNED at 12:05 PM
 
