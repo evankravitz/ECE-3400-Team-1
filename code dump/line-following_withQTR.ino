@@ -22,8 +22,8 @@ int leftMotorSpeed = Lspeed;
 int rightMotorSpeed = Rspeed;
 static int LTurnL = 56; 
 static int LTurnR = 56; 
-static int RTurnL = 160; 
-static int RTurnR = 150;
+static int RTurnL = 180; 
+static int RTurnR = 170;
 
 int lastError = 0;
 int position =0;
@@ -64,12 +64,16 @@ void loop()
   position = qtrrc.readLine(sensors);
   error = position - 1000;
 
-  
-
-
   junction();
   if(!isJunction) goStraight();
-  else turnLeft();
+  else{
+    delay(300);
+    turnLeft();
+  }
+}
+
+void stop(){
+  set_motors(90,90);
 }
 
 void goStraight(){
@@ -78,64 +82,63 @@ void goStraight(){
     lastError = error;
     if (error > 900 && error < 1100) {
       motorSpeed = 0; 
-    }
-    
-    leftMotorSpeed = Lspeed + motorSpeed*1.2;
-    rightMotorSpeed = Rspeed + motorSpeed;
-    set_motors(leftMotorSpeed, rightMotorSpeed);
+
+  set_motors(leftMotorSpeed, rightMotorSpeed);
+  delay(350);
+  position = qtrrc.readLine(sensors);
+  leftMotorSpeed = Lspeed + motorSpeed*1.2;
+  rightMotorSpeed = Rspeed + motorSpeed;
+  set_motors(leftMotorSpeed, rightMotorSpeed);
   
 }
 
 void junction(){
     if((sensors[0]>800 && sensors[1] >800 &&sensors[2] >800)){
       isJunction = true;
-      delay(175); 
     }
    // else isJunction = false;
 }
 
 void turnLeft(){
-  leftMotorSpeed = LTurnL;
-  rightMotorSpeed = LTurnR;
+  leftMotorSpeed = LTurnL;  //delay(200);
+  rightMotorSpeed = LTurnR;    
+
   set_motors(leftMotorSpeed, rightMotorSpeed);
-  delay(50);
+  delay(350);
   position = qtrrc.readLine(sensors);
-  while(!(sensors[1]>800 && sensors[0] <200 && sensors[2] <200)){
+  while(!(sensors[1]>900 && sensors[2]<600 )){
      position = qtrrc.readLine(sensors);
   }
   isJunction=false;
-  goStraight();
   return;
 
-//  goStraight();
-  
-//  while(isJunction){
-//    position = qtrrc.readLine(sensors);
-//     if(leftMotorSpeed == LTurnL || leftMotorSpeed == RTurnL) {
-//          Serial.println("doing a delay");
-//          if (!(sensors[1]>800 && sensors[0] <200 && sensors[2] <200) | !passed) {
-//            while (sensors[1]<200) {
-//            }
-//            passed = true; 
-//          }
-//          passed = false; 
-//          isJunction = false; 
-//          leftMotorSpeed = Lspeed;
-//          rightMotorSpeed = Rspeed;
-//          isJunction = false;
-//     }
-//  }
+}
+
+void turnRight(){
+  delay(300);
+  leftMotorSpeed = RTurnL;
+  rightMotorSpeed = RTurnR;
+
+  set_motors(leftMotorSpeed, rightMotorSpeed);
+  delay(350);
+  position = qtrrc.readLine(sensors);
+  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 )){
+     Serial.print(sensors[0]);
+     Serial.print('\t');
+     Serial.print(sensors[1]);
+     Serial.print('\t');
+     Serial.println(sensors[2]);
+     position = qtrrc.readLine(sensors);
+     
+  }
+  isJunction=false;
+  return;
 }
 
 void set_motors(int motor1speed, int motor2speed)
 {
   if (motor1speed > ML_MAX_SPEED ) motor1speed = ML_MAX_SPEED; // limit top speed
   if (motor2speed < MR_MAX_SPEED ) motor2speed = MR_MAX_SPEED; // limit top speed
-  //if (motor1speed < 90) motor1speed = 90; // keep motor above 0
- // if (motor2speed > 90) motor2speed = 90; // keep motor speed above 0
-  Serial.print(motor1speed);
-  Serial.print('\t');
-  Serial.println(motor2speed);
   servoL.write(motor1speed);     // set motor speed
   servoR.write(motor2speed);     // set motor speed
 }
