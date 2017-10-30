@@ -98,7 +98,7 @@ Absent: None :)
 		* Simulation that indicates that robot is done - Evan & TJ
 		* Editing chassis - Michael & Frannie 
 		* Started work on PCB - Michael & Frannie
-		* Continued work on robot using new wall sensors - Katherine & Radhika
+		* Continued work on robot using new line sensors - Katherine & Radhika
 	* To do:
 		* Line sensing, following and turning - Katherine and Radhika
 		* Implementing wall sensors - Michael, Frannie
