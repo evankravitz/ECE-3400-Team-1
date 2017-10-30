@@ -1,15 +1,17 @@
-/* Returns a 3 bit array encoding where walls are located
+/* Returns 3 bits encoding where walls are located
  * 1 if wall, 0 if no wall
  * Wall: [Left, Center, Right]
  * Index:[ 0  ,   1   ,   2  ]
  */
-int detectWalls() {
-  int wallArray[3] = {0, 0, 0};
+ 
+byte detectWalls() {
+  byte wallData = 0;
   
-  for (int i = 0; i < 3; i ++) {
+  for (int i = 0; i < 3; i ++) {    
     wallArray[i] = isWall(wallPinArray[i]);
   }
-  
+
+  return wallData;
 }
 
 /* Returns 1 if wall, 0 if no wall

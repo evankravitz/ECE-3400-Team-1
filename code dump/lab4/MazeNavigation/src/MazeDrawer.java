@@ -22,9 +22,6 @@ public class MazeDrawer extends JPanel {
 	 public MazeDrawer(String[][] maze, int[] currPos){
 	        setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	        drawMaze(maze, currPos);
-	        
-	    
-
 	     
 	 }
 	 
@@ -48,6 +45,8 @@ public class MazeDrawer extends JPanel {
 		 
 	 }
 	 
+	 /**Creates a blank maze, returns maze
+	  */
 	 private static String[][] generateMaze() {
 		 String[][] maze = new String[7][9];
 		for (int x = 0; x<7; x++){
@@ -74,38 +73,30 @@ public class MazeDrawer extends JPanel {
 	public void drawMaze(String[][] maze, int[] currPosArray){
 		 for (int i = 0; i<7; i++){
 				for (int j = 0; j<9; j++){
-	
-					if ((i%2 == 1 && j%2 == 0) ||(i%2 == 0 && j%2 == 1) ){
+					if ((i%2 == 1 && j%2 == 0) ||(i%2 == 0 && j%2 == 1) ){ //possible wall locaation
 						if(maze[i][j]=="Wall"){
 							addWall(i,j);
-
 						}
-
 					}
-					else if (i%2 ==0 && j%2 ==0){
+					else if (i%2 ==0 && j%2 ==0){ //square location
 						if (i==currPosArray[0] && j==currPosArray[1]){
 							addCurrPos(i/2, j/2);
 						}
 						else{
 							if (maze[i][j].equals("Unexplored")){
-								addUnvisited(i/2, j/2);
-								
-	
-										
+								addUnvisited(i/2, j/2);			
 							}
 							else{
 								addVisited(i/2, j/2);
-
 							}
-						}
-						
+						}	
 					}
 				}
 			}
-		 
-		 
 	 }
 	 
+	/** adds a Visited square at i,j
+	 */	
 	 private void addVisited(int i, int j) {
 		 int x = (int) Math.floor((i/4.0)*WIDTH);
 			int y =  (int) Math.floor((j/5.0)*HEIGHT);
@@ -114,7 +105,8 @@ public class MazeDrawer extends JPanel {
 			shapes.add(new Visited(x,y,width,height));
 			repaint();
 	}
-
+	 /** adds an Unvisited square at i,j
+	  */
 	private void addUnvisited(int i, int j) {
 		 int x = (int) Math.floor((i/4.0)*WIDTH);
 			int y =  (int) Math.floor((j/5.0)*HEIGHT);
@@ -124,6 +116,8 @@ public class MazeDrawer extends JPanel {
 			repaint();
 	}
 
+	/** adds a CurrPos square at i,j
+	 */
 	private void addCurrPos(int i, int j) {
 		 int x = (int) Math.floor((i/4.0)*WIDTH);
 			int y =  (int) Math.floor((j/5.0)*HEIGHT);
@@ -133,6 +127,8 @@ public class MazeDrawer extends JPanel {
 			repaint();
 	}
 
+	/** adds a wall at position i,j
+	 */
 	private void addWall(int i, int j) {
 		int x,y,width,height;
 		//vertical wall
@@ -144,11 +140,7 @@ public class MazeDrawer extends JPanel {
 			 height = (int) Math.floor((1/5.0)*(float)HEIGHT);
 			 x = (int) Math.floor(((relativeX/4.0)*WIDTH - width*0.5));
 			 y = (int) (Math.floor((relativeY/5.0)*HEIGHT));
-			 
-
-
-
-
+			
 		}
 		//horizontal wall
 		else{
@@ -180,13 +172,8 @@ public class MazeDrawer extends JPanel {
             else if (s instanceof Wall) {
                 ((Wall) s).draw(g);
             }
-            
         }
     }
 	 
-	 
-	 
-	
-	
 
 }

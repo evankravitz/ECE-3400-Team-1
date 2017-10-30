@@ -18,7 +18,6 @@ public class MazeNavigator {
 	MazeDrawer oldMaze;
 
 	
-	
 	/**
 	 * 	Note that elements with odd x and odd y
 	 * indices don't actually represent maze data.
@@ -49,14 +48,10 @@ public class MazeNavigator {
 
 		}
 		//printMaze();
-		
-		
-		
-		
-
 	}
 	
-	
+	/** draws actual maze
+	 */
 	private void displayActualMaze() {
 		JFrame otherFrame = new JFrame();
 		otherFrame.add(new MazeDrawer(actualMaze, new int[]{30, 30}));
@@ -66,7 +61,8 @@ public class MazeNavigator {
 		otherFrame.setVisible(true);
 	}
 
-
+	/** removes oldMaze and adds newMaze to frame
+	 */
 	private void updateJFrame(){
 		 frame.remove(oldMaze);
 		 MazeDrawer newMaze = new MazeDrawer(maze, currPos);
@@ -78,13 +74,16 @@ public class MazeNavigator {
 	     frame.setVisible(true);
 	}
 	
+	/** creates new JFrame and adds oldMaze to frame
+	 */
 	private void createJFrame(){
 		frame = new JFrame();
 		oldMaze = new MazeDrawer(maze, currPos);
 		frame.add(oldMaze);
-		
 	}
 	
+	/** prints maze to console
+	 */
 	private void printMaze() {
 		for (int y = 0; y<9; y++){
 			System.out.println("");
@@ -96,7 +95,9 @@ public class MazeNavigator {
 		}		
 	}
 
-	//Load test data here
+	/** creates the "Actual" maze 2D array
+	 *  load map data here
+	 */
 	private void initializeActualMaze() {
 		for (int i = 0; i<7; i++){
 			for (int j = 0; j<9; j++){
@@ -124,15 +125,8 @@ public class MazeNavigator {
 
 		actualMaze[2][5] = "Wall";
 		actualMaze[4][5] = "Wall";
-		//actualMaze[6][5] = "Wall";
-
-
-
-
-
-		
+		//actualMaze[6][5] = "Wall";		
 	}
-
 
 
 	private void addUnvisitedSurroundingNodesToFrontier(ArrayList<int[]> reachableCells) {
@@ -141,7 +135,6 @@ public class MazeNavigator {
 				frontierSet.add(Arrays.toString(cell));
 			}
 		}
-		
 	}
 
 	private void updateCurrPosAndVisitedSet(ArrayList<int[]> reachableCells) {
@@ -160,16 +153,13 @@ public class MazeNavigator {
 		else{
 			visitedStack.push(currPos);
 		}
-		this.currPos = newCurrPos;
-		
-		
+		this.currPos = newCurrPos;	
 	}
 
 	private void removeCurrentPosFromFrontier() {
 		if (frontierSet.contains(Arrays.toString(currPos))){
 			frontierSet.remove(Arrays.toString(currPos));
 		}
-		
 	}
 
 	private ArrayList<int[]> getReachableCellsAndAddWalls() {
@@ -221,14 +211,16 @@ public class MazeNavigator {
 			validMazeCoordinates.add(new int[]{currPos[0], currPos[1]-1});
 		}
 		return validMazeCoordinates;
-		
 	}
-
+	/** sets currPos to [6, 8]
+	 */
 	private void initializeCurrentPosition() {
 		currPos[0] = 6;
 		currPos[1] = 8;
 	}
 
+	/** Sets all even numbers in maze to "Unexplored" and all odd numbers to "Ignore"
+	*/
 	public void resetMaze(){
 		for (int x = 0; x<7; x++){
 			for (int y = 0; y<9; y++){
@@ -239,11 +231,7 @@ public class MazeNavigator {
 					maze[x][y]="Ignore";
 				}
 			}
-		}
-		
-		
+		}	
 	}
 	
-	
-
 }

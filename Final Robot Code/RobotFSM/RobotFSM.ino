@@ -33,11 +33,11 @@ float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
 float binWidth = samplingFrequency/numSamples;
 
 //detectWalls
-int wallPinLeft = A1;
-int wallPinMid = A2;
-int wallPinRight = A3;
+int wallPinLeft = A3;
+int wallPinMid = A4;
+int wallPinRight = A5;
 int wallPinArray[3] = {wallPinLeft, wallPinMid, wallPinRight}; //array of pins used for wall detection
-int wallArray[3] = {0, 0, 0};
+byte wallData = 0;
 
 void setup() {
   //Initializes the robot into START state
@@ -66,7 +66,7 @@ void loop() {
   if (state == JUNCTION) {
     //Serial.println("JUNCTION");
     String treasure = detectTreasure(); //gets a string for treasure at junction
-    wallArray[3] = detectWalls(); //gets an array of where walls are located
+    wallData = detectWalls(); //gets 3 bit of where walls are located
     Direction dir = chooseDirection(wallArray); //chooses direction to move based on wall array
   }
 
