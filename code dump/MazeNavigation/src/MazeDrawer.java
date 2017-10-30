@@ -26,6 +26,7 @@ public class MazeDrawer extends JPanel {
 	 }
 	 
 	 
+
 	 public static void main(String[] args){
 		 JFrame frame = new JFrame();
 		 String[][] maze = generateMaze();
