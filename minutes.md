@@ -88,9 +88,9 @@ MEETING ADJOURNED at 12:05 PM
 ### 10/27 Meeting
 11:20 AM, Hollister B11
 
-Present: Frannie, Radhika, Katherine, Michael
+Present: Frannie, Radhika, Katherine, Michael, Evan, TJ
 
-Absent: Evan, TJ.
+Absent: None :) 
 
 1. Discussed Milestone 3.
 	* Done:
