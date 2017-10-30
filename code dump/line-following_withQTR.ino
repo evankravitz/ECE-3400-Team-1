@@ -67,8 +67,7 @@ void loop()
   junction();
   if(!isJunction) goStraight();
   else{
-    delay(300);
-    turnLeft();
+    turnRight();
   }
 }
 
@@ -82,13 +81,10 @@ void goStraight(){
     lastError = error;
     if (error > 900 && error < 1100) {
       motorSpeed = 0; 
-
-  set_motors(leftMotorSpeed, rightMotorSpeed);
-  delay(350);
-  position = qtrrc.readLine(sensors);
-  leftMotorSpeed = Lspeed + motorSpeed*1.2;
-  rightMotorSpeed = Rspeed + motorSpeed;
-  set_motors(leftMotorSpeed, rightMotorSpeed);
+    }
+    leftMotorSpeed = Lspeed + motorSpeed*1.2;
+    rightMotorSpeed = Rspeed + motorSpeed;
+    set_motors(leftMotorSpeed, rightMotorSpeed);
   
 }
 
@@ -100,6 +96,7 @@ void junction(){
 }
 
 void turnLeft(){
+  delay(300);
   leftMotorSpeed = LTurnL;  //delay(200);
   rightMotorSpeed = LTurnR;    
 
@@ -123,11 +120,6 @@ void turnRight(){
   delay(350);
   position = qtrrc.readLine(sensors);
   while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 )){
-     Serial.print(sensors[0]);
-     Serial.print('\t');
-     Serial.print(sensors[1]);
-     Serial.print('\t');
-     Serial.println(sensors[2]);
      position = qtrrc.readLine(sensors);
      
   }
