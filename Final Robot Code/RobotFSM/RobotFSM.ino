@@ -33,15 +33,19 @@ float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
 float binWidth = samplingFrequency/numSamples;
 
 //detectWalls
-int wallPinLeft = A1;
-int wallPinMid = A2;
-int wallPinRight = A3;
+int wallPinLeft = A3;
+int wallPinMid = A4;
+int wallPinRight = A5;
 int wallPinArray[3] = {wallPinLeft, wallPinMid, wallPinRight}; //array of pins used for wall detection
-int wallArray[3] = {0, 0, 0};
+  char maze[9][11];
+
+
 
 void setup() {
   //Initializes the robot into START state
+  
   state = START;
+  
 
   //setup for both FFTs
   Serial.begin(9600); // use the serial port
@@ -50,6 +54,9 @@ void setup() {
   ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
   ADMUX = 0x40; // use adc0: analog A0
   DIDR0 = 0x01; // turn off the digital input for adc0
+
+  instantiateMaze();
+ // Serial.print("sup");
 }
 
 void loop() {
@@ -65,9 +72,11 @@ void loop() {
   //JUNCTION state: detects walls and treasures, chooses next direction to move
   if (state == JUNCTION) {
     //Serial.println("JUNCTION");
-    String treasure = detectTreasure(); //gets a string for treasure at junction
-    wallArray[3] = detectWalls(); //gets an array of where walls are located
-    Direction dir = chooseDirection(wallArray); //chooses direction to move based on wall array
+    byte treasure = detectTreasure(); //gets a string for treasure at junction
+    byte wallData = detectWalls(); //gets 3 bit of where walls are located
+    //updateBaseStation();
+    //theMap = updateMap();
+    //Direction dir = chooseDirection(Map); //chooses direction to move based on wall array
   }
 
   //BETWEEN state: follows a line until it reaches the next junction

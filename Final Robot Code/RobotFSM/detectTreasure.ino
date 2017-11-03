@@ -1,7 +1,7 @@
-/* Returns a string of the frequency detected at that junction
+/** Returns a string of the frequency detected at that junction
  * Either "7kHz", "12kHz", "17kHz", or "no treasure"
-*/
-String detectTreasure() {
+ */
+byte detectTreasure() {
     cli();  // UDRE interrupt slows this way down on arduino1.0
     for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
       while(!(ADCSRA & 0x10)); // wait for adc to be ready
@@ -21,15 +21,15 @@ String detectTreasure() {
     sei();
   
     if (detectedFrequency(7E3, fft_log_out)){
-      return("7kHz");
+      return(B1);
     }
      if (detectedFrequency(12E3, fft_log_out)){
-      return("12kHz");
+      return(B10);
     }
    if (detectedFrequency(17E3, fft_log_out)){
-     return("17kHz");
+     return(B100);
     }
-   else return ("no treasure");
+   else return (B0);
 }
 
 

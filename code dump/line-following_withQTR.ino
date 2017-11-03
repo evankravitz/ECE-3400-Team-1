@@ -6,8 +6,8 @@ Servo servoL;
 Servo servoR;
 
 // Change the values below to suit your robot's motors, weight, wheel type, etc.
-#define KP .02
-#define KD 1
+#define KP 0.1
+#define KD 0.3
 #define Lspeed 180
 #define Rspeed 83
 #define ML_MAX_SPEED 180
@@ -17,6 +17,20 @@ Servo servoR;
 #define TIMEOUT       2500  // waits for 2500 us for sensor outputs to go low
 #define EMITTER_PIN    QTR_NO_EMITTER_PIN  // emitter is controlled by digital pin 2
 #define DEBUG 0 // set to 1 if serial debug output needed
+
+int leftMotorSpeed = Lspeed;
+int rightMotorSpeed = Rspeed;
+static int LTurnL = 56; 
+static int LTurnR = 56; 
+static int RTurnL = 180; 
+static int RTurnR = 170;
+
+int lastError = 0;
+int position =0;
+int error =0;
+unsigned int sensors[3];
+boolean isJunction;
+boolean passed = false;
 
 //IMPROVEMENTS? range of no correction 900-1100? different KP and KD for neg/pos error? percent correction tracking? 
 
@@ -44,44 +58,79 @@ void setup()
   set_motors(90,90);
 }
 
-int lastError = 0;
-int  last_proportional = 0;
-int integral = 0;
-
 
 void loop()
 {
-  unsigned int sensors[3];
-  int position = qtrrc.readLine(sensors);
-  int error = position - 1000;
+  position = qtrrc.readLine(sensors);
+  error = position - 1000;
 
-  int motorSpeed = KP * error + KD * (error - lastError);
-//  Serial.print(position);
-//  Serial.print('\t');
-//  Serial.println(motorSpeed);
-  lastError = error;
+  junction();
+  if(!isJunction) goStraight();
+  else{
+    turnRight();
+  }
+}
 
-  int leftMotorSpeed = Lspeed + motorSpeed;
-  int rightMotorSpeed = Rspeed + motorSpeed;
+void stop(){
+  set_motors(90,90);
+}
 
-  // set motor speeds using the two motor speed variables above
-  Serial.print(position);
-  Serial.print('\t');
+void goStraight(){
+ 
+    int motorSpeed = KP * error + KD * (error - lastError);
+    lastError = error;
+    if (error > 900 && error < 1100) {
+      motorSpeed = 0; 
+    }
+    leftMotorSpeed = Lspeed + motorSpeed*1.2;
+    rightMotorSpeed = Rspeed + motorSpeed;
+    set_motors(leftMotorSpeed, rightMotorSpeed);
+  
+}
+
+void junction(){
+    if((sensors[0]>800 && sensors[1] >800 &&sensors[2] >800)){
+      isJunction = true;
+    }
+   // else isJunction = false;
+}
+
+void turnLeft(){
+  delay(300);
+  leftMotorSpeed = LTurnL;  //delay(200);
+  rightMotorSpeed = LTurnR;    
+
   set_motors(leftMotorSpeed, rightMotorSpeed);
+  delay(350);
+  position = qtrrc.readLine(sensors);
+  while(!(sensors[1]>900 && sensors[2]<600 )){
+     position = qtrrc.readLine(sensors);
+  }
+  isJunction=false;
+  return;
+
+}
+
+void turnRight(){
+  delay(300);
+  leftMotorSpeed = RTurnL;
+  rightMotorSpeed = RTurnR;
+
+  set_motors(leftMotorSpeed, rightMotorSpeed);
+  delay(350);
+  position = qtrrc.readLine(sensors);
+  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 )){
+     position = qtrrc.readLine(sensors);
+     
+  }
+  isJunction=false;
+  return;
 }
 
 void set_motors(int motor1speed, int motor2speed)
 {
   if (motor1speed > ML_MAX_SPEED ) motor1speed = ML_MAX_SPEED; // limit top speed
   if (motor2speed < MR_MAX_SPEED ) motor2speed = MR_MAX_SPEED; // limit top speed
-  if (motor1speed < 90) motor1speed = 90; // keep motor above 0
-  if (motor2speed > 90) motor2speed = 90; // keep motor speed above 0
-  Serial.print(motor1speed);
-  Serial.print('\t');
-  Serial.println(motor2speed);
   servoL.write(motor1speed);     // set motor speed
   servoR.write(motor2speed);     // set motor speed
 }
-
-
-
