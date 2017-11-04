@@ -1,3 +1,4 @@
+
 /* State machine for all robot functions
  */
 enum State {
@@ -35,10 +36,11 @@ float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
 float binWidth = samplingFrequency/numSamples;
 
 //detectWalls
-int wallPinLeft = A3;
+int wallPinLeft = A5;
 int wallPinMid = A4;
-int wallPinRight = A5;
+int wallPinRight = A3;
 int wallPinArray[3] = {wallPinLeft, wallPinMid, wallPinRight}; //array of pins used for wall detection
+<<<<<<< Updated upstream
 char maze[9][11];
 
 
@@ -75,13 +77,18 @@ boolean passed = false;
 
 //IMPROVEMENTS? range of no correction 900-1100? different KP and KD for neg/pos error? percent correction tracking? 
 
-QTRSensorsRC qtrrc((unsigned char[]) {11,10,9} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
+QTRSensorsRC qtrrc((unsigned char[]) {2,3,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
+=======
+uint8_t maze[9][11];
+
+
+>>>>>>> Stashed changes
 
 void setup() {
   //Initializes the robot into START state
-  
+  Serial.print("setup");
   state = START;
   
   //setup for both FFTs
@@ -93,31 +100,33 @@ void setup() {
   DIDR0 = 0x01; // turn off the digital input for adc0
 
   //setup for line following
-  pinMode(6, OUTPUT);
-  pinMode(12, OUTPUT);  
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);  
 
-  servoL.attach(12);
+  servoL.attach(5);
   servoR.attach(6);
+
+  set_motors(90,90);
   
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
   for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
   {
+    Serial.print("Calibrating");
     qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
   }
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
  
-  set_motors(90,90);
 
   //instantiateMaze();
- // Serial.print("sup");
+ Serial.print("sup");
 }
 
 void loop() {
-  
+  Serial.println("LOOP");
   //START state: waits until startSignal returns TRUE, then enters JUNCTION state
   if (state == START) {
-    //Serial.println("START");
+    Serial.println("START");
     if (detectStart()) {
       state = JUNCTION;
     }
@@ -125,11 +134,20 @@ void loop() {
 
   //JUNCTION state: detects walls and treasures, chooses next direction to move
   if (state == JUNCTION) {
+<<<<<<< Updated upstream
+    Serial.println("JUNCTION");
+=======
     
     //Serial.println("JUNCTION");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
     byte wallData = detectWalls(); //gets 3 bit of where walls are located
 
+=======
+    byte treasure = detectTreasure(); 
+    byte wallData = detectWalls(); 
+>>>>>>> Stashed changes
     //updateBaseStation();
     //theMap = updateMap();
     //Direction dir = chooseDirection(Map); //chooses direction to move based on wall array
@@ -152,6 +170,7 @@ void loop() {
   //BETWEEN state: follows a line until it reaches the next junction
 
   if (state == BETWEEN) {
+    Serial.println("BETWEEN");
     position = qtrrc.readLine(sensors);
     error = position - 1000;
     junction();
@@ -165,5 +184,4 @@ void loop() {
   
   //DONE state: robot has completed task
 }
-
 

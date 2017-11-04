@@ -2010,7 +2010,33 @@ wall detection using short range sensors. </p>
                 <div class="modal-body">
                   <!-- Project Details Go Here -->
                   <h2 class="text-center">Milestone 3</h2>
-                    <p> all you can eat robot buffet </p>
+                    <h3> Maze simulation </h3>
+                      <p>
+                      For this part of the lab, we wanted to prototype the the maze navigation algorithm that would later be implemented on the robot. In Java, we implemented a Depth-First-Search (DFS) algorithm for navigating through the maze. We chose a DFS algorithm for a couple reaons. Firstly, we know that it is possible to traverse all reachable parts of the maze with a DFS algorithm. Also, we figured that a DFS, in comparison to a breadth-first search, would require the last amount of "back-tracking". Our simulation results confirmed that the DFS does an efficient job at traversing the maze.  </p>
+                      <p>
+                      At a very basic level, a DFS essentially entails traversing as far as possible down unexplored parts of the maze until a dead end is reached, and then backtracking to the previous junction and exploring more unexplored regions of the maze. The implementation required some mechanism for keeping track of unexplored areas, as well as previously-traveled nodes to which to travel should the robot reach a dead end. 
+                      </p>
+                      <p>
+                      There are a couple of ways to implement this kind of algorithm which would encode these mechanisms. A recursive, tree-based approach can implement a DFS. The downside to this approach is that it is not an intuitive way of representing the maze, especially since the 2-d rectangular maze lends itself better to an array-based representation. The upside to this node is that it is quite easy to represent adjacent and reachable nodes, and the recursive structure of the maze lends itself well to a DFS algorithm.  
+                      </p>
+                      <p>
+                      Another way to implement a DFS is with an 2-d array to represent the maze, and additional data structures to keep track of unexplored areas and areas the robot has visited. The advantage to this system is a more intuitive way of representing the maze (which also works quite well with other aspects of the project). The downside is that we have to store these additional data structures, as well as implement them. In the end, we chose to implement an array-based DFS algorithm. 
+                      </p>
+                      <p>
+                      To keep track of previously visited nodes, we chose to utilize a Stack data structure. Recall that a stack allows for "pushing" items to the "top" of the stack, and then extracting elements in a last-in, first-out (LIFO) manner. This is precisely what we need for out algorithm, since we will need to return to the last visited node should the robot hit a dead end of simply not have any more unvisited nodes in its immediate surroundings. The ideal implementation of a stack allows for amortized constant time element extraction and appending. This is achieved in the Java implementation of a stack. 
+                      </p>
+                      <p>
+                      To keep track of unexplored regions of the maze, we utilize a Set data structure. Recall that a set stores unique elements in an unordered fashion, and allows the user to check for set containment, remove items from the set, and add items to the set. This is ideal for keeping track of unexplored regions of the maze, since we only need to store 1 copy of each unexplored region, the underlying indexing of hte unexplored regiion within the set is unimportant, and we need to constantly check the set for containment, as well as perform removals and add elements. The ideal implementation of a stack allows for amortized constant execution of all these tasks (via a Hash function). This is achieved in the Java implemention. 
+                      </p>
+                      <p>
+                      To actually store the maze, we utitlized a two dimensional Java array. Java arrays—like arrays in most languages—allow for constant time element access, removal, and updating (via indexing). This makes it very efficient at representing the maze. Note that in a tree structure, we would not be able to access an arbitrary maze coordinate in constant time, since we would need to traverse through the tree. In addition to keeping track of regions of the maze that can be occupied by the robot, the array also had to keep track of all possible locations of walls. This meant that the size of the 2d array would not be 4x5 (corresponding to the dimensions of the maze), but 7x9, in order to account for possible locations of walls. Note that the odd index values correspond to possible locations of walls, with values at these locations corresponding to the presence or non-presence of a possible wall. Additionally, locations in the maze array for which both coordinates are odd do not represent actual robot locations or potential wall locations in the maze -- these are extraneous elements that will be ignored. 
+                      </p>
+                      <p>
+                      For the DFS simulation, we needed to somehow represent what the "actual" maze looked like. We did this by creating an "actualMaze" array of equal dimensions that encoded the actual maze that the robot would be traversing. In order to maintain the integrity of the simulation, the algorithm is only able to view adjacent elements (walls or nonwalls/openspaces) in this maze (with respect to the current position of the robot).  
+                      </p>
+                      <p>
+                      Here's a high-level representation of the DFS algorithm. Note that the implementation of these functions can be viewed in Github repository. 
+                      </p>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
