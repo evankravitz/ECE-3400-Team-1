@@ -2096,6 +2096,9 @@ wall detection using short range sensors. </p>
                       <p>
                       There are important considerations to keep in mind as we implement this algorithm in Arduino. Most importantly, we have severe memory restrictions in Arduino. We won't have the luxury of using memory-intensive objects to store maze data. This means that instead of using Strings and integers, which take several bytes to encode, we will likely just use Char's, which are encoded in 1 byte. We will also have to deal with the fact that Arduino doesn't come with Stacks or Set data structures, so we will have to either import an external library that implements these objects, or create our own implementation. Another thing to keep in mind is how the robot will detect its surroundings. It won't simply check values in an array. Instead, it will only be able to tell if there's a right next to it. We will have to create a system for translating the presence of walls next to the robot into coordinates in the maze. </p>
 
+                      <h4> Video of simulation </h4>
+                      <iframe width="560" height="315" src="https://www.youtube.com/embed/t2SaRDsDYmg" frameborder="0" allowfullscreen></iframe>
+
                   <h3>Physical Implementation</h3>
                     <p>Moving out of the realm of simulation, our team needed to put in a lot of work to properly get our robot 
                     to navigate the maze. First, we had to install our new line sensors and reimplement line sensing and turning.
