@@ -2010,7 +2010,15 @@ wall detection using short range sensors. </p>
                 <div class="modal-body">
                   <!-- Project Details Go Here -->
                   <h2 class="text-center">Milestone 3</h2>
-                    <p> all you can eat robot buffet </p>
+                    <h3> Maze simulation </h3>
+                      <p>
+                      For this part of the lab, we wanted to prototype the the maze navigation algorithm that would later be implemented on the robot. In Java, we implemented a Depth-First-Search (DFS) algorithm for navigating through the maze. We chose a DFS algorithm for a couple reaons. Firstly, we know that it is possible to traverse all reachable parts of the maze with a DFS algorithm. Also, we figured that a DFS, in comparison to a breadth-first search, would require the last amount of "back-tracking". Our simulation results confirmed that the DFS does an efficient job at traversing the maze.  </p>
+                      <p>
+                      At a very basic level, a DFS essentially entails traversing as far as possible down unexplored parts of the maze until a dead end is reached, and then backtracking to the previous junction and exploring more unexplored regions of the maze. The implementation required some mechanism for keeping track of unexplored areas, as well as previously-traveled nodes to which to travel should the robot reach a dead end. 
+                      </p>
+                      <p>
+                      There are a couple of ways to implement this kind of algorithm which would encode these mechanisms. A recursive, tree-based approach can implement a DFS. The downside to this approach is that it is not an intuitive way of representing the maze, especially since the 2-d rectangular maze lends itself better to an array-based representation. The upside to this node is that it is quite easy to represent adjacent and reachable nodes, and the recursive structure of the maze lends itself well to a DFS algorithm.  
+                      </p>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>

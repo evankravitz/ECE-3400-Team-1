@@ -40,6 +40,7 @@ int wallPinLeft = A5;
 int wallPinMid = A4;
 int wallPinRight = A3;
 int wallPinArray[3] = {wallPinLeft, wallPinMid, wallPinRight}; //array of pins used for wall detection
+<<<<<<< Updated upstream
 char maze[9][11];
 
 
@@ -79,6 +80,11 @@ boolean passed = false;
 QTRSensorsRC qtrrc((unsigned char[]) {2,3,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
+=======
+uint8_t maze[9][11];
+
+
+>>>>>>> Stashed changes
 
 void setup() {
   //Initializes the robot into START state
@@ -128,10 +134,20 @@ void loop() {
 
   //JUNCTION state: detects walls and treasures, chooses next direction to move
   if (state == JUNCTION) {
+<<<<<<< Updated upstream
     Serial.println("JUNCTION");
+=======
+    
+    //Serial.println("JUNCTION");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
     byte wallData = detectWalls(); //gets 3 bit of where walls are located
 
+=======
+    byte treasure = detectTreasure(); 
+    byte wallData = detectWalls(); 
+>>>>>>> Stashed changes
     //updateBaseStation();
     //theMap = updateMap();
     //Direction dir = chooseDirection(Map); //chooses direction to move based on wall array
