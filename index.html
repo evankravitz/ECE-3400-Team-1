@@ -2010,7 +2010,7 @@ wall detection using short range sensors. </p>
                 <div class="modal-body">
                   <!-- Project Details Go Here -->
                   <h2 class="text-center">Milestone 3</h2>
-                    <h3> Maze simulation </h3>
+                    <h3> Maze Simulation </h3>
                       <p>
                       For this part of the lab, we wanted to prototype the the maze navigation algorithm that would later be implemented on the robot. In Java, we implemented a Depth-First-Search (DFS) algorithm for navigating through the maze. We chose a DFS algorithm for a couple reaons. Firstly, we know that it is possible to traverse all reachable parts of the maze with a DFS algorithm. Also, we figured that a DFS, in comparison to a breadth-first search, would require the last amount of "back-tracking". Our simulation results confirmed that the DFS does an efficient job at traversing the maze.  </p>
                       <p>
@@ -2038,6 +2038,32 @@ wall detection using short range sensors. </p>
                       Here's a high-level representation of the DFS algorithm. Note that the implementation of these functions can be viewed in Github repository. 
                       </p>
 
+                  <h3>Physical Implementation</h3>
+                    <p>Moving out of the realm of simulation, our team needed to put in a lot of work to properly get our robot 
+                    to navigate the maze. First, we had to install our new line sensors and reimplement line sensing and turning.
+                    Next, we had to install and calibrate our wall sensors. Finally, we had to integrate the entire system and 
+                    implement a high-level state machine to control the robot and navigate the maze. </p>
+
+                    <h4>Lines!</h4>
+                    <p>Anyone who has followed our group closely has certainly understood that we have had our fair share of 
+                    struggles implementing line following. Our line sensors have always seemed a bit wonky, and our servos never
+                    seemed to move in a sensible fashion. We implemented fairly hacky, non-resilient solutions to the line 
+                    following/turning milestones. We decided that a solid way to move forward would be to buy a 'better' line 
+                    sensor online. We turned to the Pololu QTR-3RC Reflectance Sensor Array. This particular device presented 
+                    a better alternative to our existing sensors in a variety of ways: First, it integrated three sensors in one 
+                    board, perfectly positioned to follow the black tape; second, it used digital connections, reducing the 
+                    burden on our analog pins; third, it had an existing Arduino library.</p>
+
+                    <p>Because of the aforementioned library, integrating our existing line sensing code was extremely simple. 
+                    We replaced our simple analog reads with the library's sensor read methods. We also used Pololu's calibration
+                    and PID control code to augment our line following. We continued using our funky servo calibration values
+                    for turning. It was a straightforward and successful process, that lead to a consistent line following and turning process.</p>
+
+                    <h4>Wall Sensing</h4>
+                    <p>This was mainly just a physical task. We basically dissassembled our robot fully in order to mount two more line sensors. We took this opportunity to clean up wiring and make our robot more visually appealing.</p>
+
+<h4>Integration</h4>
+<p>
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
                     Close Page</button>
