@@ -2037,6 +2037,50 @@ wall detection using short range sensors. </p>
                       <p>
                       Here's a high-level representation of the DFS algorithm. Note that the implementation of these functions can be viewed in Github repository. 
                       </p>
+                      <code>
+                      public class MazeNavigator {<br>
+                      <ul>
+                        String[][] actualMaze = new String[7][9];<br>
+                        String[][] maze = new String[7][9];<br>
+                        int[] currPos = new int[2];<br>
+                        HashSet<String> frontierSet= new HashSet<String>(); <br>
+                        Deque<int[]> visitedStack = new ArrayDeque<int[]>(); <br>
+                        JFrame frame = new JFrame(); <br>
+                        MazeDrawer oldMaze;
+                          <br>
+                          <br>
+                        public MazeNavigator() throws InterruptedException {<br>
+                        <ul>
+                          resetMaze();<br>
+                          initializeCurrentPosition();<br>
+                          frontierSet.add(Arrays.toString(currPos));<br>
+                          initializeActualMaze();<br>
+                          visitedStack.push(currPos);<br>
+                          createJFrame();<br>
+                          displayActualMaze();<br>
+                          while (!frontierSet.isEmpty()){<br>
+                          <ul>
+                            updateJFrame();<br>
+                            Thread.sleep(500);<br>
+                            maze[currPos[0]][currPos[1]] = "Explored"; <br>
+                            removeCurrentPosFromFrontier();<br>
+                            ArrayList<int[]> reachableCells = getReachableCellsAndAddWalls(); <br>
+                            addUnvisitedSurroundingNodesToFrontier(reachableCells); <br>
+                            updateCurrPosAndVisitedSet(reachableCells); <br>
+                            if (!frontierSet.isEmpty()){ <br>
+                            <ul>
+                              reachableCells = getReachableCellsAndAddWalls(); <br>
+                              addUnvisitedSurroundingNodesToFrontier(reachableCells); <br>
+                              updateJFrame(); <br>
+                              </ul>
+                            }<br>
+<br>
+</ul>
+                          }<br>
+                          printDone();<br>
+                        </ul>
+                      }<br>
+                      </code>
 
                   <h3>Physical Implementation</h3>
                     <p>Moving out of the realm of simulation, our team needed to put in a lot of work to properly get our robot 
