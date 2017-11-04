@@ -15,7 +15,7 @@ enum Direction {
 #define FFT_N 256 // set to 256 point fft
 
 //Libraries
-#include <FFT.h> // include the FFT library
+//#include <FFT.h> // include the FFT library
 #include <QTRSensors.h> //QTR sensor (line sensor) library
 #include <Servo.h> // servo library
 
@@ -82,11 +82,11 @@ unsigned int sensorValues[NUM_SENSORS];
 
 void setup() {
   //Initializes the robot into START state
-  Serial.print("setup");
   state = START;
   
   //setup for both FFTs
   Serial.begin(9600); // use the serial port
+  Serial.println("setup");
   //pinMode(13, OUTPUT); //sets pin 13 (built in LED) as an output
   TIMSK0 = 0; // turn off timer0 for lower jitter
   ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
@@ -104,11 +104,11 @@ void setup() {
   
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
-  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
-  {
-    Serial.print("Calibrating");
-    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
-  }
+//  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
+//  {
+//    Serial.println("Calibrating");
+//    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
+//  }
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
  
 
@@ -121,9 +121,9 @@ void loop() {
   //START state: waits until startSignal returns TRUE, then enters JUNCTION state
   if (state == START) {
     Serial.println("START");
-    if (detectStart()) {
+    //if (detectStart()) {
       state = JUNCTION;
-    }
+    //}
   }
 
   //JUNCTION state: detects walls and treasures, chooses next direction to move
@@ -131,6 +131,7 @@ void loop() {
     Serial.println("JUNCTION");
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
     byte wallData = detectWalls(); //gets 3 bit of where walls are located
+    Serial.println(wallData);
 
     //updateBaseStation();
     //theMap = updateMap();

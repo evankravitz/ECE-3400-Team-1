@@ -29,6 +29,7 @@ byte detectWalls() {
  */
 int isWall(int wallPin) {
   int distanceValue = analogRead(wallPin);
+  Serial.print(distanceValue);
   if (distanceValue > 100) {
     return 1;
   }
