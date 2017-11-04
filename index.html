@@ -2104,10 +2104,46 @@ wall detection using short range sensors. </p>
                     for turning. It was a straightforward and successful process, that lead to a consistent line following and turning process.</p>
 
                     <h4>Wall Sensing</h4>
-                    <p>This was mainly just a physical task. We basically dissassembled our robot fully in order to mount two more line sensors. We took this opportunity to clean up wiring and make our robot more visually appealing.</p>
+                    <p>This was mainly just a physical task. We basically dissassembled our robot fully in order to mount two more line sensors. We took this opportunity to clean up wiring and make our robot more visually appealing. We had a bit of an issue getting wall sensing to work properly, but it turns out that we just needed to redo our soldering.</p>
 
-<h4>Integration</h4>
-<p>
+                    <h4>Integration</h4>
+                    <p>Since this was a complicated milestone, we spent a lot of time organizing our code, preparing for integration. We now have a structure for our final robot code. We created a high level finite state machine, which identifies which state the robot is in (between junctions, at a junction, just starting out). Here is the basic state machine:
+                    <code>
+                    if (bitRead(wallData,0) == 0){
+                          turnRight();
+                        }
+                        else if (bitRead(wallData,1) == 0) {
+                          state == BETWEEN;
+                        }
+                        else if (bitRead(wallData,2) == 0) {
+                          turnLeft();
+                        }
+                        else {
+                          turnRight();
+                        }
+                        
+                      }
+
+                      //BETWEEN state: follows a line until it reaches the next junction
+
+                      if (state == BETWEEN) {
+                        Serial.println("BETWEEN");
+                        position = qtrrc.readLine(sensors);
+                        error = position - 1000;
+                        junction();
+                        if (isJunction) {
+                          state == JUNCTION;
+                        }
+                        else  {
+                        goStraight();
+                        }
+                      }
+                      
+                      //DONE state: robot has completed task
+                    }
+                  </code>
+
+                  Before we implemented maze following, we spent time unit testing and making sure that the robot could move and navigate and detect walls (essentially milestones 1 and 2). 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
                     Close Page</button>
