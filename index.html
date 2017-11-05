@@ -2113,7 +2113,7 @@ wall detection using short range sensors. </p>
                     sensor online. We turned to the Pololu QTR-3RC Reflectance Sensor Array. This particular device presented 
                     a better alternative to our existing sensors in a variety of ways: First, it integrated three sensors in one 
                     board, perfectly positioned to follow the black tape; second, it used digital connections, reducing the 
-                    burden on our analog pins; third, it had an existing Arduino library.</p>
+                    burden on our analog pins; third, it had an existing Arduino library. We settled on final PID control values of KP = 0.1 and KD = 0.3</p>
 
                     <p>Because of the aforementioned library, integrating our existing line sensing code was extremely simple. 
                     We replaced our simple analog reads with the library's sensor read methods. We also used Pololu's calibration
@@ -2165,11 +2165,11 @@ wall detection using short range sensors. </p>
 
                   <p>Before we implemented maze following, we spent time unit testing and making sure that the robot could move and navigate and detect walls (essentially reimplementing milestones 1 and 2). This proved to be a much more difficult task then first expected.</p>
 
-                  <p>The first major integration challenge we faced was ensuring that line following continued to work. When we added all of the different code blocks together, there was a sudden change to the quality of our line following. Suddenly, the robot began to oscillate around the line much more - most worryingly, changing our PID control variables impacted it even more negatively. We hypothesized that this behavior was caused not by suboptimal PID control values, but </p>
+                  <p>The first major integration challenge we faced was ensuring that line following continued to work. When we added all of the different code blocks together, there was a sudden change to the quality of our line following. Suddenly, the robot began to oscillate around the line much more - most worryingly, changing our PID control variables impacted it even more negatively. We hypothesized that this behavior was caused not by suboptimal PID control values, but by a multitude of print statements and excess code which delayed the PID control algorithm. As a result, the PWM control signal was updated less frequently and the robot moved jerkily. When we removed the majority of our prints statements, line following went back to working well.</p>
 
-                  <p></p>
+                  <p>Second, we struggled to implement wall sensing. Our first issue was that the wires from the IR sensor were stranded, and Michael's soldering job simply wasn't good enough (Michael is writing this, by the way). Once he (I) resoldered it, two out of the three sensors worked perfectly. However, a third sensor simply was not working, and we could not identify a hardware issue. After consulting with a TA, we commented out all FFT related code, and the wall sensor began to work. We believe that the FFT code has some sort of dependancy on the analog pin the wall sensor was on. We plan to resolve this issue once we need to.</p>
 
-                  <p>As a side note - as soon as we moved our line following code into our integrated code, there was a sudden change to the quality of our line following. Suddenly, the robot began to oscillate around the line much more - changine our PID control variables impacted it even more negatively. We settled on final values of </p>
+                  <p>Our third (extremely frustrating) issue was that of turning. The FSM and the </p>
 
                     <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
@@ -2361,11 +2361,10 @@ The robotics team explains that our robot is able to stop at junctions with extr
 
 </ul>
 
-<h3 class="text-uppercase">9/3 Meeting</h3>
+<h3 class="text-uppercase">11/3 Meeting</h3>
 
 <ul class = "list-unstyled">
 
-<li>11/3</li>
 <li>Present: Everyone (Franny virtually! Good luck on interviews!!!)</li>
 
 <ul>
@@ -2380,7 +2379,6 @@ The robotics team explains that our robot is able to stop at junctions with extr
 <li>Today implementing wall following</li>
 <li>Saturday will be implementing better things</li>
 </ul>
-
 
 </p>
 
