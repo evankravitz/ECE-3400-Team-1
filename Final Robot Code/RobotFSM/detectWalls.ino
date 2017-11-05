@@ -4,23 +4,39 @@
  * Index:[ 0  ,   1   ,   2  ]
  */
  
-byte detectWalls() {
-  byte wallData = 0;
-  int wallArray[3];
+void detectWalls() {
 
-  for (int i = 0; i < 3; i ++) {    
-    wallArray[i] = isWall(wallPinArray[i]);
-  }
- 
-  if (wallArray[2]==1){
-    bitSet(wallData,0);
-  } if (wallArray[1]==1){
-    bitSet(wallData,1);
-  } if (wallArray[0]==1){
-    bitSet(wallData,2);
-  }
+  //Serial.println("Detect walls");
 
-  return wallData;
+  wallLeft = false;
+  wallMid = false;
+  wallRight = false;
+
+  int distanceLeft = analogRead(wallPinLeft);
+  int distanceMid = analogRead(wallPinMid);
+  int distanceRight = analogRead(wallPinRight);
+//  Serial.print("left:");
+//  Serial.println(distanceLeft);
+  if (distanceLeft > 100) {
+    wallLeft = true;
+  }
+//  Serial.print("middle:");
+//  Serial.println(distanceMid);
+  if (distanceMid > 100) {
+    wallLeft = true;
+  }
+//  Serial.print("right:");
+//  Serial.println(distanceRight);
+  if (distanceRight > 100) {
+    wallRight = true;
+  }
+  
+  Serial.print("left:");
+  Serial.println(wallLeft);
+  Serial.print("middle:");
+  Serial.println(wallMid);
+  Serial.print("right:");
+  Serial.println(wallRight);
 }
 
 /* Returns 1 if wall, 0 if no wall

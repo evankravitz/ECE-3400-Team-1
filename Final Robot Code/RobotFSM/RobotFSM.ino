@@ -39,7 +39,15 @@ float binWidth = samplingFrequency/numSamples;
 int wallPinLeft = A5;
 int wallPinMid = A4;
 int wallPinRight = A3;
-int wallPinArray[3] = {wallPinLeft, wallPinMid, wallPinRight}; //array of pins used for wall detection
+
+//int distanceLeft = 0;
+//int distanceMid = 0;
+//int distanceRight = 0;
+
+boolean wallLeft = false;
+boolean wallRight = false;
+boolean wallMid = false;
+
 char maze[9][11];
 
 
@@ -48,10 +56,10 @@ Servo servoL;
 Servo servoR;
 
 // Change the values below to suit your robot's motors, weight, wheel type, etc.
-#define KP 0.1
-#define KD 0.3
+#define KP 0.07
+#define KD 0.2
 #define Lspeed 180
-#define Rspeed 83
+#define Rspeed 85
 #define ML_MAX_SPEED 180
 #define MR_MAX_SPEED 0
 #define MIDDLE_SENSOR 2
@@ -86,16 +94,22 @@ void setup() {
   
   //setup for both FFTs
   Serial.begin(9600); // use the serial port
-  Serial.println("setup");
+
   //pinMode(13, OUTPUT); //sets pin 13 (built in LED) as an output
-  TIMSK0 = 0; // turn off timer0 for lower jitter
-  ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
-  ADMUX = 0x40; // use adc0: analog A0
-  DIDR0 = 0x01; // turn off the digital input for adc0
+  
+//  TIMSK0 = 0; // turn off timer0 for lower jitter
+//  ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
+//  ADMUX = 0x40; // use adc0: analog A0
+//  DIDR0 = 0x01; // turn off the digital input for adc0
 
   //setup for line following
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);  
+
+  //distance pins
+  pinMode(A5, INPUT);
+  pinMode(A3, INPUT);
+  pinMode(A4, INPUT);
 
   servoL.attach(5);
   servoR.attach(6);
@@ -104,13 +118,14 @@ void setup() {
   
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
-//  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
-//  {
-//    Serial.println("Calibrating");
-//    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
-//  }
+  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
+  {
+    //Serial.println("Calibrating");
+    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
+  }
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
  
+
 
   //instantiateMaze();
  Serial.print("sup");
@@ -118,6 +133,7 @@ void setup() {
 
 void loop() {
   Serial.println("LOOP");
+
   //START state: waits until startSignal returns TRUE, then enters JUNCTION state
   if (state == START) {
     Serial.println("START");
@@ -130,24 +146,32 @@ void loop() {
   if (state == JUNCTION) {
     Serial.println("JUNCTION");
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
-    byte wallData = detectWalls(); //gets 3 bit of where walls are located
-    Serial.println(wallData);
 
+    stop();
+    detectWalls(); //gets 3 bit of where walls are located
+
+    delay(1000);
+    
     //updateBaseStation();
     //theMap = updateMap();
     //Direction dir = chooseDirection(Map); //chooses direction to move based on wall array
 
-    if (bitRead(wallData,0) == 0){
+    if (!wallRight){
+      Serial.println("Choose right");
       turnRight();
     }
-    else if (bitRead(wallData,1) == 0) {
-      state == BETWEEN;
+    else if (!wallMid) {
+      Serial.println("Choose mid");
+      state = BETWEEN;
     }
-    else if (bitRead(wallData,2) == 0) {
+    else if (!wallLeft) {
+      Serial.println("Choose left");
       turnLeft();
+     
     }
     else {
       turnRight();
+      Serial.println("else Right");
     }
     
   }
@@ -160,13 +184,15 @@ void loop() {
     error = position - 1000;
     junction();
     if (isJunction) {
-      state == JUNCTION;
+      state = JUNCTION;
     }
     else  {
-    goStraight();
+      Serial.println("Go straight");
+      goStraight();
     }
   }
-  
+  //delay(500);
+
   //DONE state: robot has completed task
 }
 
