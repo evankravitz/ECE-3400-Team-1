@@ -156,7 +156,7 @@ void loop() {
     //delay(1000);
 
     if (!wallRight){
-      Serial.println("Choose right");
+      //Serial.println("Choose right");
       //int time = millis();
       //while(millis()-time <300){}
       goStraight();
@@ -164,11 +164,11 @@ void loop() {
       turnRight();
     }
     else if (!wallMid) {
-      Serial.println("Choose mid");
+      //Serial.println("Choose mid");
       state = BETWEEN;
     }
     else if (!wallLeft) {
-      Serial.println("Choose left");
+      //Serial.println("Choose left");
       goStraight();
       turnLeft();
      
@@ -177,7 +177,7 @@ void loop() {
       goStraight();
       delay(300);
       turnRight();
-      Serial.println("else Right");
+      //Serial.println("else Right");
     }
     
   }
