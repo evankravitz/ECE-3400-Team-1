@@ -15,39 +15,34 @@
 
 void instantiateMaze() {
 
-//          Serial.println(unvisited);
-//          Serial.println(noWall);
-
   for (int i = 0; i <= 8; i++) {
     for (int j = 0; j<= 10; j++) {
       if (i%2 == 1 && j%2 == 1) {
-          Serial.println(unvisited);
-          maze[i][j]= (char) unvisited;
-          Serial.println(maze[i][j]);
+          maze[i][j]= (uint8_t) unvisited;
+       
         }
         if (i%2 == 0 && j%2 == 0) {
-          maze[i][j]= B0;
+          maze[i][j]= (uint8_t) B0;
         }
         if ((i%2 == 0 && j%2 == 1) || (i%2 == 1 && j%2 ==0)) {
-          maze[i][j] = noWall;
+          maze[i][j] = (uint8_t) noWall;
         }
     }
   }
   for (int i = 0; i<= 8; i++){
       for (int j = 0; j<= 10; j++){
         if((i==0 || i== 8) && j%2 == 1) {
-          maze[i][j] = wall;
+          maze[i][j] = (uint8_t) wall;
         }
         if ((j==0 || j== 10) && i%2 == 1) {
-          maze[i][j] = wall;
+          maze[i][j] = (uint8_t) wall;
         }
       }
     }
 
   for (int i = 0; i<= 8; i++){
       for (int j = 0; j<= 10; j++){
-        char out = maze[i][j];
-        //Serial.println(out);
+        (uint8_t) out = maze[i][j];
       }
   }
 }
