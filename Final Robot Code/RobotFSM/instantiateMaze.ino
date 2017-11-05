@@ -13,37 +13,37 @@
 #define twelve 5
 #define seventeen 6
 
-void instantiateMaze() {
-
-  for (int i = 0; i <= 8; i++) {
-    for (int j = 0; j<= 10; j++) {
-      if (i%2 == 1 && j%2 == 1) {
-          maze[i][j]= (uint8_t) unvisited;
-       
-        }
-        if (i%2 == 0 && j%2 == 0) {
-          maze[i][j]= (uint8_t) B0;
-        }
-        if ((i%2 == 0 && j%2 == 1) || (i%2 == 1 && j%2 ==0)) {
-          maze[i][j] = (uint8_t) noWall;
-        }
-    }
-  }
-  for (int i = 0; i<= 8; i++){
-      for (int j = 0; j<= 10; j++){
-        if((i==0 || i== 8) && j%2 == 1) {
-          maze[i][j] = (uint8_t) wall;
-        }
-        if ((j==0 || j== 10) && i%2 == 1) {
-          maze[i][j] = (uint8_t) wall;
-        }
-      }
-    }
-
-  for (int i = 0; i<= 8; i++){
-      for (int j = 0; j<= 10; j++){
-        (uint8_t) out = maze[i][j];
-      }
-  }
-}
+//void instantiateMaze() {
+//
+////  for (int i = 0; i <= 8; i++) {
+////    for (int j = 0; j<= 10; j++) {
+////      if (i%2 == 1 && j%2 == 1) {
+////          maze[i][j]= (uint8_t) unvisited;
+////       
+////        }
+////        if (i%2 == 0 && j%2 == 0) {
+////          maze[i][j]= (uint8_t) B0;
+////        }
+////        if ((i%2 == 0 && j%2 == 1) || (i%2 == 1 && j%2 ==0)) {
+////          maze[i][j] = (uint8_t) noWall;
+////        }
+////    }
+////  }
+////  for (int i = 0; i<= 8; i++){
+////      for (int j = 0; j<= 10; j++){
+////        if((i==0 || i== 8) && j%2 == 1) {
+////          maze[i][j] = (uint8_t) wall;
+////        }
+////        if ((j==0 || j== 10) && i%2 == 1) {
+////          maze[i][j] = (uint8_t) wall;
+////        }
+////      }
+////    }
+////
+////  for (int i = 0; i<= 8; i++){
+////      for (int j = 0; j<= 10; j++){
+////        (uint8_t) out = maze[i][j];
+////      }
+////  }
+//}
 

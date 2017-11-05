@@ -48,8 +48,6 @@ boolean wallLeft = false;
 boolean wallRight = false;
 boolean wallMid = false;
 
-=======
-
 char maze[9][11];
 
 
@@ -58,8 +56,8 @@ Servo servoL;
 Servo servoR;
 
 // Change the values below to suit your robot's motors, weight, wheel type, etc.
-#define KP 0.07
-#define KD 0.2
+#define KP 0.1
+#define KD 0.3
 #define Lspeed 180
 #define Rspeed 85
 #define ML_MAX_SPEED 180
@@ -89,8 +87,7 @@ boolean passed = false;
 QTRSensorsRC qtrrc((unsigned char[]) {2,3,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
-=======
-uint8_t maze[9][11];
+//uint8_t maze[9][11];
 
 void setup() {
   //Initializes the robot into START state
@@ -136,11 +133,11 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("LOOP");
+  //Serial.println("LOOP");
 
   //START state: waits until startSignal returns TRUE, then enters JUNCTION state
   if (state == START) {
-    Serial.println("START");
+    //Serial.println("START");
     //if (detectStart()) {
       state = JUNCTION;
     //}
@@ -149,17 +146,21 @@ void loop() {
   //JUNCTION state: detects walls and treasures, chooses next direction to move
   if (state == JUNCTION) {
 
-    Serial.println("JUNCTION");
+    //Serial.println("JUNCTION");
 
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
 
-    stop();
+    //stop();
     detectWalls();
 
-    delay(1000);
+    //delay(1000);
 
     if (!wallRight){
       Serial.println("Choose right");
+      //int time = millis();
+      //while(millis()-time <300){}
+      goStraight();
+      //delay(300);
       turnRight();
     }
     else if (!wallMid) {
@@ -168,10 +169,13 @@ void loop() {
     }
     else if (!wallLeft) {
       Serial.println("Choose left");
+      goStraight();
       turnLeft();
      
     }
     else {
+      goStraight();
+      delay(300);
       turnRight();
       Serial.println("else Right");
     }
@@ -181,7 +185,7 @@ void loop() {
   //BETWEEN state: follows a line until it reaches the next junction
 
   if (state == BETWEEN) {
-    Serial.println("BETWEEN");
+    //Serial.println("BETWEEN");
     position = qtrrc.readLine(sensors);
     error = position - 1000;
     junction();
@@ -189,7 +193,7 @@ void loop() {
       state = JUNCTION;
     }
     else  {
-      Serial.println("Go straight");
+      //Serial.println("Go straight");
       goStraight();
     }
   }
