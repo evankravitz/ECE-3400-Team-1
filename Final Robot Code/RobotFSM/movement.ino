@@ -4,7 +4,7 @@ void stop(){
 
 void goStraight(){
     //Serial.println(position);
-
+    state=BETWEEN;
     int motorSpeed = KP * error + KD * (error - lastError);
     lastError = error;
     if (error > 900 && error < 1100) {
