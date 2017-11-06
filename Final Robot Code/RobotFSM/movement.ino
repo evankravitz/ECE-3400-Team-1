@@ -1,10 +1,10 @@
 void stop(){
   set_motors(90,90);
+  delay(500);
 }
 
 void goStraight(){
     //Serial.println(position);
-    state=BETWEEN;
     int motorSpeed = KP * error + KD * (error - lastError);
     lastError = error;
     if (error > 900 && error < 1100) {
@@ -20,7 +20,8 @@ void goStraight(){
 }
 
 void junction(){
-    if((sensors[0]>900 && sensors[1] >900 &&sensors[2] >900)){
+    if(junkSensor>800){
+    //if((sensors[0]>900 && sensors[1] >900 &&sensors[2] >900)){
       isJunction = true;
     }
    else isJunction = false;
@@ -28,32 +29,28 @@ void junction(){
 
 void turnLeft(){
   //goStraight();
-  state = BETWEEN;
-  delay(300);
   leftMotorSpeed = LTurnL;  //delay(200);
   rightMotorSpeed = LTurnR;    
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
-  delay(350);
+  delay(150);
   position = qtrrc.readLine(sensors);
   while(!(sensors[1]>900 && sensors[2]<600 )){
      position = qtrrc.readLine(sensors);
   }
   isJunction=false;
   
-  goStraight();
   return;
 
 }
 
 void turnRight(){
-  state=BETWEEN;
-  delay(300);
+  //delay(300);
   leftMotorSpeed = RTurnL;
   rightMotorSpeed = RTurnR;
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
-  delay(350);
+  delay(150);
   position = qtrrc.readLine(sensors);
   while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 )){
      position = qtrrc.readLine(sensors);
@@ -61,7 +58,6 @@ void turnRight(){
   }
   isJunction=false;
   
-  goStraight();
   return;
 }
 

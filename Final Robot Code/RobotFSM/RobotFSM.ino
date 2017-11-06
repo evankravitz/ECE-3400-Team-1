@@ -81,6 +81,7 @@ int error =0;
 unsigned int sensors[3];
 boolean isJunction;
 boolean passed = false;
+int junkSensor =0;
 
 //IMPROVEMENTS? range of no correction 900-1100? different KP and KD for neg/pos error? percent correction tracking? 
 
@@ -106,6 +107,8 @@ void setup() {
   //setup for line following
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);  
+  pinMode(A0, INPUT); //junction sensor
+  
 
   //distance pins
   pinMode(A5, INPUT);
@@ -126,15 +129,12 @@ void setup() {
   }
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
  
-
-
   //instantiateMaze();
- Serial.print("sup");
 }
 
 void loop() {
   //Serial.println("LOOP");
-
+  
   //START state: waits until startSignal returns TRUE, then enters JUNCTION state
   if (state == START) {
     //Serial.println("START");
@@ -145,7 +145,6 @@ void loop() {
 
   //JUNCTION state: detects walls and treasures, chooses next direction to move
   if (state == JUNCTION) {
-
     //Serial.println("JUNCTION");
 
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
@@ -157,11 +156,8 @@ void loop() {
 
     if (!wallRight){
       //Serial.println("Choose right");
-      //int time = millis();
-      //while(millis()-time <300){}
-      goStraight();
-      //delay(300);
       turnRight();
+      stop();
     }
     else if (!wallMid) {
       //Serial.println("Choose mid");
@@ -169,16 +165,16 @@ void loop() {
     }
     else if (!wallLeft) {
       //Serial.println("Choose left");
-      goStraight();
       turnLeft();
+      stop();
      
     }
     else {
-      goStraight();
-      delay(300);
       turnRight();
+      stop();
       //Serial.println("else Right");
     }
+    state = BETWEEN;
     
   }
 
@@ -187,6 +183,8 @@ void loop() {
   if (state == BETWEEN) {
     //Serial.println("BETWEEN");
     position = qtrrc.readLine(sensors);
+    junkSensor = analogRead(A0);
+    
     error = position - 1000;
     junction();
     if (isJunction) {
