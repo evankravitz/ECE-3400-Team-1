@@ -2149,11 +2149,7 @@ wall detection using short range sensors. </p>
 
                   <p>Second, we struggled to implement wall sensing. Our first issue was that the wires from the IR sensor were stranded, and Michael's soldering job simply wasn't good enough (Michael is writing this, by the way). Once he (I) resoldered it, two out of the three sensors worked perfectly. However, a third sensor simply was not working, and we could not identify a hardware issue. After consulting with a TA, we commented out all FFT related code, and the wall sensor began to work. We believe that the FFT code has some sort of dependancy on the analog pin the wall sensor was on. We plan to resolve this issue once we need to.</p>
 
-                  <p>Our third (extremely frustrating) issue was that of turning. The FSM was written on the assumption that the robot would stop at a junction - do measurements - and then turn. However our turning code did not operate in that manner: It instead detected a junction, moved forward more, then turned. This implementation was developed based on a lot of trial and error, and had the most consistent turn behavior. We had to reconcile these two turning implementations in order to get our robot to navigate the maze. <b>FINGIHS</b></p>
-
-                  <code>
-                    add code
-                  </code>
+                  <p>Our third (extremely frustrating) issue was that of turning. The FSM was written on the assumption that the robot would stop at a junction - do measurements - and then turn. However our turning code did not operate in that manner: It instead detected a junction, moved forward more, then turned. This implementation was developed based on a lot of trial and error, and had the most consistent turn behavior. We had to reconcile these two turning implementations in order to get our robot to navigate the maze. You can look at the FSM code above to see our current implementation. We decided to have the junction state represent a true junction. At that point the robot pauses, detects walls around it, and then moves away. However, in order to make turning work, it moves forward first, then makes the turn. Each of the movement functions have a built in delay. This ensures that turns happen correctly.</p>
 
                   <p>Here is our robot using all of the above to move through a maze:</p>
 
