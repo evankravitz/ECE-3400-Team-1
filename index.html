@@ -2101,38 +2101,45 @@ wall detection using short range sensors. </p>
                     <h4>Integration</h4>
                     <p>Since this was a complicated milestone, we spent a lot of time organizing our code, preparing for integration. Beginning this milestone, our code for each module (wall detection, line sensing, treasure detection, etc.) were all in separate files. We now have a structure for our final robot code. We created a high level finite state machine, which identifies which state the robot is in (between junctions, at a junction, just starting out). Each state corresponds to different behaviors and interfaces between different modules. Here is the basic state machine:</p>
                     <code>
-                    if (bitRead(wallData,0) == 0){<br>
-                          <ul>turnRight();</ul><br>
-                        }<br>
-                        else if (bitRead(wallData,1) == 0) {<br>
-                          <ul>state == BETWEEN;</ul><br>
-                        }<br>
-                        else if (bitRead(wallData,2) == 0) {<br>
-                          <ul>turnLeft();</ul><br>
-                        }<br>
-                        else {<br>
-                          <ul>turnRight();</ul><br>
-                        }<br>
-                        
+                    //JUNCTION state: detects walls and treasures, chooses next direction to move<br>
+                    if (state == JUNCTION) {<br>
+                    <br>
+                    detectWalls();<br>
+                    <br>
+                    if (!wallRight){<br>
+                      goStraight();<br>
+                      //delay(300);<br>
+                      turnRight();<br>
+                    }<br>
+                    else if (!wallMid) {<br>
+                      state = BETWEEN;<br>
+                    }<br>
+                    else if (!wallLeft) {<br>
+                      goStraight();<br>
+                      turnLeft();<br>
+                    }<br>
+                    else {<br>
+                      goStraight();<br>
+                      delay(300);<br>
+                      turnRight();<br>
+                    }<br>
+                    <br>
+                    //BETWEEN state: follows a line until it reaches the next junction<br>
+                    if (state == BETWEEN) {<br>
+                      <ul>Serial.println("BETWEEN");<br>
+                      position = qtrrc.readLine(sensors);<br>
+                      error = position - 1000;<br>
+                      junction();<br>
+                      if (isJunction) {<br>
+                        <ul>state == JUNCTION;</ul>
                       }<br>
-                      <br>
-                      //BETWEEN state: follows a line until it reaches the next junction<br>
-                      <br>
-                      if (state == BETWEEN) {<br>
-                        <ul>Serial.println("BETWEEN");<br>
-                        position = qtrrc.readLine(sensors);<br>
-                        error = position - 1000;<br>
-                        junction();<br>
-                        if (isJunction) {<br>
-                          <ul>state == JUNCTION;</ul><br>
-                        }<br>
-                        else  {<br>
-                        <ul>goStraight();</ul><br>
-                        }<br>
+                      else  {<br>
+                      <ul>goStraight();</ul>
                       }<br>
-                      </ul>
-                      //DONE state: robot has completed task<br>
-                      //TODO<br>
+                    }<br>
+                    </ul>
+                    //DONE state: robot has completed task<br>
+                    //TODO<br>
                     }<br>
                   </code><br>
 
@@ -2149,6 +2156,12 @@ wall detection using short range sensors. </p>
                   </code>
 
                   <p>Here is our robot using all of the above to move through a maze:</p>
+
+                  <video width="460" height="270" controls preload> 
+                    <source src="resources/robotmaze1.mp4"></source> 
+                  </video>
+
+                  <p>As you could tell by the cheering in the background, this was the tenth time the robot succeeded its navigation in a row.</p>
                   
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
