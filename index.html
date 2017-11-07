@@ -2104,26 +2104,29 @@ wall detection using short range sensors. </p>
                     //JUNCTION state: detects walls and treasures, chooses next direction to move<br>
                     if (state == JUNCTION) {<br>
                     <br>
-                    detectWalls();<br>
+                    	stop();<br>
+                    	detectWalls();<br>
                     <br>
-                    if (!wallRight){<br>
-                      goStraight();<br>
-                      //delay(300);<br>
-                      turnRight();<br>
+                    	if (!wallRight){<br>
+                      		turnRight();<br>
+                      		stop();<br>
+                    	}<br>
+                    	else if (!wallLeft) {<br>
+                      		turnLeft();<br>
+                      		stop();<br>
+                    	}<br>
+                    	else if (wallRight && wallMid && wallLeft) {<br>
+                    		turnRight();<br>
+                    		stop():<br>
+                    		turnRight();<br>
+                    		stop();<br>
+                    	}<br>
+                    	else {<br>
+                      		turnRight();<br>
+                      		stop();<br>
+                    	}<br>
+                    	state = BETWEEN;<br>
                     }<br>
-                    else if (!wallMid) {<br>
-                      state = BETWEEN;<br>
-                    }<br>
-                    else if (!wallLeft) {<br>
-                      goStraight();<br>
-                      turnLeft();<br>
-                    }<br>
-                    else {<br>
-                      goStraight();<br>
-                      delay(300);<br>
-                      turnRight();<br>
-                    }<br>
-                    <br>
                     //BETWEEN state: follows a line until it reaches the next junction<br>
                     if (state == BETWEEN) {<br>
                       <ul>Serial.println("BETWEEN");<br>
@@ -2159,8 +2162,8 @@ wall detection using short range sensors. </p>
                   <p>In order to fix the inconsistencies in the above turning behavior, we changed our robot and our algorithm. We added an additional line sensor, mounted beneath the rest of the robot. We attached it directly to an analog pin (we anticipate making a Schmitt trigger so that we can move it to a digital pin). We altered the junction detection code so that a junction was detected once the back sensor hit the tape. We then altered the turning code so that a turn ended once the back sensor hit the black tape again. This created a much more robust turning behavior.</p>
 
                   <code>
-                    if (state == BETWEEN) {<br>
-                      while(analogRead(A0)>700 && sameJunct){ <br>
+                  if (state == BETWEEN) {<br>
+                  while(analogRead(A0)>700 && sameJunct){ <br>
                         goStraight();<br>
                       }<br>
                       sameJunct = false;<br>
