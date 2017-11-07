@@ -2156,7 +2156,36 @@ wall detection using short range sensors. </p>
                  <iframe width="560" height="315" src="https://www.youtube.com/embed/PQX7i8MVRpo" frameborder="0" allowfullscreen></iframe>
 
                   <p>As you could tell by the cheering in the background, this was the tenth time the robot succeeded its navigation in a row.</p>
+
+                  <p>In order to fix the inconsistencies in the above turning behavior, we changed our robot and our algorithm. We added an additional line sensor, mounted beneath the rest of the robot. We attached it directly to an analog pin (we anticipate making a Schmitt trigger so that we can move it to a digital pin). We then altered the between state so that <b>MIKE FINISH THIS</b></p>
+
+                  <code>
+                    if (state == BETWEEN) {<br>
+                      while(analogRead(A0)>700 && sameJunct){ <br>
+                        goStraight();<br>
+                      }<br>
+                      sameJunct = false;<br>
+                      digitalWrite(13, LOW);<br>
+                      <br>
+                      position = qtrrc.readLine(sensors);<br>
+                      junkSensor = analogRead(A0);<br>
+                      <br>
+                      error = position - 1000;<br>
+                      junction();<br>
+                      if (isJunction) {<br>
+                        state = JUNCTION;<br>
+                        digitalWrite(13, HIGH);<br>
+                      }<br>
+                      else  {<br>
+                        goStraight();<br>
+                      }<br>
+                    }<br>
+                  </code>
                   
+                  <p>After implementing the above, and playing around with our servo turn values a bit more, we created a robust turning and wall detection implementation. Here's a video of this implementation:</p>
+
+                  <b>KATHERINE ADD THE VIDEO</b>
+
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
                     Close Page</button>
