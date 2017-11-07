@@ -2156,9 +2156,7 @@ wall detection using short range sensors. </p>
                  <iframe width="560" height="315" src="https://www.youtube.com/embed/PQX7i8MVRpo" frameborder="0" allowfullscreen></iframe>
 
                   <p>As you could tell by the cheering in the background, this was the tenth time the robot succeeded its navigation in a row.</p>
-<<<<<<< HEAD
-
-                  <p>In order to fix the inconsistencies in the above turning behavior, we changed our robot and our algorithm. We added an additional line sensor, mounted beneath the rest of the robot. We attached it directly to an analog pin (we anticipate making a Schmitt trigger so that we can move it to a digital pin). We then altered the between state so that <b>MIKE FINISH THIS</b></p>
+                  <p>In order to fix the inconsistencies in the above turning behavior, we changed our robot and our algorithm. We added an additional line sensor, mounted beneath the rest of the robot. We attached it directly to an analog pin (we anticipate making a Schmitt trigger so that we can move it to a digital pin). We altered the junction detection code so that a junction was detected once the back sensor hit the tape. We then altered the turning code so that a turn ended once the back sensor hit the black tape again. This created a much more robust turning behavior.</p>
 
                   <code>
                     if (state == BETWEEN) {<br>
@@ -2184,18 +2182,12 @@ wall detection using short range sensors. </p>
                   </code>
                   
                   <p>After implementing the above, and playing around with our servo turn values a bit more, we created a robust turning and wall detection implementation. Here's a video of this implementation:</p>
-
-                  <b>KATHERINE ADD THE VIDEO</b>
-=======
-                 
-                  <p> Here is our robot with new and improved turns traversing an even cooler maze with shockingly human facial features: </p>
                   
-                   
                   <video width="460" height="270" controls preload> 
                       <source src="./resources/face.mp4"></source> 
                    </video> <br>
->>>>>>> 18dec6cef17cfb39b2319c39441a2089605e7ac7
 
+                  <p>We still need to work out some kinks with left turns, but we are able to navigate the maze! In the future, we will work to implement a more comprehensive maze mapping behavior, which we did not do in this iteration.</p>
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
                     Close Page</button>
