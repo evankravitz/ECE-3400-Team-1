@@ -204,8 +204,8 @@ void updateCurrPosAndVisitedSet(){
   for (int i = 0; i<4; i++){
     if (reachableCells[i]!=0){
       //conversion between int coordinates to array coordinates
-      int ypos = (reachableCells[i]-1)/4;
-      int xpos = (reachableCells[i]-1)%4;
+      int ypos = 2*((reachableCells[i]-1)/4)+1;
+      int xpos = 2*((reachableCells[i]-1)%4)+1;
       if (maze[xpos][ypos] == Explored){
         foundUnexplored = true;
         newCurrPos[0] = xpos; newCurrPos[1] = ypos;
@@ -215,8 +215,8 @@ void updateCurrPosAndVisitedSet(){
   }
   if (!foundUnexplored){
     char lastVisited = visitedStack.pop();
-    int newXpos = (lastVisited-1)/4;
-    int newYpos = (lastVisited-1)%4;
+    int newYpos = 2*((reachableCells[i]-1)/4)+1;
+    int newXpos = 2*((reachableCells[i]-1)%4)+1;
     newCurrPos[0] = newXpos;
     newCurrPos[1] = newYpos;
   }
@@ -256,8 +256,8 @@ void addWallsToMaze(){
 void addUnvisitedSurroundingNodesToFrontier(){
   for (int i = 0; i<4; i++){
     if (reachableCells[i]!=0){
-       int ypos = (reachableCells[i]-1)/4;
-       int xpos = (reachableCells[i]-1)%4;
+       int ypos = 2*((reachableCells[i]-1)/4)+1;
+       int xpos = 2*((reachableCells[i]-1)%4)+1;
        if (maze[xpos][ypos] == Unexplored){
           addToFrontier(reachableCells[i]);
        }
