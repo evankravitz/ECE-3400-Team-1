@@ -8,6 +8,12 @@
 #define South 2
 #define West 3
 
+#define Left 3 
+#define Right 1
+#define Straight 0
+#define Backwards 2
+
+
 
 void setup(){
   
@@ -23,6 +29,9 @@ StackArray <char> visitedStack;
 char reachableCells[4];
 char wallsRelativeDirs[2];
 char possibleWallPosition[2];
+char prevPos[2];
+char moveToPerform;
+
 
 void resetMaze() {
   // Resets the arduino's underlying maze to be completely unexplored
@@ -38,6 +47,8 @@ void resetMaze() {
 
 
  void loop(){
+  prevPos[0] = currPos[0];
+  prevPos[1] = currPos[1];
   resetMaze();
   initializeCurrPos();
   addToFrontier(convertCoordsToChar(currPos));
@@ -45,65 +56,182 @@ void resetMaze() {
   while (!frontierIsEmpty()){
     maze[currPos[0]][currPos[1]] = Explored;
     removeFromFrontier(convertCoordsToChar(currPos));
-    getReachableCells();
     addWallsToMaze();
+    getReachableCells();
     addUnvisitedSurroundingNodesToFrontier();
     updateCurrPosAndVisitedSet();
     if (!frontierIsEmpty()){
-      getReachableCells();
       addWallsToMaze();
+      getReachableCells();
+      addUnvisitedSurroundingNodesToFrontier();
     }
-   
+   updateMove();
+   performMove();
   }
+  doneWithNavigation();
   
   
  }
+
+ void performMove(){
+  
+ }
+
+void doneWithNavigation(){
+  
+}
+
+void updateMove(){
+  int dx = currPos[0] - prevPos[0];
+  int dy = currPos[1] - prevPos[1];
+  if ((dx == 2 && currentOrientation==East) //displace east, facing east
+     || (dy == -2 && currentOrientation==North) //displace north, facing north
+     || (dx == -2 && currentOrientation==West) //displace west, facing west
+     || (dy == 2 && currentOrientation==South)){      //displace south, facing south
+        moveToPerform = Straight;
+  }
+  else if ((dy == 2  && currentOrientation==East) //displace south, facing east
+     || (dx == -2 && currentOrientation==South) //displace west, facing south
+     || (dy == -2 && currentOrientation==West) //displace north, facing west
+     || (dx == 2 && currentOrientation==North)) //displace east, facing north
+     {
+        moveToPerform = Right;
+  }
+    else if ((dy == 2  && currentOrientation==North) //displace south, facing north
+     || (dx == -2 && currentOrientation==East) //displace west, facing east
+     || (dy == -2 && currentOrientation==South) //displace north, facing south
+     || (dx == 2 && currentOrientation==West)) //displace east, facing west
+     {
+        moveToPerform = Backwards;
+  }
+  else{
+    moveToPerform == Left;
+  }
+
+  
+
+  
+
+  
+}
+
+
+char generateNewDirection(char currOrientation, char displacementOrientation){
+  //go north
+  if ((currOrientation==North && displacementOrientation==Straight) || //facing north, looking in front 
+  (currOrientation==East && displacementOrientation==Left) || //facing east, looking left
+  (currOrientation==South && displacementOrientation==Backwards) || // facing south, looking behind
+  (currOrientation==West && displacementOrientation==Right)){ // facing west, looking right
+    return North;
+  }
+  //go east
+  if ((currOrientation==North && displacementOrientation==Right) || //facing north, looking right
+  (currOrientation==East && displacementOrientation==Straight) || //facing east, looking in front
+  (currOrientation==South && displacementOrientation==Left) || // facing south, looking left
+  (currOrientation==West && displacementOrientation==Backwards)){ //facing west, looking behind
+    return East;
+  }
+  //go south
+  if ((currOrientation==North && displacementOrientation==Backwards) || //facing north, looking behind
+  (currOrientation==East && displacementOrientation==Right) || //facing east, looking right
+  (currOrientation==South && displacementOrientation==Straight) || // facing south, looking in front
+  (currOrientation==West && displacementOrientation==Left)){ // facing west, looking left
+    return South;
+  }
+  //go west
+  if ((currOrientation==North && displacementOrientation==Left) || //facing north, looking left
+  (currOrientation==East && displacementOrientation==Backwards) || //facing east, looking behind
+  (currOrientation==South && displacementOrientation==Right) || // facing south, looking right
+  (currOrientation==West && displacementOrientation==Straight)){ // facing west, looking in fornt
+    return West;
+  } 
+  
+}
+void getReachableCells(){
+  getAdjacentWall(0); //in front
+  if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
+    char reachableCellArray[2]; 
+    reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
+    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCells[0] = convertCoordsToChar(reachableCellArray);
+  }
+  getAdjacentWall(1); //right
+  if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
+    char reachableCellArray[2]; 
+    reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
+    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCells[1] = convertCoordsToChar(reachableCellArray);
+  }
+  getAdjacentWall(2); //left
+  if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
+    char reachableCellArray[2]; 
+    reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
+    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCells[2] = convertCoordsToChar(reachableCellArray);
+  }
+  reachableCells[3] = convertCoordsToChar(prevPos);
+  
+  
+}
 void getAdjacentWall(char dir){
   possibleWallPosition[0] = currPos[0];
   possibleWallPosition[1] = currPos[1];
+  char directionToGo = generateNewDirection(currentOrientation, dir);
   //go straight
-  if ((currentOrientation==0 && dir==0) || //facing north, looking in front 
-  (currentOrientation==1 && dir==3) || //facing east, looking left
-  (currentOrientation==2 && dir==2) || // facing south, looking behind
-  (currentOrientation==3 && dir==1)){ // facing west, looking right
+  if (directionToGo == North){ 
     possibleWallPosition[1] = currPos[1] -1;
   }
   //go right
-  if ((currentOrientation==0 && dir==1) || //facing north, looking right
-  (currentOrientation==1 && dir==0) || //facing east, looking in front
-  (currentOrientation==2 && dir==3) || // facing south, looking left
-  (currentOrientation==3 && dir==2)){ //facing west, looking behind
+  if (directionToGo == East){
     possibleWallPosition[0] = currPos[0] + 1;
   }
   //go backwards
-  if ((currentOrientation==0 && dir==2) || //facing north, looking behind
-  (currentOrientation==1 && dir==1) || //facing east, looking right
-  (currentOrientation==2 && dir==0) || // facing south, looking in front
-  (currentOrientation==3 && dir==3)){ // facing west, looking left
+  if (directionToGo == South ){ 
     possibleWallPosition[1] = currPos[1]+1;
   }
   //go left
-  if ((currentOrientation==0 && dir==3) || //facing north, looking left
-  (currentOrientation==1 && dir==2) || //facing east, looking behind
-  (currentOrientation==2 && dir==1) || // facing south, looking right
-  (currentOrientation==3 && dir==0)){ // facing west, looking in fornt
+  if (directionToGo == West){ 
     possibleWallPosition[0] = currPos[0]-1;
   } 
 }
  
-void getReachableCells(){
-  
-}
+
 
 
 void updateCurrPosAndVisitedSet(){
-  
+  boolean foundUnexplored = false;
+  char newCurrPos[2];
+  for (int i = 0; i<4; i++){
+    if (reachableCells[i]!=0){
+      //conversion between int coordinates to array coordinates
+      int ypos = (reachableCells[i]-1)/4;
+      int xpos = (reachableCells[i]-1)%4;
+      if (maze[xpos][ypos] == Explored){
+        foundUnexplored = true;
+        newCurrPos[0] = xpos; newCurrPos[1] = ypos;
+        break;
+      }
+    }
+  }
+  if (!foundUnexplored){
+    char lastVisited = visitedStack.pop();
+    int newXpos = (lastVisited-1)/4;
+    int newYpos = (lastVisited-1)%4;
+    newCurrPos[0] = newXpos;
+    newCurrPos[1] = newYpos;
+  }
+  else{
+    visitedStack.push(convertCoordsToChar(currPos));
+  }
+  prevPos[0] = currPos[0];
+  prevPos[1] = currPos[1];
+  currPos[0] = newCurrPos[0];
+  currPos[1] = newCurrPos[1];
 }
 
 void getWalls(){
   
 }
-
 void addWallsToMaze(){
   getWalls(); //this method will be defined somewhere. 
   char wallCoord[2];
@@ -126,18 +254,22 @@ void addWallsToMaze(){
 }
 
 void addUnvisitedSurroundingNodesToFrontier(){
-  
+  for (int i = 0; i<4; i++){
+    if (reachableCells[i]!=0){
+       int ypos = (reachableCells[i]-1)/4;
+       int xpos = (reachableCells[i]-1)%4;
+       if (maze[xpos][ypos] == Unexplored){
+          addToFrontier(reachableCells[i]);
+       }
+   }
+  }
 }
- 
  void initializeCurrPos(){
   currPos[0]= 7;
   currPos[1]= 9;
  }
 
 
- void addWalls(){
-  
- }
 
  char convertCoordsToChar(char coodinateArray[]){
   if (coodinateArray[0]==1 && coodinateArray[1]==1){
