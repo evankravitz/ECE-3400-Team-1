@@ -151,7 +151,7 @@ void loop() {
 
     stop();
     detectWalls();
-
+    
     //delay(1000);
 
     if (!wallRight){
