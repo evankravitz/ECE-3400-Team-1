@@ -67,6 +67,7 @@ void resetMaze() {
     }
    updateMove();
    performMove();
+  
   }
   doneWithNavigation();
   
