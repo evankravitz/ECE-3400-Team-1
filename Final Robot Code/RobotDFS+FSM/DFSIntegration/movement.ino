@@ -21,22 +21,23 @@ void goStraight(){
 
 void junction(){
     if(junkSensor>800 && !sameJunct){
-    //if((sensors[0]>900 && sensors[1] >900 &&sensors[2] >900)){
       isJunction = true;
       sameJunct=true;
     }
-   else isJunction = false;
+   else {
+    isJunction = false;
+   }
 }
 
 void turnLeft(){
   //goStraight();
-  leftMotorSpeed = LTurnL;  //delay(200);
-  rightMotorSpeed = LTurnR;    
+  leftMotorSpeed = LTurnLw;  //delay(200);
+  rightMotorSpeed = LTurnRw;    
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
   delay(200);
   position = qtrrc.readLine(sensors);
-  while(!(sensors[1]>900 && sensors[2]<600 && analogRead(A0)<800)){
+  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 && analogRead(A0)>800)){
      position = qtrrc.readLine(sensors);
   }
   //isJunction=false;
@@ -47,13 +48,13 @@ void turnLeft(){
 
 void turnRight(){
   //delay(300);
-  leftMotorSpeed = RTurnL;
-  rightMotorSpeed = RTurnR;
+  leftMotorSpeed = RTurnLw;
+  rightMotorSpeed = RTurnRw;
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
   delay(200);
   position = qtrrc.readLine(sensors);
-  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 && analogRead(A0)>800) ){
+  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 && analogRead(A0)>800)){
      position = qtrrc.readLine(sensors);
      
   }
@@ -87,7 +88,11 @@ void performMove(){
  }
 
 void moveLeft(){
-  turnLeft();
+  turnRight();
+  stop();
+  turnRight();
+  stop();
+  turnRight();
   stop();
   moveStraight();
 }
@@ -107,12 +112,14 @@ void moveBackwards(){
 }
 
 void moveStraight(){
-  while(analogRead(A0)>700 && sameJunct){ 
+//  if analogRead(A0
+  while(analogRead(A0)>700){ 
       goStraight();
-    }
-    
+   }
+
   sameJunct = false;
   digitalWrite(13, LOW);
+  isJunction = false;
   
   while (!isJunction) {
     position = qtrrc.readLine(sensors);
