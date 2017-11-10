@@ -31,8 +31,8 @@ void junction(){
 
 void turnLeft(){
   //goStraight();
-  leftMotorSpeed = LTurnL;  //delay(200);
-  rightMotorSpeed = LTurnR;    
+  leftMotorSpeed = LTurnLw;  //delay(200);
+  rightMotorSpeed = LTurnRw;    
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
   delay(200);
@@ -48,8 +48,8 @@ void turnLeft(){
 
 void turnRight(){
   //delay(300);
-  leftMotorSpeed = RTurnL;
-  rightMotorSpeed = RTurnR;
+  leftMotorSpeed = RTurnLw;
+  rightMotorSpeed = RTurnRw;
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
   delay(200);

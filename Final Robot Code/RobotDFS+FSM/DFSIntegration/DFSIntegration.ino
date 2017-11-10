@@ -54,10 +54,10 @@ Servo servoR;
 
 int leftMotorSpeed = Lspeed;
 int rightMotorSpeed = Rspeed;
-static int LTurnL = 56; 
-static int LTurnR = 56; 
-static int RTurnL = 180; 
-static int RTurnR = 170;
+static int LTurnLw = 56; 
+static int LTurnRw = 56; 
+static int RTurnLw = 180; 
+static int RTurnRw = 170;
 
 int lastError = 0;
 int position =0;
