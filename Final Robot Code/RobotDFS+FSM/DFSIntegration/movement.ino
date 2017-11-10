@@ -21,11 +21,12 @@ void goStraight(){
 
 void junction(){
     if(junkSensor>800 && !sameJunct){
-    //if((sensors[0]>900 && sensors[1] >900 &&sensors[2] >900)){
       isJunction = true;
       sameJunct=true;
     }
-   else isJunction = false;
+   else {
+    isJunction = false;
+   }
 }
 
 void turnLeft(){
@@ -107,12 +108,13 @@ void moveBackwards(){
 }
 
 void moveStraight(){
-  while(analogRead(A0)>700 && sameJunct){ 
+  while(analogRead(A0)>700){ 
       goStraight();
-    }
-    
+   }
+
   sameJunct = false;
   digitalWrite(13, LOW);
+  isJunction = false;
   
   while (!isJunction) {
     position = qtrrc.readLine(sensors);

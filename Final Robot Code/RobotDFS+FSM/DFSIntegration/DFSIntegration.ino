@@ -126,31 +126,33 @@ void setup(){
 }
 
 void loop(){
-  prevPos[0] = currPos[0];
-  prevPos[1] = currPos[1];
-  resetMaze();
-  initializeCurrPos();
-  initializeOrientation();
-  addToFrontier(convertCoordsToChar(currPos));
-  visitedStack.push(convertCoordsToChar(currPos));
-  
-  
-  while (!frontierIsEmpty()){
-    maze[currPos[0]][currPos[1]] = Explored;
-    removeFromFrontier(convertCoordsToChar(currPos));
-    addWallsToMaze();
-    getReachableCells();
-    addUnvisitedSurroundingNodesToFrontier();
-    updateCurrPosAndVisitedSet();
-    if (!frontierIsEmpty()){
-      addWallsToMaze();
-      getReachableCells();
-      addUnvisitedSurroundingNodesToFrontier();
-    }
-   updateMove();
-   performMove();
-  }
-  
-  doneWithNavigation();
+//  prevPos[0] = currPos[0];
+//  prevPos[1] = currPos[1];
+//  resetMaze();
+//  initializeCurrPos();
+//  initializeOrientation();
+//  addToFrontier(convertCoordsToChar(currPos));
+//  visitedStack.push(convertCoordsToChar(currPos));
+//  
+//  
+//  while (!frontierIsEmpty()){
+//    maze[currPos[0]][currPos[1]] = Explored;
+//    removeFromFrontier(convertCoordsToChar(currPos));
+//    addWallsToMaze();
+//    getReachableCells();
+//    addUnvisitedSurroundingNodesToFrontier();
+//    updateCurrPosAndVisitedSet();
+//    if (!frontierIsEmpty()){
+//      addWallsToMaze();
+//      getReachableCells();
+//      addUnvisitedSurroundingNodesToFrontier();
+//    }
+//   updateMove();
+//   performMove();
+//  }
+//  
+//  doneWithNavigation();
+
+  moveLeft();
 }
 
