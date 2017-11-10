@@ -37,7 +37,7 @@ void turnLeft(){
   set_motors(leftMotorSpeed, rightMotorSpeed);
   delay(200);
   position = qtrrc.readLine(sensors);
-  while(!(sensors[1]>900 && sensors[2]<600 && analogRead(A0)<800)){
+  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 && analogRead(A0)>800)){
      position = qtrrc.readLine(sensors);
   }
   //isJunction=false;
@@ -54,7 +54,7 @@ void turnRight(){
   set_motors(leftMotorSpeed, rightMotorSpeed);
   delay(200);
   position = qtrrc.readLine(sensors);
-  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 && analogRead(A0)>800) ){
+  while(!(sensors[1]>900 && sensors[0]<450 && sensors[2]<450 && analogRead(A0)>800)){
      position = qtrrc.readLine(sensors);
      
   }
@@ -88,7 +88,11 @@ void performMove(){
  }
 
 void moveLeft(){
-  turnLeft();
+  turnRight();
+  stop();
+  turnRight();
+  stop();
+  turnRight();
   stop();
   moveStraight();
 }
@@ -108,6 +112,7 @@ void moveBackwards(){
 }
 
 void moveStraight(){
+//  if analogRead(A0
   while(analogRead(A0)>700){ 
       goStraight();
    }

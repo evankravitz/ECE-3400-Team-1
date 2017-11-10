@@ -152,7 +152,8 @@ void loop(){
 //  }
 //  
 //  doneWithNavigation();
-
+  moveStraight();
   moveLeft();
+
 }
 
