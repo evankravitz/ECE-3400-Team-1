@@ -152,8 +152,16 @@ void loop(){
 //  }
 //  
 //  doneWithNavigation();
-  moveStraight();
-  moveLeft();
+////Figure eight bc lol it's never too late to do milestone 1 
+moveStraight();
+moveRight();
+moveLeft(); 
+moveLeft();
+moveLeft();
+moveLeft();
+moveRight();
+moveRight(); 
+turnRight();
 
 }
 
