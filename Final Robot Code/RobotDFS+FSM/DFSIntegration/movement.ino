@@ -95,7 +95,7 @@ void turnRight(){
     position = qtrrc.readLine(sensors); 
     int motorSpeed = KP * error + KD * (error - lastError);
     lastError = error;
-    if (error > 850 && error < 1150) {
+    if (error > 900 && error < 1100) {
       motorSpeed = 0; 
       }
     
