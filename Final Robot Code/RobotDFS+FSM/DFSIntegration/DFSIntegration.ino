@@ -126,42 +126,44 @@ void setup(){
 }
 
 void loop(){
-//  prevPos[0] = currPos[0];
-//  prevPos[1] = currPos[1];
-//  resetMaze();
-//  initializeCurrPos();
-//  initializeOrientation();
-//  addToFrontier(convertCoordsToChar(currPos));
-//  visitedStack.push(convertCoordsToChar(currPos));
-//  
-//  
-//  while (!frontierIsEmpty()){
-//    maze[currPos[0]][currPos[1]] = Explored;
-//    removeFromFrontier(convertCoordsToChar(currPos));
-//    addWallsToMaze();
-//    getReachableCells();
-//    addUnvisitedSurroundingNodesToFrontier();
-//    updateCurrPosAndVisitedSet();
+  detectWalls();
+  prevPos[0] = currPos[0];
+  prevPos[1] = currPos[1];
+  resetMaze();
+  initializeCurrPos();
+  initializeOrientation();
+  addToFrontier(convertCoordsToChar(currPos));
+  visitedStack.push(convertCoordsToChar(currPos));  
+  printMaze();
+  while (!frontierIsEmpty()){
+    detectWalls();
+    maze[currPos[0]][currPos[1]] = Explored;
+    removeFromFrontier(convertCoordsToChar(currPos));
+    addWallsToMaze();
+    printMaze();
+    getReachableCells();
+    addUnvisitedSurroundingNodesToFrontier();
+    updateCurrPosAndVisitedSet();
 //    if (!frontierIsEmpty()){
 //      addWallsToMaze();
 //      getReachableCells();
 //      addUnvisitedSurroundingNodesToFrontier();
-//    }
-//   updateMove();
-//   performMove();
-//  }
-//  
-//  doneWithNavigation();
+//   }
+   updateMove();
+   //Serial.println((int)moveToPerform);
+   performMove();
+  }
+  doneWithNavigation();
+
 ////Figure eight bc lol it's never too late to do milestone 1 
-moveStraight();
-moveRight();
-moveLeft(); 
-moveLeft();
-moveLeft();
-moveLeft();
-moveRight();
-moveRight(); 
-turnRight();
+//moveStraight();
+//moveRight();
+//moveLeft(); 
+//moveLeft();
+//moveLeft();
+//moveLeft();
+//moveRight();
+//moveRight(); 
+//turnRight();
 
 }
-

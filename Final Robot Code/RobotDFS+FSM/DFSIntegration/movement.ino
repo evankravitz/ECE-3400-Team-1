@@ -123,16 +123,24 @@ void set_motors(int motor1speed, int motor2speed) {
 
 
 void performMove(){
+  currentOrientation = generateNewDirection(currentOrientation, moveToPerform);
   if (moveToPerform == Left){
+    Serial.println("Moving Left!");
     moveLeft();
   }
   if (moveToPerform == Right){
+    Serial.println("Moving Right!");
+
     moveRight();
   }
   if (moveToPerform == Straight){
+    Serial.println("Moving Straight!");
+
     moveStraight();
   }
   if (moveToPerform == Backwards){
+   Serial.println("Moving Backwards!");
+
     moveBackwards();
   }
  }
@@ -174,7 +182,9 @@ void moveStraight(){
     error = position - 1000;
     junction();
     if (isJunction) {
+      set_motors(90,90);
       digitalWrite(13, HIGH);
+      
     }
     else  {
       goStraight();

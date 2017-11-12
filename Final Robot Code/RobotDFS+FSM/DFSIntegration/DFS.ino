@@ -12,9 +12,30 @@ void doneWithNavigation(){
   
 }
 
+void printMaze(){
+  Serial.println("Start Maze vvvvvvvvv");
+  for (int y = 0; y < 11; y++){
+    Serial.println("");
+    Serial.println("____________________");
+    for (int x = 0; x<9; x++){
+      Serial.print("||");
+      Serial.print((int)maze[x][y]);
+    }
+  }
+  Serial.println("");
+  Serial.println("End Maze^^^^^");
+}
+
 void updateMove(){
-  int dx = currPos[0] - prevPos[0];
-  int dy = currPos[1] - prevPos[1];
+  Serial.println("FKSHKJLHFD");
+  Serial.println((int)currPos[0]);
+  Serial.println((int)currPos[1]);
+  Serial.println((int)prevPos[0]);
+  Serial.println((int)prevPos[1]);
+  Serial.println("FKSHKJLHFD");
+
+  int dx = (int)currPos[0] - (int)prevPos[0];
+  int dy = (int)currPos[1] - (int)prevPos[1];
   if ((dx == 2 && currentOrientation==East) //displace east, facing east
      || (dy == -2 && currentOrientation==North) //displace north, facing north
      || (dx == -2 && currentOrientation==West) //displace west, facing west
@@ -36,7 +57,7 @@ void updateMove(){
         moveToPerform = Backwards;
   }
   else{
-    moveToPerform == Left;
+    moveToPerform = Left;
   }
 
   
@@ -82,22 +103,23 @@ void getReachableCells(){
   getAdjacentWall(Straight); //in front
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
-    reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
-    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCellArray[0] = currPos[0] + 2*((int)possibleWallPosition[0] - (int)currPos[0]);
+    reachableCellArray[1] = currPos[1] + 2*((int)possibleWallPosition[1] - (int) currPos[1]);
+
     reachableCells[0] = convertCoordsToChar(reachableCellArray);
   }
   getAdjacentWall(Right); //right
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
     reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
-    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCellArray[1] = currPos[1] + 2*(possibleWallPosition[1] - currPos[1]);
     reachableCells[1] = convertCoordsToChar(reachableCellArray);
   }
   getAdjacentWall(Left); //left
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
     reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
-    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCellArray[1] = currPos[1] + 2*(possibleWallPosition[1] - currPos[1]);
     reachableCells[2] = convertCoordsToChar(reachableCellArray);
   }
   reachableCells[3] = convertCoordsToChar(prevPos);
@@ -135,9 +157,13 @@ void updateCurrPosAndVisitedSet(){
   for (int i = 0; i<4; i++){
     if (reachableCells[i]!=0){
       //conversion between int coordinates to array coordinates
+      
       int ypos = 2*((reachableCells[i]-1)/4)+1;
       int xpos = 2*((reachableCells[i]-1)%4)+1;
-      if (maze[xpos][ypos] == Explored){
+      if (maze[xpos][ypos] == Unexplored){
+//        Serial.println((int)reachableCells[i]);
+//        Serial.println(xpos);
+//        Serial.println(ypos);
         foundUnexplored = true;
         newCurrPos[0] = xpos; newCurrPos[1] = ypos;
         break;
@@ -158,6 +184,13 @@ void updateCurrPosAndVisitedSet(){
   prevPos[1] = currPos[1];
   currPos[0] = newCurrPos[0];
   currPos[1] = newCurrPos[1];
+//  Serial.println((int) currPos[0]);
+//  Serial.println((int) currPos[1]);
+//  Serial.println("SFKJSHFKSL");
+//  Serial.println((int) prevPos[0]);
+//  Serial.println((int) prevPos[1]);
+
+
 }
 
 
