@@ -41,6 +41,7 @@ module DE0_NANO(
 	 localparam black = 8'b0;
 	 localparam pink = 8'b11110011;
 	 localparam cyan = 8'b10011011;
+	 localparam magenta = 8'b11100011; 
 	 
 	 //=======================================================
 	 //  PORT declarations
@@ -106,12 +107,26 @@ module DE0_NANO(
 				PIXEL_COLOR <= white;
 			end
 			if (currentGrid == explored) begin
-				PIXEL_COLOR <= pink;
+				PIXEL_COLOR <= white;
 			end
-			if (currentGrid == currPos) begin
+			if (currentGrid[1:0] == currPos) begin
 				PIXEL_COLOR <= black;
 			end
+		   if (PIXEL_COORD_X < 10'd96*(GRID_X+1) && PIXEL_COORD_Y <(10'd12+(GRID_Y*10'd96)) && currentGrid[7] == 1'b1) begin
+				PIXEL_COLOR <= magenta; 
+		   end
+//			if (PIXEL_COORD_Y < 10'd96*(GRID_Y+1) && PIXEL_COORD_X<(10'd12+(GRID_X*10'd96)) && currentGrid[6] == 1'b1) begin 
+//				PIXEL_COLOR <= pink; 
+//			end else begin 
+//				PIXEL_COLOR <= white; 
+//			end
+			if (PIXEL_COORD_X < 10'd96*(GRID_X+1) && (PIXEL_COORD_Y >((GRID_Y+1)*10'd96)-10'd12) && (PIXEL_COORD_Y <((GRID_Y+1)*10'd96)) && currentGrid[5] == 1'b1) begin
+				PIXEL_COLOR <= magenta; 
+		   end
+			
+			
 		end
+		//if (PIXEL_COORD_X < (10'd96*(GRIX_X+1)) && PIXEL_COORD_Y <
 	end
 
 	 reg [24:0] led_counter; // timer to keep track of when to toggle LED
@@ -136,21 +151,23 @@ module DE0_NANO(
         .V_SYNC_NEG(GPIO_0_D[5])
     );
 	 
-	 inputReader reader(
-		.valid(GPIO_1_D[8]),
-		.arduinoInput({GPIO_1_D[10],GPIO_1_D[12],GPIO_1_D[14],GPIO_1_D[16],GPIO_1_D[18], GPIO_1_D[20], GPIO_D_1[22], GPIO_D_1[24]}),
-		.robotX(botX),
-		.robotY(botY),
-		.preX(preX),
-		.preY(preY),
-		.walls(wall),
-		.treasure(tres)
-	);
+//	 inputReader reader(
+//		.valid(GPIO_1_D[8]),
+//		.arduinoInput({GPIO_1_D[10],GPIO_1_D[12],GPIO_1_D[14],GPIO_1_D[16],GPIO_1_D[18], GPIO_1_D[20], GPIO_1_D[22], GPIO_1_D[24]}),
+//		.robotX(botX),
+//		.robotY(botY),
+//		.preX(preX),
+//		.preY(preY),
+//		.walls(wall),
+//		.treasure(tres)
+//	);
 	 
+	 assign botX = 2'b10;
+	 assign botY = 3'b010;
 	 
 	 localparam explored = 8'b00000001;
 	 localparam unexplored = 8'b00000000;
-	 localparam currPos = 2'b10;
+	 localparam currPos = 2'b11;
 	 
 	 assign reset = ~KEY[0]; // reset when KEY0 is pressed
 	 
@@ -173,17 +190,17 @@ module DE0_NANO(
 				led_counter <= 25'b0;
 
 				grid1[0][0] = unexplored;
-				grid1[0][1] = unexplored;
+				grid1[0][1] = 8'b10100000;
 				grid1[0][2] = unexplored;
 				grid1[0][3] = unexplored;
 				grid1[0][4] = unexplored;
-				grid1[1][0] = unexplored;
+				grid1[1][0] = 8'b10100000;
 				grid1[1][1] = unexplored;
 				grid1[1][2] = unexplored;
 				grid1[1][3] = unexplored;
 				grid1[1][4] = unexplored;
 				grid1[2][0] = unexplored;
-				grid1[2][1] = unexplored;
+				grid1[2][1] = 8'b10100000;
 				grid1[2][2] = unexplored;
 				grid1[2][3] = unexplored;
 				grid1[2][4] = unexplored;
@@ -194,11 +211,11 @@ module DE0_NANO(
 				grid1[3][4] = unexplored;
 		  end
 		  
-		  else begin 
-			grid1[preX][preY] = grid1[preX][preY] | explored;
-			grid1[preX][preY] = grid1[preX][preY] & 0x11111101;
-			grid1[botX][botY] = {wall,tres,currPos};
-		  end
+//		  else begin 
+//			grid1[preX][preY] = grid1[preX][preY] | explored;
+//			grid1[preX][preY] = grid1[preX][preY] & 8'b11111101;
+//			grid1[botX][botY] = {wall,tres,currPos};
+//		  end
 	 end
 	 
 
