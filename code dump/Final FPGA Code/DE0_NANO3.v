@@ -37,11 +37,13 @@ module DE0_NANO(
 	 //=======================================================
 
 	 localparam ONE_SEC = 25000000; // one second in 25MHz clock cycles
-	 localparam white = 8'b11111111;
-	 localparam black = 8'b0;
-	 localparam pink = 8'b11110011;
-	 localparam cyan = 8'b10011011;
-	 localparam magenta = 8'b11100011; 
+	 localparam white = 8'b11111111; //unexplored
+	 localparam black = 8'b0; //walls
+	 localparam pink = 8'b11110011; //explored
+	 localparam magenta = 8'b11100011; //botbotbot
+	 localparam blue = 8'b00110011; //12kHz treasure Freq
+	 localparam red = 8'b11100000;  // 7kHz treasure Freq
+	 localparam green = 8'b01010001; // 17 kHZ treasure Freq
 	 
 	 //=======================================================
 	 //  PORT declarations
@@ -106,22 +108,27 @@ module DE0_NANO(
 			if (currentGrid == unexplored) begin
 				PIXEL_COLOR <= white;
 			end
-			if (currentGrid == explored) begin
-				PIXEL_COLOR <= white;
+			if (currentGrid[0] ==1'b1) begin
+				PIXEL_COLOR <= pink;
 			end
 			if (currentGrid[1:0] == currPos) begin
-				PIXEL_COLOR <= black;
+				PIXEL_COLOR <= magenta;
 			end
-		   if (PIXEL_COORD_X < 10'd96*(GRID_X+1) && PIXEL_COORD_Y <(10'd12+(GRID_Y*10'd96)) && currentGrid[7] == 1'b1) begin
-				PIXEL_COLOR <= magenta; 
+			if (PIXEL_COORD_X<=(10'd4+(GRID_X*10'd96)) && PIXEL_COORD_X>=(GRID_X*10'd96) && currentGrid[6] == 1'b1) begin  //right
+				PIXEL_COLOR <= black; 
+			end else 
+			if ((PIXEL_COORD_X >=((GRID_X+1)*10'd96)-10'd4) && PIXEL_COORD_X <= ((GRID_X+1)*10'd96) && currentGrid[4] == 1'b1) begin //left
+				PIXEL_COLOR <= black; 
+			end else begin 
+				PIXEL_COLOR <= white; 
+			end
+
+		   if (PIXEL_COORD_Y <=(10'd4+(GRID_Y*10'd96)) && PIXEL_COORD_Y >= (GRID_Y*10'd96) && currentGrid[7] == 1'b1) begin //top
+				PIXEL_COLOR <= black; 
 		   end
-//			if (PIXEL_COORD_Y < 10'd96*(GRID_Y+1) && PIXEL_COORD_X<(10'd12+(GRID_X*10'd96)) && currentGrid[6] == 1'b1) begin 
-//				PIXEL_COLOR <= pink; 
-//			end else begin 
-//				PIXEL_COLOR <= white; 
-//			end
-			if (PIXEL_COORD_X < 10'd96*(GRID_X+1) && (PIXEL_COORD_Y >((GRID_Y+1)*10'd96)-10'd12) && (PIXEL_COORD_Y <((GRID_Y+1)*10'd96)) && currentGrid[5] == 1'b1) begin
-				PIXEL_COLOR <= magenta; 
+
+			if ((PIXEL_COORD_Y >=((GRID_Y+1)*10'd96)-10'd4) && currentGrid[5] == 1'b1) begin //bottom
+				PIXEL_COLOR <= black; 
 		   end
 			
 			
@@ -189,26 +196,26 @@ module DE0_NANO(
 				led_state   <= 1'b0;
 				led_counter <= 25'b0;
 
-				grid1[0][0] = unexplored;
-				grid1[0][1] = 8'b10100000;
-				grid1[0][2] = unexplored;
-				grid1[0][3] = unexplored;
-				grid1[0][4] = unexplored;
-				grid1[1][0] = 8'b10100000;
-				grid1[1][1] = unexplored;
-				grid1[1][2] = unexplored;
-				grid1[1][3] = unexplored;
-				grid1[1][4] = unexplored;
-				grid1[2][0] = unexplored;
-				grid1[2][1] = 8'b10100000;
-				grid1[2][2] = unexplored;
-				grid1[2][3] = unexplored;
-				grid1[2][4] = unexplored;
-				grid1[3][0] = unexplored;
-				grid1[3][1] = unexplored;
-				grid1[3][2] = unexplored;
-				grid1[3][3] = unexplored;
-				grid1[3][4] = unexplored;
+				grid1[0][0] = 8'b11110000;
+				grid1[0][1] = 8'b11110000;
+				grid1[0][2] = 8'b11110000;
+				grid1[0][3] = 8'b11110000;
+				grid1[0][4] = 8'b11110000;
+				grid1[1][0] = 8'b11110000;
+				grid1[1][1] = 8'b11110000;
+				grid1[1][2] = 8'b11110000;
+				grid1[1][3] = 8'b11110000;
+				grid1[1][4] = 8'b11110000;
+				grid1[2][0] = 8'b11110000;
+				grid1[2][1] = 8'b11110000;
+				grid1[2][2] = 8'b11110000;
+				grid1[2][3] = 8'b11110000;
+				grid1[2][4] = 8'b11110000;
+				grid1[3][0] = 8'b11110000;
+				grid1[3][1] = 8'b11110000;
+				grid1[3][2] = 8'b11110000;
+				grid1[3][3] = 8'b11110000;
+				grid1[3][4] = 8'b11110000;
 		  end
 		  
 //		  else begin 
