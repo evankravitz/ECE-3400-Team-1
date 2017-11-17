@@ -41,9 +41,9 @@ module DE0_NANO(
 	 localparam black = 8'b0; //walls
 	 localparam pink = 8'b11110011; //explored
 	 localparam magenta = 8'b11100011; //botbotbot
-	 localparam blue = 8'b00110011; //12kHz treasure Freq
-	 localparam red = 8'b11100000;  // 7kHz treasure Freq
-	 localparam green = 8'b01010001; // 17 kHZ treasure Freq
+	 localparam red = 8'b11100000;  // 7kHz treasure Freq (2'b01)
+	 localparam blue = 8'b00110011; //12kHz treasure Freq (2'b10)
+	 localparam green = 8'b01010001; // 17 kHZ treasure Freq (2'b11)
 	 
 	 //=======================================================
 	 //  PORT declarations
@@ -105,21 +105,19 @@ module DE0_NANO(
 		end
 		else begin
 		currentGrid <= grid1[GRID_X][GRID_Y];
-			if (currentGrid == unexplored) begin
-				PIXEL_COLOR <= white;
-			end
-			if (currentGrid[0] ==1'b1) begin
-				PIXEL_COLOR <= pink;
-			end
-			if (currentGrid[1:0] == currPos) begin
-				PIXEL_COLOR <= magenta;
-			end
+ 
 			if (PIXEL_COORD_X<=(10'd4+(GRID_X*10'd96)) && PIXEL_COORD_X>=(GRID_X*10'd96) && currentGrid[6] == 1'b1) begin  //right
 				PIXEL_COLOR <= black; 
 			end else 
 			if ((PIXEL_COORD_X >=((GRID_X+1)*10'd96)-10'd4) && PIXEL_COORD_X <= ((GRID_X+1)*10'd96) && currentGrid[4] == 1'b1) begin //left
 				PIXEL_COLOR <= black; 
-			end else begin 
+			end else if (currentGrid[1:0] == 2'b01) begin 
+				PIXEL_COLOR <= pink;
+			end else if (currentGrid[1:0] == currPos && (PIXEL_COORD_X<=((GRID_X+1)*10'd96)-10'd30) && PIXEL_COORD_X >= ((GRID_X*10'd96)+10'd30) && (PIXEL_COORD_Y<=((GRID_Y+1)*10'd96)-10'd30) && PIXEL_COORD_Y >= ((GRID_Y*10'd96)+10'd30))  begin
+				PIXEL_COLOR <= magenta;
+			end else if ((currentGrid[1:0] == currPos) && (PIXEL_COORD_X<=(GRID_X*10'd96) + 10'd48)) begin 
+				PIXEL_COLOR <= pink; 
+			end else begin	
 				PIXEL_COLOR <= white; 
 			end
 
@@ -131,9 +129,17 @@ module DE0_NANO(
 				PIXEL_COLOR <= black; 
 		   end
 			
-			
+			if ((currentGrid[3:2] == 2'b01) && (PIXEL_COORD_X <= ((GRID_X+1)*10'd96) - 10'd7) && (PIXEL_COORD_X >= ((GRID_X+1)*10'd96) - 10'd15) && (PIXEL_COORD_Y <= ((GRID_Y+1)*10'd96) - 10'd7) && (PIXEL_COORD_Y >= ((GRID_Y+1)*10'd96) - 10'd15)) begin
+				PIXEL_COLOR <= red; 
+			end
+			if ((currentGrid[3:2] == 2'b10) && (PIXEL_COORD_X <= ((GRID_X+1)*10'd96) - 10'd7) && (PIXEL_COORD_X >= ((GRID_X+1)*10'd96) - 10'd15) && (PIXEL_COORD_Y <= ((GRID_Y+1)*10'd96) - 10'd7) && (PIXEL_COORD_Y >= ((GRID_Y+1)*10'd96) - 10'd15)) begin
+				PIXEL_COLOR <= blue; 
+			end
+			if ((currentGrid[3:2] == 2'b11) && (PIXEL_COORD_X <= ((GRID_X+1)*10'd96) - 10'd7) && (PIXEL_COORD_X >= ((GRID_X+1)*10'd96) - 10'd15) && (PIXEL_COORD_Y <= ((GRID_Y+1)*10'd96) - 10'd7) && (PIXEL_COORD_Y >= ((GRID_Y+1)*10'd96) - 10'd15)) begin
+				PIXEL_COLOR <= green; 
+			end
 		end
-		//if (PIXEL_COORD_X < (10'd96*(GRIX_X+1)) && PIXEL_COORD_Y <
+		
 	end
 
 	 reg [24:0] led_counter; // timer to keep track of when to toggle LED
@@ -175,6 +181,7 @@ module DE0_NANO(
 	 localparam explored = 8'b00000001;
 	 localparam unexplored = 8'b00000000;
 	 localparam currPos = 2'b11;
+
 	 
 	 assign reset = ~KEY[0]; // reset when KEY0 is pressed
 	 
@@ -198,28 +205,27 @@ module DE0_NANO(
 
 				grid1[0][0] = 8'b11110000;
 				grid1[0][1] = 8'b11110000;
-				grid1[0][2] = 8'b11110000;
+				grid1[0][2] = 8'b11110100;
 				grid1[0][3] = 8'b11110000;
 				grid1[0][4] = 8'b11110000;
 				grid1[1][0] = 8'b11110000;
 				grid1[1][1] = 8'b11110000;
 				grid1[1][2] = 8'b11110000;
 				grid1[1][3] = 8'b11110000;
-				grid1[1][4] = 8'b11110000;
+				grid1[1][4] = 8'b11111000;
 				grid1[2][0] = 8'b11110000;
 				grid1[2][1] = 8'b11110000;
 				grid1[2][2] = 8'b11110000;
-				grid1[2][3] = 8'b11110000;
+				grid1[2][3] = 8'b11111111;
 				grid1[2][4] = 8'b11110000;
 				grid1[3][0] = 8'b11110000;
 				grid1[3][1] = 8'b11110000;
-				grid1[3][2] = 8'b11110000;
-				grid1[3][3] = 8'b11110000;
-				grid1[3][4] = 8'b11110000;
+				grid1[3][2] = 8'b11110101;
+				grid1[3][3] = 8'b11111100;
+				grid1[3][4] = 8'b11111000;
 		  end
 		  
 //		  else begin 
-//			grid1[preX][preY] = grid1[preX][preY] | explored;
 //			grid1[preX][preY] = grid1[preX][preY] & 8'b11111101;
 //			grid1[botX][botY] = {wall,tres,currPos};
 //		  end
