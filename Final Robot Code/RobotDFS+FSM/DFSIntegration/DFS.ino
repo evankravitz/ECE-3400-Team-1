@@ -9,7 +9,7 @@ void resetMaze() {
 
 
 void doneWithNavigation(){
-  
+  delay(100000000);
 }
 
 void printMaze(){
@@ -27,13 +27,14 @@ void printMaze(){
 }
 
 void updateMove(){
-  Serial.println("FKSHKJLHFD");
-  Serial.println((int)currPos[0]);
-  Serial.println((int)currPos[1]);
-  Serial.println((int)prevPos[0]);
-  Serial.println((int)prevPos[1]);
-  Serial.println("FKSHKJLHFD");
-
+//  Serial.println("FKSHKJLHFD");
+//  Serial.println((int)currPos[0]);
+//  Serial.println((int)currPos[1]);
+//  Serial.println((int)prevPos[0]);
+//  Serial.println((int)prevPos[1]);
+//  Serial.println("FKSHKJLHFD");
+//  Serial.println((int) currPos[0]);
+//  Serial.println((int) currPos[1]);
   int dx = (int)currPos[0] - (int)prevPos[0];
   int dy = (int)currPos[1] - (int)prevPos[1];
   if ((dx == 2 && currentOrientation==East) //displace east, facing east
@@ -100,6 +101,9 @@ char generateNewDirection(char currOrientation, char displacementOrientation){
   
 }
 void getReachableCells(){
+  for (int i = 0; i<4; i++){
+    reachableCells[i] = 0;
+  }
   getAdjacentWall(Straight); //in front
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
@@ -122,7 +126,7 @@ void getReachableCells(){
     reachableCellArray[1] = currPos[1] + 2*(possibleWallPosition[1] - currPos[1]);
     reachableCells[2] = convertCoordsToChar(reachableCellArray);
   }
-  reachableCells[3] = convertCoordsToChar(prevPos);
+  //reachableCells[3] = convertCoordsToChar(prevPos);
   
 }
 
@@ -130,6 +134,9 @@ void getAdjacentWall(char dir){
   possibleWallPosition[0] = currPos[0];
   possibleWallPosition[1] = currPos[1];
   char directionToGo = generateNewDirection(currentOrientation, dir);
+//  Serial.print("Current orientation:"); Serial.println((int)currentOrientation);
+//  Serial.print("Displacement direction WTR current orientation"); Serial.println((int) dir);
+//  Serial.print("Direction to go:"); Serial.println((int)directionToGo);
   //go straight
   if (directionToGo == North){ 
     possibleWallPosition[1] = currPos[1] -1;
@@ -160,6 +167,14 @@ void updateCurrPosAndVisitedSet(){
       
       int ypos = 2*((reachableCells[i]-1)/4)+1;
       int xpos = 2*((reachableCells[i]-1)%4)+1;
+//      Serial.print("Reachable Cell:");
+//      Serial.println((int) reachableCells[i]);
+//      Serial.print("Xpos");
+//      Serial.println(xpos);
+//      Serial.print("Ypos");
+//      Serial.println(ypos);    
+//       
+
       if (maze[xpos][ypos] == Unexplored){
 //        Serial.println((int)reachableCells[i]);
 //        Serial.println(xpos);
@@ -171,7 +186,9 @@ void updateCurrPosAndVisitedSet(){
     }
   }
   if (!foundUnexplored){
+//    Serial.print("Last visited (popped):");
     char lastVisited = visitedStack.pop();
+//    Serial.print("Last visited (popped):"); Serial.println((int)lastVisited);
     int newYpos = 2*((lastVisited-1)/4)+1;
     int newXpos = 2*((lastVisited-1)%4)+1;
     newCurrPos[0] = newXpos;
@@ -195,14 +212,22 @@ void updateCurrPosAndVisitedSet(){
 
 
 void addWallsToMaze(){
-  detectWalls(); //this method will be defined somewhere. 
+  //detectWalls(); //this method will be defined somewhere. 
   char wallCoord[2];
+//  Serial.print("Wall Left:"); Serial.println(wallLeft);
+//  Serial.print("Wall Mid:"); Serial.println(wallMid);
+//  Serial.print("Wall Right:"); Serial.println(wallRight);
+
   if (wallLeft){
     getAdjacentWall(Left);
+//    Serial.print("Possible Wall Position Left Sensor X:"); Serial.println((int)possibleWallPosition[0]);
+//    Serial.print("Possible Wall Position Left Sensor Y:"); Serial.println((int)possibleWallPosition[1]);
     maze[possibleWallPosition[0]][possibleWallPosition[1]] = Wall;
   }
   if (wallMid){
     getAdjacentWall(Straight);
+//    Serial.print("Possible Wall Position Middle Sensor X:"); Serial.println((int)possibleWallPosition[0]);
+//    Serial.print("Possible Wall Position Middle Sensor Y:"); Serial.println((int)possibleWallPosition[1]);
     maze[possibleWallPosition[0]][possibleWallPosition[1]] = Wall;
 
   }
@@ -323,3 +348,15 @@ boolean frontierIsEmpty(){
   }
   return true;
 }
+
+void printFrontier(){
+  Serial.println("Begin printing frontier");
+  for (int i = 0; i<20; i++){
+    if (frontier[i]==1){
+      Serial.println(i+1);
+    }
+  }
+ Serial.println("Done printing frontier");
+
+}
+

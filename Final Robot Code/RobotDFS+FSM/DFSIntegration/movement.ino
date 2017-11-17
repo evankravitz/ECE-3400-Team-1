@@ -91,7 +91,7 @@ void turnRight(){
      position = qtrrc.readLine(sensors); 
   }
   while(analogRead(A0)<750 | sensors[1]<900){
-    Serial.println(sensors[1]);
+    //Serial.println(sensors[1]);
     position = qtrrc.readLine(sensors); 
     int motorSpeed = KP * error + KD * (error - lastError);
     lastError = error;
@@ -125,21 +125,21 @@ void set_motors(int motor1speed, int motor2speed) {
 void performMove(){
   currentOrientation = generateNewDirection(currentOrientation, moveToPerform);
   if (moveToPerform == Left){
-    Serial.println("Moving Left!");
+    //Serial.println("Moving Left!");
     moveLeft();
   }
   if (moveToPerform == Right){
-    Serial.println("Moving Right!");
+   // Serial.println("Moving Right!");
 
     moveRight();
   }
   if (moveToPerform == Straight){
-    Serial.println("Moving Straight!");
+   // Serial.println("Moving Straight!");
 
     moveStraight();
   }
   if (moveToPerform == Backwards){
-   Serial.println("Moving Backwards!");
+  // Serial.println("Moving Backwards!");
 
     moveBackwards();
   }

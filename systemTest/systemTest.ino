@@ -15,6 +15,9 @@ int numSamples = 256;
 float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
 float binWidth = samplingFrequency/numSamples;
 
+int position;
+int backSensor;
+
 //detectWalls
 int wallPinLeft = A5;
 int wallPinMid = A4;
@@ -124,3 +127,9 @@ void loop() {
   
 }
 
+void set_motors(int motor1speed, int motor2speed) {
+  if (motor1speed > ML_MAX_SPEED ) motor1speed = ML_MAX_SPEED; // limit top speed
+  if (motor2speed < MR_MAX_SPEED ) motor2speed = MR_MAX_SPEED; // limit top speed
+  servoL.write(motor1speed);     // set motor speed
+  servoR.write(motor2speed);     // set motor speed
+}
