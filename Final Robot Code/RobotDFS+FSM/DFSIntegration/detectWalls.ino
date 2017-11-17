@@ -1,10 +1,10 @@
 void detectWalls() {
 
   //Serial.println("Detect walls");
+   wallLeft = false;
+   wallRight = false;
+   wallMid = false;
 
-  wallLeft = false;
-  wallMid = false;
-  wallRight = false;
 
   int distanceLeft = analogRead(wallPinLeft);
   int distanceMid = analogRead(wallPinMid);

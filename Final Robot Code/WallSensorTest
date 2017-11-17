@@ -1,0 +1,31 @@
+
+ 
+// Wall Sensor Test 
+void setup(){
+  pinMode(A5, INPUT);
+  pinMode(A3, INPUT);
+  pinMode(A4, INPUT);
+  Serial.begin(9600);
+} 
+
+void loop(){
+  int distanceLeft = analogRead(A5);
+  int distanceMid = analogRead(A4);
+  int distanceRight = analogRead(A3);
+  
+
+  if (distanceLeft > 100) {
+     Serial.println("Wall on left");
+      Serial.println(distanceLeft);
+  }
+
+  if (distanceMid > 100) {
+    Serial.println("Wall in front");
+    Serial.println(distanceMid);
+ }
+
+  if (distanceRight > 100) {
+   Serial.println("Wall to right");
+   Serial.println(distanceRight);
+  }
+}
