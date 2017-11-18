@@ -143,6 +143,9 @@ void performMove(){
 
     moveBackwards();
   }
+  if (moveToPerform == Stop){
+      stop();
+  }
  }
 
 void moveLeft(){

@@ -87,6 +87,7 @@ unsigned int sensorValues[NUM_SENSORS];
 #define Right 1
 #define Straight 0
 #define Backwards 2
+#define Stop 4
 
 char currentOrientation; //We'll create some way of computing the current orientation later
 char maze [9] [11];
