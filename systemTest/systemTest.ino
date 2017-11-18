@@ -104,26 +104,27 @@ void setup() {
 }
 
 void loop() {
-  distanceLeft = analogRead(wallPinLeft);
-  distanceMid = analogRead(wallPinMid);
-  distanceRight = analogRead(wallPinRight);
-  Serial.print('Wall left: ');
-  Serial.println(distanceLeft);
-  Serial.print('Wall forward: ');
-  Serial.println(distanceMid);
-  Serial.print('Wall right: ');
-  Serial.println(distanceRight);
-  
-  position = qtrrc.readLine(sensors);
-  backSensor = analogRead(A0);
-  Serial.print('junction sensor: ');
-  Serial.println(backSensor);
-  Serial.print('sensor 1: ');
-  Serial.println(sensors[1]); 
-  Serial.print('sensor 2: ');
-  Serial.println(sensors[2]); 
-  Serial.print('sensor 3: ');
-  Serial.println(sensors[3]); 
+  set_motors(0,180);
+//  distanceLeft = analogRead(wallPinLeft);
+//  distanceMid = analogRead(wallPinMid);
+//  distanceRight = analogRead(A3);
+//  Serial.print("Wall left: ");
+//  Serial.println(distanceLeft);
+//  Serial.print("Wall forward: ");
+//  Serial.println(distanceMid);
+//  Serial.print("Wall right: ");
+//  Serial.println(distanceRight);
+
+//  position = qtrrc.readLine(sensors);
+//  backSensor = analogRead(A0);
+//  Serial.print("junction sensor: ");
+//  Serial.println(backSensor);
+//  Serial.print("sensor 1: ");
+//  Serial.println(sensors[1]); 
+//  Serial.print("sensor 2: ");
+//  Serial.println(sensors[2]); 
+//  Serial.print("sensor 3: ");
+//  Serial.println(sensors[3]); 
   
 }
 
