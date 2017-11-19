@@ -66,7 +66,7 @@ boolean isJunction;
 boolean sameJunct = false;
 int junkSensor =0;
 
-QTRSensorsRC qtrrc((unsigned char[]) {2,3,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
+QTRSensorsRC qtrrc((unsigned char[]) {2,5,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
 
@@ -103,7 +103,7 @@ void setup(){
   Serial.begin(9600); // use the serial port
   
   //servo pins
-  pinMode(9, OUTPUT);
+  pinMode(3, OUTPUT);
   pinMode(6, OUTPUT);  
 
   //junction sensor
@@ -114,7 +114,7 @@ void setup(){
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
 
-  servoL.attach(9);
+  servoL.attach(3);
   servoR.attach(6);
 
   set_motors(90,90);
