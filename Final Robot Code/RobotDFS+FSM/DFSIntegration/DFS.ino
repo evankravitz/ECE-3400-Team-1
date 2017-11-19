@@ -57,6 +57,9 @@ void updateMove(){
      {
         moveToPerform = Backwards;
   }
+    else if (dy ==0 && dx == 0){
+      moveToPerform = Stop;
+    }
   else{
     moveToPerform = Left;
   }

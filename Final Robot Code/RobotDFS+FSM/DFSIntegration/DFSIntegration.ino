@@ -1,4 +1,3 @@
-
 //Definitions
 //for Fourier Transform
 #define LOG_OUT 1 // use the log output function
@@ -27,9 +26,9 @@ int wallPinLeft = A5;
 int wallPinMid = A4;
 int wallPinRight = A3;
 
-//int distanceLeft = 0;
-//int distanceMid = 0;
-//int distanceRight = 0;
+int distanceLeft = 0;
+int distanceMid = 0;
+int distanceRight = 0;
 
 boolean wallLeft = false;
 boolean wallRight = false;
@@ -43,7 +42,7 @@ Servo servoR;
 #define KP 0.1
 #define KD 0.3
 #define Lspeed 180
-#define Rspeed 85
+#define Rspeed 82
 #define ML_MAX_SPEED 180
 #define MR_MAX_SPEED 0
 #define MIDDLE_SENSOR 2
@@ -67,7 +66,7 @@ boolean isJunction;
 boolean sameJunct = false;
 int junkSensor =0;
 
-QTRSensorsRC qtrrc((unsigned char[]) {2,3,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
+QTRSensorsRC qtrrc((unsigned char[]) {2,5,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
 
@@ -87,6 +86,7 @@ unsigned int sensorValues[NUM_SENSORS];
 #define Right 1
 #define Straight 0
 #define Backwards 2
+#define Stop 4
 
 char currentOrientation; //We'll create some way of computing the current orientation later
 char maze [9] [11];
@@ -101,16 +101,20 @@ char moveToPerform;
 
 void setup(){
   Serial.begin(9600); // use the serial port
-  //wall pins
-  pinMode(5, OUTPUT);
+  
+  //servo pins
+  pinMode(3, OUTPUT);
   pinMode(6, OUTPUT);  
-  pinMode(A0, INPUT); //junction sensor
-  //distance pins
+
+  //junction sensor
+  pinMode(A0, INPUT);
+  
+  //wall detection pins
   pinMode(A5, INPUT);
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
 
-  servoL.attach(5);
+  servoL.attach(3);
   servoR.attach(6);
 
   set_motors(90,90);
@@ -134,12 +138,12 @@ void loop(){
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
-  printMaze();
+  //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
 //  Serial.print("current position y"); Serial.println((int)currPos[1]);
   while (!frontierIsEmpty()){
-    Serial.print("current position x"); Serial.println((int)currPos[0]);
-    Serial.print("current position y"); Serial.println((int)currPos[1]);
+    //Serial.print("current position x"); Serial.println((int)currPos[0]);
+   // Serial.print("current position y"); Serial.println((int)currPos[1]);
     detectWalls();
     Serial.print("Wall Reft:"); Serial.println(wallLeft);
     Serial.print("Wall Mid:"); Serial.println(wallMid);
@@ -147,16 +151,17 @@ void loop(){
     maze[currPos[0]][currPos[1]] = Explored;
     removeFromFrontier(convertCoordsToChar(currPos));
     addWallsToMaze();
-    printMaze();
+    //printMaze();
     getReachableCells();
     addUnvisitedSurroundingNodesToFrontier();
    // printFrontier();
     updateCurrPosAndVisitedSet();
-//    if (!frontierIsEmpty()){
-//      addWallsToMaze();
-//      getReachableCells();
-//      addUnvisitedSurroundingNodesToFrontier();
-//   }
+      if (frontierIsEmpty()){
+        addWallsToMaze();
+        getReachableCells();
+        addUnvisitedSurroundingNodesToFrontier();
+        doneWithNavigation();
+     }
    updateMove();
    //Serial.println((int)moveToPerform);
    performMove();
