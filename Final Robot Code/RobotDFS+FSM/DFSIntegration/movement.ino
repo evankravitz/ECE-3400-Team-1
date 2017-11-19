@@ -20,7 +20,7 @@ void goStraight(){
 }
 
 void junction(){
-    if(junkSensor>800 && !sameJunct){
+    if(junkSensor==HIGH && !sameJunct){
       isJunction = true;
       sameJunct=true;
     }
@@ -37,23 +37,16 @@ void turnLeft(){
   set_motors(leftMotorSpeed, rightMotorSpeed);
  
   position = qtrrc.readLine(sensors);
-  while(!(analogRead(A0)<750)){
+  while(!(digitalRead(7)==LOW)){
      position = qtrrc.readLine(sensors); 
   }
-  while(analogRead(A0)<750){
+  while(digitalRead(7)==LOW && sensors[1] < 900){
     position = qtrrc.readLine(sensors); 
-    int motorSpeed = KP * error + KD * (error - lastError);
-    lastError = error;
-    if (error > 900 && error < 1100) {
-      motorSpeed = 0; 
-    }
-    leftMotorSpeed = LTurnLw + motorSpeed*1.2;
-    rightMotorSpeed = LTurnRw + motorSpeed;
-
-    //Serial.println(leftMotorSpeed);
-    //Serial.println(rightMotorSpeed);
-    set_motors(leftMotorSpeed, rightMotorSpeed);
-    
+  }
+  set_motors(90,90);
+  delay(25);
+  if(digitalRead(7)==LOW){
+    while(digitalRead(7)==LOW) goStraight();
   }
   
   return;
@@ -69,25 +62,11 @@ void turnRight(){
   set_motors(leftMotorSpeed, rightMotorSpeed);
  
   position = qtrrc.readLine(sensors);
-  while(!(analogRead(A0)<750)){
+  while(!(digitalRead(7)==LOW)){
      position = qtrrc.readLine(sensors); 
   }
-  while(analogRead(A0)<750 | sensors[1]<900){
-    //Serial.println(sensors[1]);
+  while(digitalRead(7)==LOW | sensors[1]<900){
     position = qtrrc.readLine(sensors); 
-    int motorSpeed = KP * error + KD * (error - lastError);
-    lastError = error;
-    if (error > 900 && error < 1100) {
-      motorSpeed = 0; 
-      }
-    
-    leftMotorSpeed = RTurnLw + motorSpeed*1.2;
-    rightMotorSpeed = RTurnRw + motorSpeed;
-
-    //Serial.println(leftMotorSpeed);
-    //Serial.println(rightMotorSpeed);
-    set_motors(leftMotorSpeed, rightMotorSpeed);
-    
   }
 
   return;

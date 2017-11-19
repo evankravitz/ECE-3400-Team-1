@@ -107,7 +107,7 @@ void setup(){
   pinMode(6, OUTPUT);  
 
   //junction sensor
-  pinMode(A0, INPUT);
+  pinMode(7, INPUT);
   
   //wall detection pins
   pinMode(A5, INPUT);
