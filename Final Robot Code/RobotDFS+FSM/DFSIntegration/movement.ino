@@ -131,7 +131,7 @@ void moveBackwards(){
 
 void moveStraight(){
 //  if analogRead(A0
-  while(analogRead(A0)>700){ 
+  while(digitalRead(7)==HIGH){ 
       goStraight();
    }
 
@@ -141,7 +141,7 @@ void moveStraight(){
   
   while (!isJunction) {
     position = qtrrc.readLine(sensors);
-    junkSensor = analogRead(A0);
+    junkSensor = digitalRead(7);
     
     error = position - 1000;
     junction();
