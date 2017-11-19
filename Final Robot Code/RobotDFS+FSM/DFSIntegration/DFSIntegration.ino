@@ -135,12 +135,12 @@ void loop(){
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
-  printMaze();
+  //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
 //  Serial.print("current position y"); Serial.println((int)currPos[1]);
   while (!frontierIsEmpty()){
-    Serial.print("current position x"); Serial.println((int)currPos[0]);
-    Serial.print("current position y"); Serial.println((int)currPos[1]);
+    //Serial.print("current position x"); Serial.println((int)currPos[0]);
+   // Serial.print("current position y"); Serial.println((int)currPos[1]);
     detectWalls();
     Serial.print("Wall Reft:"); Serial.println(wallLeft);
     Serial.print("Wall Mid:"); Serial.println(wallMid);
@@ -148,16 +148,17 @@ void loop(){
     maze[currPos[0]][currPos[1]] = Explored;
     removeFromFrontier(convertCoordsToChar(currPos));
     addWallsToMaze();
-    printMaze();
+    //printMaze();
     getReachableCells();
     addUnvisitedSurroundingNodesToFrontier();
    // printFrontier();
     updateCurrPosAndVisitedSet();
-//    if (!frontierIsEmpty()){
-//      addWallsToMaze();
-//      getReachableCells();
-//      addUnvisitedSurroundingNodesToFrontier();
-//   }
+      if (frontierIsEmpty()){
+        addWallsToMaze();
+        getReachableCells();
+        addUnvisitedSurroundingNodesToFrontier();
+        doneWithNavigation();
+     }
    updateMove();
    //Serial.println((int)moveToPerform);
    performMove();

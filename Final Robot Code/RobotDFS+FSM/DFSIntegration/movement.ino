@@ -37,7 +37,7 @@ void turnLeft(){
   set_motors(leftMotorSpeed, rightMotorSpeed);
  
   position = qtrrc.readLine(sensors);
-  while(!(analogRead(A0)<650)){
+  while(!(analogRead(A0)<750)){
      position = qtrrc.readLine(sensors); 
   }
   while(analogRead(A0)<750){
@@ -87,7 +87,7 @@ void turnRight(){
   set_motors(leftMotorSpeed, rightMotorSpeed);
  
   position = qtrrc.readLine(sensors);
-  while(!(analogRead(A0)<650)){
+  while(!(analogRead(A0)<750)){
      position = qtrrc.readLine(sensors); 
   }
   while(analogRead(A0)<750 | sensors[1]<900){

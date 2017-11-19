@@ -11,17 +11,17 @@ void detectWalls() {
   int distanceRight = analogRead(wallPinRight);
 //  Serial.print("left:");
 //  Serial.println(distanceLeft);
-  if (distanceLeft > 100) {
+  if (distanceLeft > 250) {
     wallLeft = true;
   }
 //  Serial.print("middle:");
 //  Serial.println(distanceMid);
-  if (distanceMid > 100) {
+  if (distanceMid > 110) {
     wallMid = true;
   }
 //  Serial.print("right:");
 //  Serial.println(distanceRight);
-  if (distanceRight > 100) {
+  if (distanceRight > 200) {
     wallRight = true;
   }
   
