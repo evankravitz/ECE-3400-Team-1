@@ -1,4 +1,3 @@
-
 //Definitions
 //for Fourier Transform
 #define LOG_OUT 1 // use the log output function
@@ -27,9 +26,9 @@ int wallPinLeft = A5;
 int wallPinMid = A4;
 int wallPinRight = A3;
 
-//int distanceLeft = 0;
-//int distanceMid = 0;
-//int distanceRight = 0;
+int distanceLeft = 0;
+int distanceMid = 0;
+int distanceRight = 0;
 
 boolean wallLeft = false;
 boolean wallRight = false;
@@ -43,7 +42,7 @@ Servo servoR;
 #define KP 0.1
 #define KD 0.3
 #define Lspeed 180
-#define Rspeed 85
+#define Rspeed 82
 #define ML_MAX_SPEED 180
 #define MR_MAX_SPEED 0
 #define MIDDLE_SENSOR 2
@@ -102,16 +101,20 @@ char moveToPerform;
 
 void setup(){
   Serial.begin(9600); // use the serial port
-  //wall pins
-  pinMode(5, OUTPUT);
+  
+  //servo pins
+  pinMode(9, OUTPUT);
   pinMode(6, OUTPUT);  
-  pinMode(A0, INPUT); //junction sensor
-  //distance pins
+
+  //junction sensor
+  pinMode(A0, INPUT);
+  
+  //wall detection pins
   pinMode(A5, INPUT);
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
 
-  servoL.attach(5);
+  servoL.attach(9);
   servoR.attach(6);
 
   set_motors(90,90);
