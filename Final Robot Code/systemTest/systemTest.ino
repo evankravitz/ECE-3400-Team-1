@@ -107,9 +107,9 @@ void loop() {
 
   //readMic();
 
-//testStart();
+  testStart();
 
- detectTreasure();
+ //detectTreasure();
   
 }
 
