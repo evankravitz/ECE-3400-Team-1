@@ -6,9 +6,9 @@
 int micPin = A0; //microphone connected to analog 0, code currently does this in setup in ADMUX
 
 //detectWalls
-int wallPinLeft = A5;
-int wallPinMid = A4;
-int wallPinRight = A3;
+const int wallPinLeft = A5;
+const int wallPinMid = A4;
+const int wallPinRight = A3;
 
 int distanceLeft = 0;
 int distanceMid = 0;
@@ -59,6 +59,10 @@ unsigned int sensorValues[NUM_SENSORS];
 #define FFT_N 128 // set to 256 point fft
 #include <FFT.h> // include the FFT library
 
+bool startDFS = false;
+const int buttonPin = 8;
+int buttonState = 0;
+
 void setup() {
   //setup for both FFTs
   Serial.begin(9600); // use the serial port
@@ -72,7 +76,7 @@ void setup() {
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
   
-  //extra line sensor
+  //microphone
   pinMode(A0, INPUT);
 
   servoL.attach(9);
@@ -82,12 +86,12 @@ void setup() {
   
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
-  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
-  {
-    //Serial.println("Calibrating");
-    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
-  }
-  digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
+//  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
+//  {
+//    //Serial.println("Calibrating");
+//    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
+//  }
+//  digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
 
   TIMSK0 = 0; // turn off timer0 for lower jitter
   ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
@@ -103,8 +107,10 @@ void loop() {
 //readWallBooleans();
 
 //testLineFollowing();
-  Serial.println("loop");
-  detectStart();
+
+  //readMic();
+
+  testStart();
   
 }
 
@@ -153,10 +159,22 @@ void readWallBooleans() {
 
 void testLineFollowing() {
   position = qtrrc.readLine(sensors);
-  junkSensor = analogRead(A0);
+  junkSensor = digitalRead(7);
   error = position - 1000;
   Serial.println(error);
   goStraight();
+}
+
+void readMic() {
+  Serial.println(analogRead(A0));
+}
+
+void testStart() {
+  startDFS = detectStart();
+  startDFS = detectButton();
+  if (startDFS == true) {
+    digitalWrite(13, HIGH);
+  }
 }
 
 

@@ -1,4 +1,4 @@
-void detectStart() {
+bool detectStart() {
   while(1) { // reduces jitter
     cli();  // UDRE interrupt slows this way down on arduino1.0
     for (int i = 0 ; i < 256 ; i += 2) { // save 128 samples
@@ -23,13 +23,25 @@ void detectStart() {
       Serial.println(fft_log_out[i]); // send out the data
     }
 
-    //detects input on bin 19 and returns TRUE if signal is detected
-//    if (fft_log_out[18] > 120) {
-//      //digitalWrite(13, HIGH);
-//      return true;
-//    }
-//    else {
-//      return false;
-//    }
+    //detects input on bin 10 and returns TRUE if signal is detected
+    if (fft_log_out[9] > 100) {
+      digitalWrite(13, HIGH);
+      return true;
+    }
+    else {
+      digitalWrite(13, LOW);
+      return false;
+    }
   }
 }
+
+bool detectButton() {
+  int buttonState = digitalRead(buttonPin);
+  
+  if (buttonState == HIGH) {
+    return true;
+  } else {
+    return false;
+  } 
+}
+

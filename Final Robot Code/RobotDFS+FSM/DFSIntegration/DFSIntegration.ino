@@ -16,14 +16,7 @@ const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 role_e role = role_pong_back;
 
 
-
-//Definitions
-//for Fourier Transform
-#define LOG_OUT 1 // use the log output function
-#define FFT_N 256 // set to 256 point fft
-
 //Libraries
-//#include <FFT.h> // include the FFT library
 #include <QTRSensors.h> //QTR sensor (line sensor) library
 #include <Servo.h> // servo library
 #include <StackArray.h>
@@ -60,10 +53,6 @@ Servo servoL;
 Servo servoR;
 
 
-
-
-
-
 // Change the values below to suit your robot's motors, weight, wheel type, etc.
 #define KP 0.1
 #define KD 0.3
@@ -95,6 +84,17 @@ int junkSensor =0;
 QTRSensorsRC qtrrc((unsigned char[]) {2,5,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN);
 
 unsigned int sensorValues[NUM_SENSORS];
+
+//start detection things
+
+//for Fourier Transform
+#define LOG_OUT 1 // use the log output function
+#define FFT_N 256 // set to 256 point fft
+#include <FFT.h> // include the FFT library
+
+bool startDFS = false;
+const int buttonPin = 8;
+int buttonState = 0;
 
 ///// Everything above is from the FSM code ^^^^
 
@@ -128,7 +128,7 @@ char done = 0;
 
 
 void setup(){
-
+  
   //radio setup:
   radio.begin();
 
@@ -150,7 +150,7 @@ void setup(){
 
   
   Serial.begin(9600); // use the serial port
-  
+  Serial.println("setup");
   //servo pins
   pinMode(3, OUTPUT);
   pinMode(6, OUTPUT);  
@@ -167,17 +167,22 @@ void setup(){
   servoR.attach(6);
 
   set_motors(90,90);
-
-  
   
   pinMode(13, OUTPUT);
+  Serial.println("start calibration");
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
   for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
   {
     //Serial.println("Calibrating");
     qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
   }
+  Serial.println("done calibrating");
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
+  
+  TIMSK0 = 0; // turn off timer0 for lower jitter
+  ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
+  ADMUX = 0x40; // use adc0: analog A0
+  DIDR0 = 0x01; // turn off the digital input for adc0
 }
 
 void loop(){
@@ -190,6 +195,11 @@ void loop(){
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
+
+  while(!startDFS) {
+    startDFS = detectStart();
+    startDFS = detectButton();
+  }
   
   //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
