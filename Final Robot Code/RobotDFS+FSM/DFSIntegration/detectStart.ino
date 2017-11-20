@@ -38,6 +38,7 @@ bool detectStart() {
     DIDR0 = tempDIDR0;
     //detects input on bin 10 and returns TRUE if signal is detected
     if (fft_log_out[9] > 100) {
+      Serial.println("sound!");
       return true;
     }
     else {
@@ -50,6 +51,7 @@ bool detectButton() {
   int buttonState = digitalRead(buttonPin);
   
   if (buttonState == HIGH) {
+    Serial.println("button!");
     return true;
   } else {
     return false;

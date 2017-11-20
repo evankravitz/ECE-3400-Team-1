@@ -136,7 +136,7 @@ void moveStraight(){
    }
 
   sameJunct = false;
-  digitalWrite(13, LOW);
+//  digitalWrite(13, LOW);
   isJunction = false;
   
   while (!isJunction) {
@@ -147,7 +147,7 @@ void moveStraight(){
     junction();
     if (isJunction) {
       set_motors(90,90);
-      digitalWrite(13, HIGH);
+//      digitalWrite(13, HIGH);
       
     }
     else  {

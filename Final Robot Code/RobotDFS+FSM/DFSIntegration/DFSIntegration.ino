@@ -13,7 +13,7 @@ const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
 
 //for Fourier Transform
 #define LOG_OUT 1 // use the log output function
-#define FFT_N 256 // set to 256 point fft
+#define FFT_N 128 // set to 256 point fft
 #include <FFT.h> // include the FFT library
 
 
@@ -166,32 +166,36 @@ void setup(){
 
   set_motors(90,90);
   
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
+//  pinMode(13, OUTPUT);
+//  digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
   for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
   {
-    //Serial.println("Calibrating");
+  // Serial.println("Calibrating");
     qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
   }
-  digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
+  Serial.println("Done Calibrating");
+//  digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
   
 }
 
 void loop(){
   //start on 660 Hz Tone OR Button Press
+  Serial.println(startDFS);
    while(!startDFS) {
       set_motors(90,90);
       delay(25);
-      startDFS = detectStart();
+      Serial.println(startDFS);
+      startDFS |= detectStart();
       startDFS |= detectButton();
   }
   //turns light on to tell that we started
-  digitalWrite(13, HIGH);
+//  digitalWrite(13, HIGH);
   set_motors(90,90);
   delay(500);
-  digitalWrite(13, LOW);
-  
+//  digitalWrite(13, LOW);
+  Serial.println("Started!");
   recordAndTransmitData();
+//  Serial.println("did I record & transmit?");
   detectWalls();
   detectTreasures();
   prevPos[0] = currPos[0];
@@ -224,6 +228,7 @@ void loop(){
         addWallsToMaze();
         getReachableCells();
         addUnvisitedSurroundingNodesToFrontier();
+        updateMove();
         doneWithNavigation();
      }
    updateMove();
