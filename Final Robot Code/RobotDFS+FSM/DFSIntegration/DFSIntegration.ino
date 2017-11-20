@@ -7,13 +7,9 @@ RF24 radio(9,10);
 
 const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
 // The various roles supported by this sketch
-typedef enum { role_ping_out = 1, role_pong_back } role_e;
 
-// The debug-friendly names of those roles
-const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 
 // The role of the current running sketch
-role_e role = role_pong_back;
 
 
 //Libraries
@@ -26,12 +22,12 @@ role_e role = role_pong_back;
 
 //detectTreasure
 //int treasurePin = A0; // treasure connected to analog 0, code does this in setup in ADMUX
-long clockFreq = 16E6;
-int divisionFactor = 32;
-int conversionTime = 13;
-int numSamples = 256;
-float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
-float binWidth = samplingFrequency/numSamples;
+const long clockFreq = 16E6;
+const int divisionFactor = 32;
+const int conversionTime = 13;
+const int numSamples = 256;
+const float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
+const float binWidth = samplingFrequency/numSamples;
 
 char treasure = 0;
 
@@ -186,6 +182,7 @@ void setup(){
 }
 
 void loop(){
+  recordAndTransmitData();
   detectWalls();
   detectTreasures();
   prevPos[0] = currPos[0];
@@ -204,7 +201,7 @@ void loop(){
   //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
 //  Serial.print("current position y"); Serial.println((int)currPos[1]);
-  while (!frontierIsEmpty()){
+  while (true){
     //Serial.print("current position x"); Serial.println((int)currPos[0]);
    // Serial.print("current position y"); Serial.println((int)currPos[1]);
     detectWalls();
@@ -229,10 +226,8 @@ void loop(){
         doneWithNavigation();
      }
    updateMove();
-   //Serial.println((int)moveToPerform);
    performMove();
   }
-  doneWithNavigation();
 
 ////Figure eight bc lol it's never too late to do milestone 1 
 //moveStraight();

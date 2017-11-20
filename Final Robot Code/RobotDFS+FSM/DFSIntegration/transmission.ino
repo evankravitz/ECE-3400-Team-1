@@ -1,12 +1,18 @@
-void recordAndTransmitData(){
+unsigned long started_waiting_at;
 
-  String stringToSend = assembleWordString();
-  word wordToSend = assembleWord(stringToSend);
-  sendPacket(wordToSend);
+void recordAndTransmitData(){
+//  unsigned long startTime = millis();
+  //String stringToSend = assembleWordString();
+  word wordToSend = assembleWord("1111000010101010");
+  boolean successfullySent = false;
+  while (!successfullySent){
+    successfullySent = sendPacket(wordToSend);
+  }
+  Serial.println("Data successfully sent!");
 }
 
 word assembleWord(String stringWord){
-  word wordToReturn;
+  word wordToReturn = 0000000000000000;
   for (int i = 0; i<16; i++){
     int bitIndex = 15-i;
     if (stringWord.charAt(i)=='0'){
@@ -113,35 +119,34 @@ String assembleDoneString(){
 
 
 
-void sendPacket(word data){
+boolean sendPacket(word data){
+  radio.stopListening();
   bool ok = radio.write(&data, sizeof(word));
-  
+
   if (!ok){
-    Serial.println("Unable to send data. Retrying...");
-    return sendPacket(data);
-  }
-  
-  unsigned long started_waiting_at = millis();
-  bool timeout = false;
-  while (!radio.available() && !timeout){
-    if (millis() - started_waiting_at > 200){
-      timeout= true;
+    return false;
+   }
+  else{
+  //  Serial.println("Waiting to start listening...");
+    radio.startListening();
+    started_waiting_at = millis();
+    bool timeout = false;
+    
+    if (timeout){
+      return false;
+    }
+    else{
+      char recievedData;
+     // Serial.println("Trying to recieve back from reciever...");
+      radio.read(&recievedData, sizeof(word));
+      if (!recievedData==data){
+        return false;
+      }
+      else{
+         return true;
+      }
     }
   }
-  
-  if (timeout){
-    Serial.println("Transmission timed out. Retrying...");
-    return sendPacket(data);
-  }
-  char recievedData;
-  radio.read(&recievedData, sizeof(word));
-  if (!recievedData==data){
-    Serial.println("Transmission data corrupted. Retrying...");
-    return sendPacket(data);
-  }
-  
-  
-    
   
   
 
