@@ -2227,16 +2227,28 @@ wall detection using short range sensors. </p>
 
                     <p>We began dealing with these issues by working on a new protoboard. This protoboard would include a new set of power rails, as well as a manual start button and a Schmitt trigger for the back line sensor. We designed the Schmitt trigger to go high at 4V, and go low and 3V, thus making it easy for us to read whether the line sensor was over white or black (see the schematic below). Our manual reset button is just a button wired between 3V and a digital input pin with a resistor in series. We put two power rails on either side of the protoboard for ease of wiring. This ended up being a huge issue, because we used some pretty terrible header pins. In order to actually get stable connections, we needed to solder the connections. See below for pictures of the protoboard and the Schmitt trigger diagram.</p>
 
-                    <img class="img-fluid img-centered" src="./resources/schmitt_trigger" alt=""> <br>
+                    <img class="img-fluid img-centered" src="./resources/schmitt_trigger.png" alt=""> <br>
                     <p>R1=10kΩ, R2=50kΩ, R3=25kΩ, R4=50kΩ</p>
 
-                    <p><b>PUT IN PROTOBOARD PIC YA DUMMY!</b></p>
+                    <img class="img-fluid img-centered" src="./resources/trigger-wave.JPG" alt=""> <br>
+
+                    <p>The functioning Schmitt trigger output</p>
+
+                    <img class="img-fluid img-centered" src="./resources/protoboard.JPG" alt=""> <br>
 
                     <p>We decided to put our treasure detection and microphone circuitry on a PCB. We used the schematics developed in Lab 2 and Milestone 3 for the microphone and IR sensors respectively. We assigned pin A0 to the microphone, A1 to be the right IR sensor, and A2 to the left IR sensor. The PCB came out really well, you can see the schematic and final product below.</p>
 
+                    <img class="img-fluid img-centered" src="./resources/pcb.JPG" alt=""> <br>
+
+                    <p> During this whole process, we made sweeping changes to our robot and its wiring, ultimately making it cleaner and easier to work with. See the below image:</p>
+
+                    <img class="img-fluid img-centered" src="./resources/robotm4.JPG" alt=""> <br>
+
                   <h3>DFS Integration</h3>
+                  <b>Evan?</b>
 
                   <h3>Verilog & Wireless Communication Updates</h3>
+                  <b>Katherine?</b>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
