@@ -85,7 +85,7 @@ void setup() {
   set_motors(90,90);
   
   pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
+ // digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
 //  for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
 //  {
 //    //Serial.println("Calibrating");
@@ -93,10 +93,7 @@ void setup() {
 //  }
 //  digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
 
-  TIMSK0 = 0; // turn off timer0 for lower jitter
-  ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
-  ADMUX = 0x40; // use adc0: analog A0
-  DIDR0 = 0x01; // turn off the digital input for adc0
+
   
 }
 
@@ -110,7 +107,9 @@ void loop() {
 
   //readMic();
 
-  testStart();
+//testStart();
+
+ detectTreasure();
   
 }
 
@@ -170,10 +169,11 @@ void readMic() {
 }
 
 void testStart() {
-  startDFS = detectStart();
   startDFS = detectButton();
   if (startDFS == true) {
     digitalWrite(13, HIGH);
+  } else {
+    digitalWrite(13, LOW);
   }
 }
 

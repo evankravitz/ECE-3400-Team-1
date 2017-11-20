@@ -1,7 +1,7 @@
 //Definitions
 //for Fourier Transform
 #define LOG_OUT 1 // use the log output function
-#define FFT_N 256 // set to 256 point fft
+#define FFT_N 128 // set to 256 point fft
 
 //Libraries
 #include <FFT.h> // include the FFT library
@@ -106,18 +106,21 @@ char moveToPerform;
 
 void setup(){
   Serial.begin(9600); // use the serial port
-  
+  Serial.println("setup");
   //servo pins
   pinMode(3, OUTPUT);
   pinMode(6, OUTPUT);  
 
   //junction sensor
   pinMode(7, INPUT);
-  
+
   //wall detection pins
   pinMode(A5, INPUT);
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
+
+  //microphone
+  pinMode(A0, INPUT);
 
   servoL.attach(3);
   servoR.attach(6);
@@ -125,16 +128,31 @@ void setup(){
   set_motors(90,90);
   
   pinMode(13, OUTPUT);
+  //Serial.println("start calibration");
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
   for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
   {
-    //Serial.println("Calibrating");
     qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
   }
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
+  //Serial.println("done calibrating");
+
 }
 
 void loop(){
+  while(!startDFS) {
+      set_motors(90,90);
+      delay(25);
+      startDFS = detectStart();
+      startDFS |= detectButton();
+  }
+  //turns light on to tell that we started
+  digitalWrite(13, HIGH);
+  set_motors(90,90);
+  delay(500);
+  digitalWrite(13, LOW);
+
+  //rest is normal DFS algorithm
   detectWalls();
   prevPos[0] = currPos[0];
   prevPos[1] = currPos[1];
@@ -142,9 +160,9 @@ void loop(){
   initializeCurrPos();
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
-  visitedStack.push(convertCoordsToChar(currPos));  
-
-
+  visitedStack.push(convertCoordsToChar(currPos)); 
+   
+  
   
   //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
@@ -153,9 +171,9 @@ void loop(){
     //Serial.print("current position x"); Serial.println((int)currPos[0]);
    // Serial.print("current position y"); Serial.println((int)currPos[1]);
     detectWalls();
-    Serial.print("Wall Reft:"); Serial.println(wallLeft);
-    Serial.print("Wall Mid:"); Serial.println(wallMid);
-    Serial.print("Wall Right:"); Serial.println(wallRight);
+//    Serial.print("Wall Reft:"); Serial.println(wallLeft);
+//    Serial.print("Wall Mid:"); Serial.println(wallMid);
+//    Serial.print("Wall Right:"); Serial.println(wallRight);
     maze[currPos[0]][currPos[1]] = Explored;
     removeFromFrontier(convertCoordsToChar(currPos));
     addWallsToMaze();
@@ -175,16 +193,4 @@ void loop(){
    performMove();
   }
   doneWithNavigation();
-
-////Figure eight bc lol it's never too late to do milestone 1 
-//moveStraight();
-//moveRight();
-//moveLeft(); 
-//moveLeft();
-//moveLeft();
-//moveLeft();
-//moveRight();
-//moveRight(); 
-//turnRight();
-
 }
