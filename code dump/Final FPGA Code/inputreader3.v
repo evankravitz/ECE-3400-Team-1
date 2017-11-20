@@ -7,14 +7,15 @@ preX,
 preY,
 walls,
 treasure, 
-left, right, down, up);
+left, right, down, up, updateType);
 
 input valid;
-input [7:0] arduinoInput;
+input [6:0] arduinoInput;
 output reg [1:0] robotX;
 output reg [2:0] robotY;
 output reg [3:0] walls;
 output reg [1:0] treasure;
+output reg updateType;
 output reg left; 
 output reg right; 
 output reg up; 
@@ -27,14 +28,23 @@ always @ (posedge valid) begin
 	preX = robotX;
 	preY = robotY;
 
-	if (arduinoInput[8] == 1'b1) begin
-		robotX = arduinoInput[6:5];
-		robotY = arduinoInput[4:2];
+	if (arduinoInput[6] == 1'b1) begin
+		updateType = 1'b0;
+		robotX = arduinoInput[5:4];
+		robotY = arduinoInput[3:1];
 	end
-	if (arduinoInput[8] == 1'b0) begin
-		walls = arduinoInput[6:3];
-		treasure = arduinoInput[2:1];
+	if (arduinoInput[6] == 1'b0) begin
+		updateType = 1'b1;
+		walls = arduinoInput[5:2];
+		treasure = arduinoInput[1:0];
 	end
+	
+	
+	
+	
+	
+	
+	
 	
 	if (preX == robotX) begin 
 		if (robotY > preY) begin 

@@ -1,10 +1,9 @@
-
 //Libraries
-//#include <FFT.h> // include the FFT library
+
 #include <QTRSensors.h> //QTR sensor (line sensor) library
 #include <Servo.h> // servo library
 
-//int micPin = A0; //microphone connected to analog 0, code currently does this in setup in ADMUX
+int micPin = A0; //microphone connected to analog 0, code currently does this in setup in ADMUX
 
 //detectWalls
 int wallPinLeft = A5;
@@ -55,6 +54,11 @@ QTRSensorsRC qtrrc((unsigned char[]) {2,3,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN)
 
 unsigned int sensorValues[NUM_SENSORS];
 
+//for Fourier Transform
+#define LOG_OUT 1 // use the log output function
+#define FFT_N 128 // set to 256 point fft
+#include <FFT.h> // include the FFT library
+
 void setup() {
   //setup for both FFTs
   Serial.begin(9600); // use the serial port
@@ -84,6 +88,11 @@ void setup() {
     qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
   }
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
+
+  TIMSK0 = 0; // turn off timer0 for lower jitter
+  ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
+  ADMUX = 0x40; // use adc0: analog A0
+  DIDR0 = 0x01; // turn off the digital input for adc0
   
 }
 
@@ -91,9 +100,11 @@ void loop() {
 
 //readWallSensors();
 
-  readWallBooleans();
+//readWallBooleans();
 
 //testLineFollowing();
+  Serial.println("loop");
+  detectStart();
   
 }
 

@@ -2225,7 +2225,14 @@ wall detection using short range sensors. </p>
                       <ul>Wiring up our IR phototransistors and their amplifiers</ul>
                       <ul>Wiring up our microphone</ul>
 
-                    <p>We began dealing with these issues by working on a new protoboard. This protoboard would include a new set of power rails, as well as a manual start button and a Schmitt trigger for the back line sensor. We designed the Schmitt trigger to go high at 4V, and go low and 3V, thus making it easy for us to read whether the line sensor was over white or black (see the schematic below). Our manual reset</p>
+                    <p>We began dealing with these issues by working on a new protoboard. This protoboard would include a new set of power rails, as well as a manual start button and a Schmitt trigger for the back line sensor. We designed the Schmitt trigger to go high at 4V, and go low and 3V, thus making it easy for us to read whether the line sensor was over white or black (see the schematic below). Our manual reset button is just a button wired between 3V and a digital input pin with a resistor in series. We put two power rails on either side of the protoboard for ease of wiring. This ended up being a huge issue, because we used some pretty terrible header pins. In order to actually get stable connections, we needed to solder the connections. See below for pictures of the protoboard and the Schmitt trigger diagram.</p>
+
+                    <img class="img-fluid img-centered" src="./resources/schmitt_trigger.jpg" alt=""> <br>
+                    <p>R1=10kΩ, R2=50kΩ, R3=25kΩ, R4=50kΩ</p>
+
+                    <p><b>PUT IN PROTOBOARD PIC YA DUMMY!</b></p>
+
+                    <p>We decided to put our treasure detection and microphone circuitry on a PCB.</p>
                   <h3>DFS Integration</h3>
                   <h3>Verilog & Wireless Communication Updates</h3>
                   <h3></h3>

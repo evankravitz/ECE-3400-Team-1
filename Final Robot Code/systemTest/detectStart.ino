@@ -1,7 +1,7 @@
-boolean detectStart() {
+void detectStart() {
   while(1) { // reduces jitter
     cli();  // UDRE interrupt slows this way down on arduino1.0
-    for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
+    for (int i = 0 ; i < 256 ; i += 2) { // save 128 samples
       while(!(ADCSRA & 0x10)); // wait for adc to be ready
       ADCSRA = 0xf7; // restart adc
       byte m = ADCL; // fetch adc data
@@ -18,18 +18,18 @@ boolean detectStart() {
     fft_mag_log(); // take the output of the fft
 
     sei();
-    //Serial.println("start");
+    Serial.println("start");
     for (byte i = 0 ; i < FFT_N/2 ; i++) { 
-      //Serial.println(fft_log_out[i]); // send out the data
+      Serial.println(fft_log_out[i]); // send out the data
     }
 
     //detects input on bin 19 and returns TRUE if signal is detected
-    if (fft_log_out[18] > 120) {
-      //digitalWrite(13, HIGH);
-      return true;
-    }
-    else {
-      return false;
-    }
+//    if (fft_log_out[18] > 120) {
+//      //digitalWrite(13, HIGH);
+//      return true;
+//    }
+//    else {
+//      return false;
+//    }
   }
 }

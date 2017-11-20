@@ -167,6 +167,8 @@ void setup(){
   servoR.attach(6);
 
   set_motors(90,90);
+
+  
   
   pinMode(13, OUTPUT);
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode

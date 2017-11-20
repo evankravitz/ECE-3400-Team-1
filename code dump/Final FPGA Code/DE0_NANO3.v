@@ -115,21 +115,21 @@ module DE0_NANO(
 				PIXEL_COLOR <= pink;
 			end else if (currentGrid[1:0] == currPos && (PIXEL_COORD_X<=((GRID_X+1)*10'd96)-10'd30) && PIXEL_COORD_X >= ((GRID_X*10'd96)+10'd30) && (PIXEL_COORD_Y<=((GRID_Y+1)*10'd96)-10'd30) && PIXEL_COORD_Y >= ((GRID_Y*10'd96)+10'd30))  begin
 				PIXEL_COLOR <= magenta;
-			end else if (currentGrid[1:0] == currPos) begin 
-				if (left == 1'b1 && (PIXEL_COORD_X<=(GRID_X*10'd96) + 10'd48)) begin 
-					PIXEL_COLOR <= pink; 
-				end 
-				else if (right == 1'b1 && (PIXEL_COORD_X<=((GRID_X+1)*10'd96) - 10'd48)) begin 
-					PIXEL_COLOR <= pink; 
-				end 
-				else if (up == 1'b1 && (PIXEL_COORD_Y<=(GRID_Y*10'd96) + 10'd48)) begin 
-					PIXEL_COLOR <= pink; 
-				end 
-				else if (down == 1'b1 && (PIXEL_COORD_Y<=((GRID_Y+1)*10'd96) - 10'd48)) begin 
-					PIXEL_COLOR <= pink; 
-				end else begin 
-					PIXEL_COLOR <= white;
-				end
+//			end else if (currentGrid[1:0] == currPos) begin 
+//				if (right == 1'b1 && (PIXEL_COORD_X<=(GRID_X*10'd96) + 10'd48) && (PIXEL_COORD_X>=(GRID_X*10'd96))) begin 
+//					PIXEL_COLOR <= pink; 
+//				end 
+//				else if (left == 1'b1 && (PIXEL_COORD_X>=((GRID_X+1)*10'd96) - 10'd48) && (PIXEL_COORD_X<=(GRID_X+1)*10'd96)) begin 
+//					PIXEL_COLOR <= pink; 
+//				end 
+//				else if (up == 1'b1 && (PIXEL_COORD_Y>=(GRID_Y*10'd96) + 10'd48)  && (PIXEL_COORD_Y<=(GRID_Y+1)*10'd96)) begin 
+//					PIXEL_COLOR <= pink; 
+//				end 
+//				else if (down == 1'b1 && (PIXEL_COORD_Y<=((GRID_Y+1)*10'd96) - 10'd48) && (PIXEL_COORD_X>=(GRID_X)*10'd96)) begin 
+//					PIXEL_COLOR <= pink; 
+//				end else begin 
+//					PIXEL_COLOR <= white;
+//				end
 				
 			end else begin	
 				PIXEL_COLOR <= white; 
@@ -164,10 +164,11 @@ module DE0_NANO(
 	 wire [2:0]	preY;
 	 wire [3:0] wall;
 	 wire [1:0] tres;
-	 wire left = 1'b0; 
-	 wire right = 1'b0; 
-	 wire up = 1'b0; 
-	 wire down = 1'b1;
+	 wire left;
+	 wire right; 
+	 wire up;
+	 wire updateType;
+	 wire down;
 
 	 
     // Module outputs coordinates of next pixel to be written onto screen
@@ -182,24 +183,25 @@ module DE0_NANO(
         .V_SYNC_NEG(GPIO_0_D[5])
     );
 	 
-//	 inputReader reader(
-//		.valid(GPIO_1_D[8]),
-//		.arduinoInput({GPIO_1_D[10],GPIO_1_D[12],GPIO_1_D[14],GPIO_1_D[16],GPIO_1_D[18], GPIO_1_D[20], GPIO_1_D[22], GPIO_1_D[24]}),
-//		.robotX(botX),
-//		.robotY(botY),
-//		.preX(preX),
-//		.preY(preY),
-//		.walls(wall),
-//		.treasure(tres), 
-//		.left(left),
-//		.right(right),
-//		.down(down),
-//		.up(up)
-//	);
+	 inputReader reader(
+		.valid(GPIO_1_D[24]),
+		.arduinoInput({GPIO_1_D[10],GPIO_1_D[12],GPIO_1_D[14],GPIO_1_D[16],GPIO_1_D[18], GPIO_1_D[20], GPIO_1_D[22]}),
+		.robotX(botX),
+		.robotY(botY),
+		.preX(preX),
+		.preY(preY),
+		.walls(wall),
+		.treasure(tres), 
+		.left(left),
+		.right(right),
+		.down(down),
+		.up(up), 
+		.updateType(updateType)
+	);
 	 
-	 assign botX = 2'b10;
-	 assign botY = 3'b010;
-	 
+//	assign botX = 2'b10;
+//	assign botY = 3'b010;
+//	 
 	 localparam explored = 8'b00000001;
 	 localparam unexplored = 8'b00000000;
 	 localparam currPos = 2'b11;
@@ -225,33 +227,38 @@ module DE0_NANO(
 				led_state   <= 1'b0;
 				led_counter <= 25'b0;
 
-				grid1[0][0] = 8'b11110001;
-				grid1[0][1] = 8'b11110001;
-				grid1[0][2] = 8'b11110101;
-				grid1[0][3] = 8'b11110001;
-				grid1[0][4] = 8'b11110001;
-				grid1[1][0] = 8'b11110001;
-				grid1[1][1] = 8'b11110001;
-				grid1[1][2] = 8'b11110001;
-				grid1[1][3] = 8'b11110001;
-				grid1[1][4] = 8'b11111001;
-				grid1[2][0] = 8'b11110001;
-				grid1[2][1] = 8'b11110001;
-				grid1[2][2] = 8'b11110001;
-				grid1[2][3] = 8'b11111111;
-				grid1[2][4] = 8'b11110000;
-				grid1[3][0] = 8'b11110000;
-				grid1[3][1] = 8'b11110000;
-				grid1[3][2] = 8'b11110100;
-				grid1[3][3] = 8'b11111100;
-				grid1[3][4] = 8'b11111000;
+				grid1[0][0] = 8'b00000000;
+				grid1[0][1] = 8'b00000000;
+				grid1[0][2] = 8'b00000000;
+				grid1[0][3] = 8'b00000000;
+				grid1[0][4] = 8'b00000000;
+				grid1[1][0] = 8'b00000000;
+				grid1[1][1] = 8'b00000000;
+				grid1[1][2] = 8'b00000000;
+				grid1[1][3] = 8'b00000000;
+				grid1[1][4] = 8'b00000000;
+				grid1[2][0] = 8'b00000000;
+				grid1[2][1] = 8'b00000000;
+				grid1[2][2] = 8'b00000000;
+				grid1[2][3] = 8'b00000000;
+				grid1[2][4] = 8'b00000000;
+				grid1[3][0] = 8'b00000000;
+				grid1[3][1] = 8'b00000000;
+				grid1[3][2] = 8'b00000000;
+				grid1[3][3] = 8'b00000000;
+				grid1[3][4] = 8'b00000000;
 		  end
 		  
-//		  else begin 
-//			grid1[preX][preY] = grid1[preX][preY] & 8'b11111101;
-//			grid1[botX][botY] = {wall,tres,currPos};
-//		  end
+		  else begin 
+			grid1[preX][preY] = grid1[preX][preY] & 8'b11111101;
+			if (updateType == 1'b0) begin
+				grid1[botX][botY] = grid1[botX][botY] & 8'b11111100;
+				grid1[botX][botY] = grid1[botX][botY] | currPos;
+			end else begin
+				grid1[botX][botY] = {wall,tres,currPos};
+				end 
+		  end
 	 end
 	 
 
-endmodule 
+endmodule
