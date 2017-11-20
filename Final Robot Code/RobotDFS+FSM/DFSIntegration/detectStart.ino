@@ -1,5 +1,15 @@
 bool detectStart() {
+    char tempADCSRA = ADCSRA;
+    char tempTIMSK0 = TIMSK0; // turn off timer0 for lower jitter
+    char tempADMUX = ADMUX; // use adc0: analog A0
+    char tempDIDR0 = DIDR0;
   while(1) { // reduces jitter
+    
+    ADCSRA = 0xe7;
+    TIMSK0 = 0; // turn off timer0 for lower jitter
+    ADMUX = 0x40; // use adc0: analog A0
+    DIDR0 = 0x01; // turn off the digital input for adc0
+    
     cli();  // UDRE interrupt slows this way down on arduino1.0
     for (int i = 0 ; i < 256 ; i += 2) { // save 128 samples
       while(!(ADCSRA & 0x10)); // wait for adc to be ready
@@ -18,18 +28,19 @@ bool detectStart() {
     fft_mag_log(); // take the output of the fft
 
     sei();
-    Serial.println("start");
-    for (byte i = 0 ; i < FFT_N/2 ; i++) { 
-      Serial.println(fft_log_out[i]); // send out the data
-    }
-
+//  Serial.println("start");
+//    for (byte i = 0 ; i < FFT_N/2 ; i++) { 
+//      Serial.println(fft_log_out[i]); // send out the data
+//    }
+    ADCSRA = tempADCSRA;
+    TIMSK0 = tempTIMSK0; // turn off timer0 for lower jitter
+    ADMUX = tempADMUX; // use adc0: analog A0
+    DIDR0 = tempDIDR0;
     //detects input on bin 10 and returns TRUE if signal is detected
     if (fft_log_out[9] > 100) {
-      digitalWrite(13, HIGH);
       return true;
     }
     else {
-      digitalWrite(13, LOW);
       return false;
     }
   }

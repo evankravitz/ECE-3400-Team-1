@@ -11,6 +11,11 @@ const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
 
 // The role of the current running sketch
 
+//for Fourier Transform
+#define LOG_OUT 1 // use the log output function
+#define FFT_N 256 // set to 256 point fft
+#include <FFT.h> // include the FFT library
+
 
 //Libraries
 #include <QTRSensors.h> //QTR sensor (line sensor) library
@@ -82,12 +87,6 @@ QTRSensorsRC qtrrc((unsigned char[]) {2,5,4} ,NUM_SENSORS, TIMEOUT, EMITTER_PIN)
 unsigned int sensorValues[NUM_SENSORS];
 
 //start detection things
-
-//for Fourier Transform
-#define LOG_OUT 1 // use the log output function
-#define FFT_N 256 // set to 256 point fft
-#include <FFT.h> // include the FFT library
-
 bool startDFS = false;
 const int buttonPin = 8;
 int buttonState = 0;
@@ -159,29 +158,39 @@ void setup(){
   pinMode(A3, INPUT);
   pinMode(A4, INPUT);
 
+    //microphone
+  pinMode(A0, INPUT);
+
   servoL.attach(3);
   servoR.attach(6);
 
   set_motors(90,90);
   
   pinMode(13, OUTPUT);
-  Serial.println("start calibration");
   digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
   for (int i = 0; i < 100; i++)  // make the calibration take about 10 seconds
   {
     //Serial.println("Calibrating");
     qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
   }
-  Serial.println("done calibrating");
   digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
   
-  TIMSK0 = 0; // turn off timer0 for lower jitter
-  ADCSRA = 0xe7; // set the adc to free running mode, changed prescalar to 128
-  ADMUX = 0x40; // use adc0: analog A0
-  DIDR0 = 0x01; // turn off the digital input for adc0
 }
 
 void loop(){
+  //start on 660 Hz Tone OR Button Press
+   while(!startDFS) {
+      set_motors(90,90);
+      delay(25);
+      startDFS = detectStart();
+      startDFS |= detectButton();
+  }
+  //turns light on to tell that we started
+  digitalWrite(13, HIGH);
+  set_motors(90,90);
+  delay(500);
+  digitalWrite(13, LOW);
+  
   recordAndTransmitData();
   detectWalls();
   detectTreasures();
@@ -193,11 +202,6 @@ void loop(){
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
 
-  while(!startDFS) {
-    startDFS = detectStart();
-    startDFS = detectButton();
-  }
-  
   //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
 //  Serial.print("current position y"); Serial.println((int)currPos[1]);
@@ -207,9 +211,7 @@ void loop(){
     detectWalls();
     detectTreasures();
     recordAndTransmitData();
-    Serial.print("Wall Reft:"); Serial.println(wallLeft);
-    Serial.print("Wall Mid:"); Serial.println(wallMid);
-    Serial.print("Wall Right:"); Serial.println(wallRight);
+ 
     maze[currPos[0]][currPos[1]] = Explored;
     removeFromFrontier(convertCoordsToChar(currPos));
     addWallsToMaze();
@@ -222,7 +224,6 @@ void loop(){
         addWallsToMaze();
         getReachableCells();
         addUnvisitedSurroundingNodesToFrontier();
-        recordAndTransmitData();
         doneWithNavigation();
      }
    updateMove();

@@ -11,6 +11,7 @@ void resetMaze() {
 void doneWithNavigation(){
   while (true){
     done = 1;
+    recordAndTransmitData();
   }
 }
 
