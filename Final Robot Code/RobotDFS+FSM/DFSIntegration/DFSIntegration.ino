@@ -1,3 +1,22 @@
+//Radio Stuff:
+#include <SPI.h>
+#include "nRF24L01.h"
+#include "RF24.h"
+
+RF24 radio(9,10);
+
+const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
+// The various roles supported by this sketch
+typedef enum { role_ping_out = 1, role_pong_back } role_e;
+
+// The debug-friendly names of those roles
+const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
+
+// The role of the current running sketch
+role_e role = role_pong_back;
+
+
+
 //Definitions
 //for Fourier Transform
 #define LOG_OUT 1 // use the log output function
@@ -21,6 +40,8 @@ int numSamples = 256;
 float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
 float binWidth = samplingFrequency/numSamples;
 
+char treasure = 0;
+
 //detectWalls
 int wallPinLeft = A5;
 int wallPinMid = A4;
@@ -37,6 +58,11 @@ boolean wallMid = false;
 //Line Following
 Servo servoL;
 Servo servoR;
+
+
+
+
+
 
 // Change the values below to suit your robot's motors, weight, wheel type, etc.
 #define KP 0.1
@@ -98,8 +124,31 @@ char wallsRelativeDirs[2];
 char possibleWallPosition[2];
 char prevPos[2];
 char moveToPerform;
+char done = 0;
+
 
 void setup(){
+
+  //radio setup:
+  radio.begin();
+
+  // optionally, increase the delay between retries & # of retries
+  radio.setRetries(15,15);
+  radio.setAutoAck(true);
+  // set the channel
+  radio.setChannel(0x50);
+  // set the power
+  // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
+  radio.setPALevel(RF24_PA_MIN);
+  //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
+  radio.setDataRate(RF24_1MBPS);
+
+  radio.openWritingPipe(pipes[0]);
+ radio.openReadingPipe(1,pipes[1]);
+   radio.startListening();
+
+
+  
   Serial.begin(9600); // use the serial port
   
   //servo pins
@@ -131,6 +180,7 @@ void setup(){
 
 void loop(){
   detectWalls();
+  detectTreasures();
   prevPos[0] = currPos[0];
   prevPos[1] = currPos[1];
   resetMaze();
@@ -138,6 +188,7 @@ void loop(){
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
+  
   //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
 //  Serial.print("current position y"); Serial.println((int)currPos[1]);
@@ -145,6 +196,8 @@ void loop(){
     //Serial.print("current position x"); Serial.println((int)currPos[0]);
    // Serial.print("current position y"); Serial.println((int)currPos[1]);
     detectWalls();
+    detectTreasures();
+    recordAndTransmitData();
     Serial.print("Wall Reft:"); Serial.println(wallLeft);
     Serial.print("Wall Mid:"); Serial.println(wallMid);
     Serial.print("Wall Right:"); Serial.println(wallRight);
@@ -160,6 +213,7 @@ void loop(){
         addWallsToMaze();
         getReachableCells();
         addUnvisitedSurroundingNodesToFrontier();
+        recordAndTransmitData();
         doneWithNavigation();
      }
    updateMove();

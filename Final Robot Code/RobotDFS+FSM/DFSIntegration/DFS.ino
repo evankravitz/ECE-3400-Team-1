@@ -10,6 +10,7 @@ void resetMaze() {
 
 void doneWithNavigation(){
   delay(100000000);
+  done = 1;
 }
 
 void printMaze(){
