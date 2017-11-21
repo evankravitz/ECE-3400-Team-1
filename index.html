@@ -2321,8 +2321,7 @@ wall detection using short range sensors. </p>
                   
                   <p> Implementing the base station was a culmination of work done over multiple different lab sessions. To get receive radio transmissions from the robot, we connrected a tranceiver to the arduino on the robot, as well as to an arduino that outputs the received information to the FPGA to simulate via physical connections. </p> 
                   <p> [A paragraph about how the arduino sends the 16 bit word here would be good] </p>
-                  <p> The base station arduino receives a 16 bit word from the robot's arduino. It converts the transmitted word into a string and takes the information about the location of the bot and information about the walls and treasures in the maze from the appropriate indexes of the string. The arduino which is wired so that it is able to transmit 8 bits at any instance to the FPGA, sends two different types of information bytes--location information and treasure and wall information: </p>
-
+<p> The base station arduino receives a 16 bit word from the robot's arduino. It converts the transmitted word into a string and takes the information about the location of the bot and information about the walls and treasures in the maze from the appropriate indexes of the string. The arduino which is wired so that it is able to transmit 8 bits at any instance to the FPGA, sends two different types of information bytes--location information and treasure and wall information. The arduino writes digital pins to be either high or low depending on location or if there are walls or treasures detected by the bot. This is a diagram of how the byte is organized: </p>
                   <img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
