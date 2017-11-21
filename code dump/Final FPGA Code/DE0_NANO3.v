@@ -44,6 +44,7 @@ module DE0_NANO(
 	 localparam red = 8'b11100000;  // 7kHz treasure Freq (2'b01)
 	 localparam blue = 8'b00110011; //12kHz treasure Freq (2'b10)
 	 localparam green = 8'b01010001; // 17 kHZ treasure Freq (2'b11)
+	 localparam CLKDIVIDER_B_SIN = 25000000 / 800 / 256;
 	 
 	 //=======================================================
 	 //  PORT declarations
@@ -82,7 +83,7 @@ module DE0_NANO(
 	 wire [2:0] GRID_Y;
 	 reg grid [19:0][7:0];
 	 reg visited [19:0]; 
-
+	reg [15:0] soundcounter;
 	 
 	 
 	 GRID_SELECTOR gridSelector(
@@ -97,6 +98,13 @@ module DE0_NANO(
 	reg[7:0] grid1[3:0] [4:0];
 	reg[7:0] currentGrid;
 	reg[24:0] counter;
+		 reg [24:0] led_counter; // timer to keep track of when to toggle LED
+	 reg [24:0] freq_counter;
+	 reg 			led_state;   // 1 is on, 0 is off
+	 
+	 reg [2:0]	freq_state;
+	 
+	 reg [7:0] DAC; //DAC
 	 
 	//state machine 
 	always @(posedge CLOCK_25) begin
@@ -152,6 +160,20 @@ module DE0_NANO(
 			if ((currentGrid[3:2] == 2'b11) && (PIXEL_COORD_X <= ((GRID_X+1)*10'd96) - 10'd7) && (PIXEL_COORD_X >= ((GRID_X+1)*10'd96) - 10'd15) && (PIXEL_COORD_Y <= ((GRID_Y+1)*10'd96) - 10'd7) && (PIXEL_COORD_Y >= ((GRID_Y+1)*10'd96) - 10'd15)) begin
 				PIXEL_COLOR <= green; 
 			end
+			if (done) begin 
+				if (soundcounter == 0) begin
+					soundcounter <= CLKDIVIDER_B_SIN - 1;
+				end 
+				if (DAC >= 255) begin
+				DAC <= 0;
+				end
+				else begin
+				DAC <=  DAC + 1;
+				end 
+			end 
+			else begin 
+				soundcounter <= soundcounter - 1;
+			end
 		end
 		
 	end
@@ -169,6 +191,7 @@ module DE0_NANO(
 	 wire up;
 	 wire updateType;
 	 wire down;
+	 wire done;
 
 	 
     // Module outputs coordinates of next pixel to be written onto screen
@@ -196,8 +219,15 @@ module DE0_NANO(
 		.right(right),
 		.down(down),
 		.up(up), 
-		.updateType(updateType)
+		.updateType(updateType), 
+		.done(done)
 	);
+	
+	sin_rom sin(
+		.addr(DAC),
+		.clk(CLOCK_25),
+		.q({GPIO_1_D[9],GPIO_1_D[11],GPIO_1_D[13],GPIO_1_D[15],GPIO_1_D[17],GPIO_1_D[19],GPIO_1_D[21],GPIO_1_D[23]})
+	 );
 	 
 //	assign botX = 2'b10;
 //	assign botY = 3'b010;
@@ -210,7 +240,7 @@ module DE0_NANO(
 	 assign reset = ~KEY[0]; // reset when KEY0 is pressed
 	 
 	// assign PIXEL_COLOR = 8'b000_111_00; // Green
-	 assign LED[0] = led_state;
+	// assign LED[0] = led_state;
 	 
     //=======================================================
     //  Structural coding
