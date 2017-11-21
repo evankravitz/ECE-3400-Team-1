@@ -1,8 +1,6 @@
 
 void detectTreasures(){
    
-//  Serial.println(binWidth);
-//  Serial.println("reading treasures");
   boolean successfullyRecordFrequency = false;
   while (!successfullyRecordFrequency){
     noTreasure1 = 0;  sevenKHZTreasure1 = 0;  twelveKHZTreasure1 = 0;  seventeenKHZTreasure1 = 0;
@@ -22,8 +20,6 @@ void readTreasures(){
    
     int freqDetected1 =  updateFFTArrayAndFindFrequencyDetector1();
     int freqDetected2 =  updateFFTArrayAndFindFrequencyDetector2();
-
-  //  Serial.println("k= "); Serial.print(k);
 
 
      
@@ -103,19 +99,6 @@ boolean selectLargestTreasureAndUpdateTreasureVariables(){
   int largestFreq1 = selectLargestFrequency(1);
   int largestFreq2 = selectLargestFrequency(2);
 
-//  Serial.println("noTreasure1: "); Serial.print(noTreasure1);
-//  Serial.println("sevenKHZTreasure1: "); Serial.print(sevenKHZTreasure1);
-//  Serial.println("twelveKHZTreasure1: "); Serial.print(twelveKHZTreasure1);
-//  Serial.println("seventeenKHZTreasure1: "); Serial.print(seventeenKHZTreasure1);
-//
-//  //
-//  
-//  Serial.println("noTreasure2: "); Serial.print(noTreasure2);
-//  Serial.println("sevenKHZTreasure2: "); Serial.print(sevenKHZTreasure2);
-//  Serial.println("twelveKHZTreasure2: "); Serial.print(twelveKHZTreasure2);
-//  Serial.println("seventeenKHZTreasure2: "); Serial.print(seventeenKHZTreasure2);
-
-
   if (largestFreq1==0 && largestFreq2==0){
     treasure = 0;
     return true;
@@ -142,7 +125,6 @@ boolean selectLargestTreasureAndUpdateTreasureVariables(){
 
 int updateFFTArrayAndFindFrequencyDetector1(){
 
-  //set_motors(90,90);
     char tempADCSRA = ADCSRA;
     char tempTIMSK0 = TIMSK0; // turn off timer0 for lower jitter
     char tempADMUX = ADMUX; // use adc0: analog A0
@@ -178,8 +160,8 @@ int updateFFTArrayAndFindFrequencyDetector1(){
     TIMSK0 = tempTIMSK0; // turn off timer0 for lower jitter
     ADMUX = tempADMUX; // use adc0: analog A0
     DIDR0 = tempDIDR0;
-  servoL.attach(3);
-  servoR.attach(6);
+    servoL.attach(3);
+    servoR.attach(6);
 
    if (detectedFrequency(7E3, fft_log_out)){
        return 7;
@@ -201,7 +183,6 @@ int updateFFTArrayAndFindFrequencyDetector1(){
 }
 int updateFFTArrayAndFindFrequencyDetector2(){
 
-  //set_motors(90,90);
   
     char tempADCSRA = ADCSRA;
     char tempTIMSK0 = TIMSK0; // turn off timer0 for lower jitter
@@ -229,18 +210,19 @@ int updateFFTArrayAndFindFrequencyDetector2(){
       fft_input[i] = k; // put real data into even bins
       fft_input[i+1] = 0; // set odd bins to 0
     }
+    
     fft_window(); // window the data for better frequency response
     fft_reorder(); // reorder the data before doing the fft
     fft_run(); // process the data in the fft
     fft_mag_log(); // take the output of the fft
     sei();
-//    
+    
     ADCSRA = tempADCSRA;
     TIMSK0 = tempTIMSK0; // turn off timer0 for lower jitter
     ADMUX = tempADMUX; // use adc0: analog A0
     DIDR0 = tempDIDR0;
    
-   servoL.attach(3);
+  servoL.attach(3);
   servoR.attach(6);
    if (detectedFrequency(7E3, fft_log_out)){
        return 7;
@@ -274,24 +256,7 @@ boolean detectedFrequency(float freqToDetect, uint8_t fftArray[]){
       
     }
   }
-//
-//  Serial.println("Maximum magnitude: "); Serial.print(maximumMag);
-//  Serial.println("Detector 1");
-//  for (int i = 0; i<128; i++){
-//        Serial.print(" ");
-//        Serial.print((int) fftArray[i]);
-//     }
-//     
-  
 
-//  if (maximumMag>158){
-//    return true;
-//  }
-//  return false;
-//// //Serial.println("Maximum magnitude: "); Serial.print(maximumMag);
-////  
-////
-////  
   if (maximumMag<absoluteMinThreshold){
     return false;
   }
