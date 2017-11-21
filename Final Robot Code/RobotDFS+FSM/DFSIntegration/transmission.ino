@@ -2,13 +2,13 @@ unsigned long started_waiting_at;
 
 void recordAndTransmitData(){
 //  unsigned long startTime = millis();
-  //String stringToSend = assembleWordString();
-  word wordToSend = assembleWord("1111000010101010");
+  String stringToSend = assembleWordString();
+  word wordToSend = assembleWord(stringToSend);
   boolean successfullySent = false;
   while (!successfullySent){
     successfullySent = sendPacket(wordToSend);
   }
-  Serial.println("Data successfully sent!");
+ // Serial.println("Data successfully sent!");
 }
 
 word assembleWord(String stringWord){

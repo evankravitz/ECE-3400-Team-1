@@ -5,6 +5,9 @@
 
 RF24 radio(9,10);
 
+int noTreasure1 = 0;  int sevenKHZTreasure1 = 0;  int twelveKHZTreasure1 = 0;  int seventeenKHZTreasure1 = 0;
+int noTreasure2 = 0;  int sevenKHZTreasure2 = 0;  int twelveKHZTreasure2 = 0;  int seventeenKHZTreasure2 = 0;
+
 const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
 // The various roles supported by this sketch
 
@@ -13,7 +16,7 @@ const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
 
 //for Fourier Transform
 #define LOG_OUT 1 // use the log output function
-#define FFT_N 256 // set to 256 point fft
+#define FFT_N 128 // set to 128 point fft
 #include <FFT.h> // include the FFT library
 
 
@@ -30,7 +33,7 @@ const uint64_t pipes[2] = { 0x0000000002LL, 0x0000000003LL };
 const long clockFreq = 16E6;
 const int divisionFactor = 32;
 const int conversionTime = 13;
-const int numSamples = 256;
+const int numSamples = 128;
 const float samplingFrequency = ((clockFreq/((float)divisionFactor))/conversionTime);
 const float binWidth = samplingFrequency/numSamples;
 
@@ -178,67 +181,62 @@ void setup(){
 }
 
 void loop(){
-  //start on 660 Hz Tone OR Button Press
-   while(!startDFS) {
-      set_motors(90,90);
-      delay(25);
-      startDFS = detectStart();
-      startDFS |= detectButton();
-  }
-  //turns light on to tell that we started
-  digitalWrite(13, HIGH);
-  set_motors(90,90);
-  delay(500);
-  digitalWrite(13, LOW);
-  
-  recordAndTransmitData();
-  detectWalls();
-  detectTreasures();
-  prevPos[0] = currPos[0];
-  prevPos[1] = currPos[1];
-  resetMaze();
-  initializeCurrPos();
-  initializeOrientation();
-  addToFrontier(convertCoordsToChar(currPos));
-  visitedStack.push(convertCoordsToChar(currPos));  
+
+//  //start on 660 Hz Tone OR Button Press
+//   while(!startDFS) {
+//      set_motors(90,90);
+//      delay(25);
+//      startDFS = detectStart();
+//      startDFS |= detectButton();
+//  }
+//  //turns light on to tell that we started
+//  digitalWrite(13, HIGH);
+//  set_motors(90,90);
+//  delay(500);
+//  digitalWrite(13, LOW);
+//  
+//  recordAndTransmitData();
+//  detectWalls();
+//  prevPos[0] = currPos[0];
+//  prevPos[1] = currPos[1];
+//  resetMaze();
+//  initializeCurrPos();
+//  initializeOrientation();
+//  addToFrontier(convertCoordsToChar(currPos));
+//  visitedStack.push(convertCoordsToChar(currPos));  
 
   //printMaze();
 //  Serial.print("current position x"); Serial.println((int)currPos[0]);
 //  Serial.print("current position y"); Serial.println((int)currPos[1]);
   while (true){
-    //Serial.print("current position x"); Serial.println((int)currPos[0]);
-   // Serial.print("current position y"); Serial.println((int)currPos[1]);
     detectWalls();
     detectTreasures();
-    recordAndTransmitData();
- 
     maze[currPos[0]][currPos[1]] = Explored;
     removeFromFrontier(convertCoordsToChar(currPos));
     addWallsToMaze();
-    //printMaze();
     getReachableCells();
     addUnvisitedSurroundingNodesToFrontier();
-   // printFrontier();
+    recordAndTransmitData(); 
     updateCurrPosAndVisitedSet();
-      if (frontierIsEmpty()){
+    if (frontierIsEmpty()){
         addWallsToMaze();
         getReachableCells();
         addUnvisitedSurroundingNodesToFrontier();
         doneWithNavigation();
-     }
-   updateMove();
-   performMove();
+    }
+    updateMove();
+    performMove();
   }
-
-////Figure eight bc lol it's never too late to do milestone 1 
-//moveStraight();
-//moveRight();
-//moveLeft(); 
-//moveLeft();
-//moveLeft();
-//moveLeft();
-//moveRight();
-//moveRight(); 
-//turnRight();
+//
+//////Figure eight bc lol it's never too late to do milestone 1 
+////moveStraight();
+////moveRight();
+////moveLeft(); 
+////moveLeft();
+////moveLeft();
+////moveLeft();
+////moveRight();
+////moveRight(); 
+////turnRight();
 
 }
