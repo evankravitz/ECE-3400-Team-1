@@ -10,7 +10,6 @@ void detectTreasures(){
     readTreasures();
     successfullyRecordFrequency=selectLargestTreasureAndUpdateTreasureVariables();
   }
-  Serial.println((int) treasure);
 
 
 }

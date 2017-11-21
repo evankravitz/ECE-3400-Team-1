@@ -182,32 +182,27 @@ void setup(){
 
 void loop(){
 
-//  //start on 660 Hz Tone OR Button Press
-//   while(!startDFS) {
-//      set_motors(90,90);
-//      delay(25);
-//      startDFS = detectStart();
-//      startDFS |= detectButton();
-//  }
-//  //turns light on to tell that we started
-//  digitalWrite(13, HIGH);
-//  set_motors(90,90);
-//  delay(500);
-//  digitalWrite(13, LOW);
-//  
-//  recordAndTransmitData();
-//  detectWalls();
-//  prevPos[0] = currPos[0];
-//  prevPos[1] = currPos[1];
-//  resetMaze();
-//  initializeCurrPos();
-//  initializeOrientation();
-//  addToFrontier(convertCoordsToChar(currPos));
-//  visitedStack.push(convertCoordsToChar(currPos));  
+  //start on 660 Hz Tone OR Button Press
+   while(!startDFS) {
+      set_motors(90,90);
+      delay(25);
+      startDFS = detectStart();
+      startDFS |= detectButton();
+  }
+  //turns light on to tell that we started
+  digitalWrite(13, HIGH);
+  set_motors(90,90);
+  delay(500);
+  digitalWrite(13, LOW);
+  
+  prevPos[0] = currPos[0];
+  prevPos[1] = currPos[1];
+  resetMaze();
+  initializeCurrPos();
+  initializeOrientation();
+  addToFrontier(convertCoordsToChar(currPos));
+  visitedStack.push(convertCoordsToChar(currPos));  
 
-  //printMaze();
-//  Serial.print("current position x"); Serial.println((int)currPos[0]);
-//  Serial.print("current position y"); Serial.println((int)currPos[1]);
   while (true){
     detectWalls();
     detectTreasures();
@@ -216,27 +211,16 @@ void loop(){
     addWallsToMaze();
     getReachableCells();
     addUnvisitedSurroundingNodesToFrontier();
-    recordAndTransmitData(); 
-    updateCurrPosAndVisitedSet();
     if (frontierIsEmpty()){
-        addWallsToMaze();
-        getReachableCells();
-        addUnvisitedSurroundingNodesToFrontier();
         doneWithNavigation();
     }
-    updateMove();
-    performMove();
+    else{
+      recordAndTransmitData(); 
+      updateCurrPosAndVisitedSet();
+      updateMove();
+      performMove();
+    }
+
   }
-//
-//////Figure eight bc lol it's never too late to do milestone 1 
-////moveStraight();
-////moveRight();
-////moveLeft(); 
-////moveLeft();
-////moveLeft();
-////moveLeft();
-////moveRight();
-////moveRight(); 
-////turnRight();
 
 }
