@@ -177,6 +177,12 @@ module DE0_NANO(
 		end
 		
 	end
+	
+	always @ (negedge CLOCK_25) begin  // maybe flashes the bot pixels when done
+		if (done) begin 
+			PIXEL_COLOR <=pink; 
+		end
+	end	
 
 	 reg [24:0] led_counter; // timer to keep track of when to toggle LED
 	 reg 			led_state;   // 1 is on, 0 is off
