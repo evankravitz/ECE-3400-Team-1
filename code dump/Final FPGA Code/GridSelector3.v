@@ -16,8 +16,8 @@ output reg [3:0] GRID_Y;
 
 
 always @ (*) begin
-	GRID_X = PIXEL_COORD_X / 96;
-	GRID_Y = PIXEL_COORD_Y / 96;
+	GRID_X = (PIXEL_COORD_X +1) / 96;
+	GRID_Y = (PIXEL_COORD_Y +1) / 96;
 end
 
 	
