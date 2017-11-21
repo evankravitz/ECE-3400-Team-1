@@ -2318,6 +2318,12 @@ wall detection using short range sensors. </p>
                   <p> Once we had our code written, we tested it out on the robot.  We created a module that would print the maze and where the robot detected walls in order to debug.  We noticed that soemtimes the robot would think there was a wall next to it when there wasn't, and therefore would miss a portion of the maze.  In addition, when our robot missed the line on a turn, it would run into walls because its coordinates were incorrect as a result of the faulty turn.  In order to fix these issues, we ran extra tests on wall detection and updated the sensitivity values to ensure they were as accurate as possible.  We also edited the turning code to make it more accurate so that our robot would turn correctly at a much higher rate. </p>
                   <p> After implementing these changes, we saw that our robot was able to navigate through the maze and implement the DFS algorithm mostly correctly!  We discovered one bug that made it so the robot would pop the stack and move into one extra cell after it finished navigating the entire maze.  We fixed this bug by changing the code that caused the robot to pop from the stack and then found that our DFS worked the way we wanted it to. </p>
                   <h3>Verilog & Wireless Communication Updates</h3>
+                  
+                  <p> Implementing the base station was a culmination of work done over multiple different lab sessions. To get receive radio transmissions from the robot, we connrected a tranceiver to the arduino on the robot, as well as to an arduino that outputs the received information to the FPGA to simulate via physical connections. </p> 
+                  <p> [A paragraph about how the arduino sends the 16 bit word here would be good] </p>
+                  <p> The base station arduino receives a 16 bit word from the robot's arduino. It converts the transmitted word into a string and takes the information about the location of the bot and information about the walls and treasures in the maze from the appropriate indexes of the string. The arduino which is wired so that it is able to transmit 8 bits at any instance to the FPGA, sends two different types of information bytes--location information and treasure and wall information: </p>
+
+                  <img class="img-fluid img-centered" src="./resources/bitdiagram.png" alt=""> <br>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
