@@ -8,7 +8,7 @@ void recordAndTransmitData(){
   while (!successfullySent){
     successfullySent = sendPacket(wordToSend);
   }
- // Serial.println("Data successfully sent!");
+  
 }
 
 word assembleWord(String stringWord){
@@ -130,25 +130,16 @@ boolean sendPacket(word data){
     return false;
    }
   else{
-  //  Serial.println("Waiting to start listening...");
-    radio.startListening();
-    started_waiting_at = millis();
-    bool timeout = false;
-    
-    if (timeout){
-      return false;
-    }
-    else{
-      char recievedData;
-     // Serial.println("Trying to recieve back from reciever...");
-      radio.read(&recievedData, sizeof(word));
-      if (!recievedData==data){
-        return false;
+  radio.startListening();
+  char recievedData;
+  radio.read(&recievedData, sizeof(word));
+  if (!recievedData==data){
+     return false;
+     }
+  else{
+     return true;
       }
-      else{
-         return true;
-      }
-    }
+  
   }
   
   
