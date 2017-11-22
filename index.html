@@ -2239,7 +2239,20 @@ wall detection using short range sensors. </p>
                     <p>We decided to put our treasure detection and microphone circuitry on a PCB. We used the schematics developed in Lab 2 and Milestone 3 for the microphone and IR sensors respectively. We assigned pin A0 to the microphone, A1 to be the right IR sensor, and A2 to the left IR sensor. The PCB came out really well, you can see the schematic and final product below.</p>
 
 <<<<<<< HEAD
-                      <h4> Treasure Detection  </h4>
+                     
+
+                  <h3>DFS Integration</h3>
+                    <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation. There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Fortunately, we were able to overcome both of these challenges. <p>
+=======
+                    <img class="img-fluid img-centered" src="./resources/pcb.JPG" alt=""> <br>
+
+                    <p> During this whole process, we made sweeping changes to our robot and its wiring, ultimately making it cleaner and easier to work with. See the below image:</p>
+
+                    <img class="img-fluid img-centered" src="./resources/robotm4.JPG" alt=""> <br>
+
+                  <h3>DFS Integration</h3>
+
+                   <h4> Treasure Detection  </h4>
 
 
                   <p>
@@ -2258,22 +2271,7 @@ wall detection using short range sensors. </p>
 
 
                   <h3>DFS Integration</h3>
-                    <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation. There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Fortunately, we were able to overcome both of these challenges. <p>
-=======
-                    <img class="img-fluid img-centered" src="./resources/pcb.JPG" alt=""> <br>
 
-                    <p> During this whole process, we made sweeping changes to our robot and its wiring, ultimately making it cleaner and easier to work with. See the below image:</p>
-
-                    <img class="img-fluid img-centered" src="./resources/robotm4.JPG" alt=""> <br>
-
-                  <h3>DFS Integration</h3>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                  <b>Evan?</b>
-
-                  <h3>Verilog & Wireless Communication Updates</h3>
-                  <b>Katherine?</b>
-=======
                     <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation.  To implement this algorithm in real life, we needed to convert the Java algorithm into Arduino code and use the modules we had already written for the robot such as goStraight(), turnRight(), turnLeft() etc. to cause the robot to implement the DFS algorithm while traversing the maze. </p>
                     <p> In order to do this, we needed to add some features to the algorithm.  For example, we needed a way to keep track of the direction the robot was facing so that if, for example, the robot detected a wall on one of its sensors, we would be able to know the direction the robot was facing and determine if the wall was along the north, south, west, or east of the maze.  </p>
                     <p> To implement this change, we added a module called generateNewDirection.  This module takes in two char inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the direction the robot should turn.  An example block of the code that would indicate the robot's next move would be to the North is shown below </p>
