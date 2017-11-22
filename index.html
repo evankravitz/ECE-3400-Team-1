@@ -2549,7 +2549,7 @@ wall detection using short range sensors. </p>
                   <h4> Robot transmission to base station </h4>
 
                   <p>
-                    The robot transmits maze information to the base station in between moves. We decided that it would be most efficient to send the data in the form of a <code> word </code>. An Arduino <code>word</code> is a 16-bit data structure (see the next section for how we decided to encode the maze data within this <code>word</code>). 16 bits is enough bits to encode all the information we send to the base station. We chose a compact data structure for wireless transmission since this will ensure greater reliability, as opposed to sending over many bytes of data. The only downside to this method was that it involved greater work on the part of the Arduino on the robot, since it had to assemble the <code>word</code> that is being sent over. To do this, we first assembled a <code>String</code> representing the <code>word</code>.This made it easy to concatenate strings representing different components of the data, and then convert it to a <code> word </code>. 
+                    The robot transmits maze information to the base station in between moves. We decided that it would be most efficient to send the data in the form of a <code> word </code>. An Arduino <code>word</code> is a 16-bit data structure (see the next section for how we decided to encode the maze data within this <code>word</code>. We essentially just send over a concatenation of the two bytes that the Arduino will transmit to the FPGA). 16 bits is enough bits to encode all the information we send to the base station. We chose a compact data structure for wireless transmission since this will ensure greater reliability, as opposed to sending over many bytes of data. The only downside to this method was that it involved greater work on the part of the Arduino on the robot, since it had to assemble the <code>word</code> that is being sent over. To do this, we first assembled a <code>String</code> representing the <code>word</code>.This made it easy to concatenate strings representing different components of the data, and then convert it to a <code> word </code>. 
                   </p>
 
                   
@@ -2647,7 +2647,8 @@ wall detection using short range sensors. </p>
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/3TE-e3mRpMw" frameborder="0" allowfullscreen></iframe>
 
                  
-
+</br>
+</br>
 
  <h4> Milestone 4 Reflections </h4>
 
