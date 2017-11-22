@@ -1,5 +1,16 @@
 unsigned long started_waiting_at;
 
+void recordAndTrasmitDataAtTurningJunction(){
+  detectTreasures();
+  char savedCurrPos[2];
+  savedCurrPos[0] = currPos[0];   savedCurrPos[1] = currPos[1];
+  currPos[0] = prevPos[0]; currPos[1]=prevPos[1];
+  recordAndTransmitData();
+  currPos[0] = savedCurrPos[0];  currPos[1] = savedCurrPos[1];
+
+  
+}
+
 void recordAndTransmitData(){
 //  unsigned long startTime = millis();
   String stringToSend = assembleWordString();
