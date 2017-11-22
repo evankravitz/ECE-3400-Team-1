@@ -2238,14 +2238,37 @@ wall detection using short range sensors. </p>
 
                     <p>We decided to put our treasure detection and microphone circuitry on a PCB. We used the schematics developed in Lab 2 and Milestone 3 for the microphone and IR sensors respectively. We assigned pin A0 to the microphone, A1 to be the right IR sensor, and A2 to the left IR sensor. The PCB came out really well, you can see the schematic and final product below.</p>
 
+                     
+
+                
                     <img class="img-fluid img-centered" src="./resources/pcb.JPG" alt=""> <br>
 
                     <p> During this whole process, we made sweeping changes to our robot and its wiring, ultimately making it cleaner and easier to work with. See the below image:</p>
 
                     <img class="img-fluid img-centered" src="./resources/robotm4.JPG" alt=""> <br>
 
+
+                   <h4> Treasure Detection  </h4>
+
+
+                  <p>
+                  In a previous lab, our group was able to demonstrate that an analog circuit could be built, in addition to Arduino code, which would be able to detect different frequency treasures. In this lab, we took this a step further by demonstrating that this functionality can be achieved on our PCB, with multiple IR sensors, and within the framework of the existing Arduino code. One of the first challenges we faced was generating two FFTs—corresponding to the two photoresistors circuits mounted on the robot—and then deciding what treasure is present given the spectrum of both signals. We decided that in order to improve accuracy, we would take 30 frequency samples. In other words, each time the robot wanted to determine if a treasure was present in its vicinity, it would have to generate 30 unique FFTs for each IR sensor, corresponding to 30 time-domain samples of the input data for each sensor. We would identify the dominant frequency present in each sample in the same manner as in a previous lab. However, instead of simply returning what the frequency detected in a single voltage sample is, we would look at the frequencies that were most frequently represented among the 30 spectra. The Arduino code would determine that no treasure was in its immediate vicinity if no dominant IR frequency was dected for both sensors. The Arduino code would determine that a 7 kHz signal was present if one of the sensors detected a 7 Khz signal for most of its samples, and the other one detected no frequency for one of its samples, or vice-versa. A similar process was employed for 12 kHz and 17 Khz signals. This procedure ensures more reliable data. 
+                  <br />
+                  Below is a video of the robot detecting frequencies:
+                  <br />
+                  </p>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/OME9VeLte6U" frameborder="0" allowfullscreen></iframe>
+
+                  <h4> Robot transmission to base station </h4>
+
+                  <p>
+                    The robot transmit maze information to the base station in between moves. We decided that it would be most efficient to send the data in the form of a <code> word </code>. An Arduino <code>word</code> is a 16-bit data structure (see the next section for how we decided to encode the maze data within this <code>word</code>. 16 bits is enough bits to encode all the information we send to the base station. We chose a compact data structure for wireless transmission since this will ensure greater reliability, as opposed to sending over many bytes of data. The only downside to this method was that it involved greater work on the part of the Arduino on the robot, since it had to assemble the <code>word</code> that is being sent over. To do this, we first assembled a <code>String</code> representing the <code>word</code>.This made it easy to concatenate strings representing different components of the data, and then concatenate them. 
+                  </p>
+
+
                   <h3>DFS Integration</h3>
 
+<<<<<<< HEAD
                     <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation.  To implement this algorithm in real life, we needed to convert the Java algorithm into Arduino code and use the modules we had already written for the robot such as goStraight(), turnRight(), turnLeft() etc. to cause the robot to implement the DFS algorithm while traversing the maze. </p>
                     <p> In order to do this, we needed to add some features to the algorithm.  For example, we needed a way to keep track of the direction the robot was facing so that if, for example, the robot detected a wall on one of its sensors, we would be able to know the direction the robot was facing and determine if the wall was along the north, south, west, or east of the maze.  </p>
                     <p> To implement this change, we added a module called generateNewDirection.  This module takes in two char inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the direction the robot should turn.  An example block of the code that would indicate the robot's next move would be to the North is shown below </p>
@@ -2253,6 +2276,12 @@ wall detection using short range sensors. </p>
                     <p> There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Thirdly, we needed to have reliable code to perform different maneuver. Fortunately, we were able to implement all three of these. <p>
 
                     <p> One of the ways in which we kept track of orientation involved adding a module called <code> generateNewDirection</code>.  This module takes in two <code>char</code> inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the resultant direction. This was particularly useful in translating relative wall data from the robot into array indices, which was also used in determining reachable cells for a given robot location. Below is code that we developed that would achieve this functionality </p>
+=======
+                    <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation. There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Fortunately, we were able to implement all three of these. <p>
+
+                    <p> One of the ways in which we kept track of orientation involved adding a module called <code> generateNewDirection</code>.  This module takes in two <code>char</code> inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the resultant direction. This was particularly useful in translating relative wall data from the robot into array indices, which was also used in determining reachable cells for a given robot location. Below is code that we developed that would achieve this functionality </p>
+                    
+>>>>>>> 2455d0484f890eda368d56aab0b9114d2b1bab61
                       <code>
                    <pre>
 <font color="#00979c">char</font> <font color="#000000">generateNewDirection</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">currOrientation</font><font color="#434f54">,</font> <font color="#00979c">char</font> <font color="#000000">displacementOrientation</font><font color="#000000">)</font><font color="#000000">{</font>
@@ -2336,8 +2365,42 @@ wall detection using short range sensors. </p>
 </pre>
         </code> 
 
-                  <p> We then continued to translate the concepts from the DFS algorithm into arduino code, creating modules that would add adjacent, unvisited, and available cells to the frontier set, and pops from the stack to determine which unvisited cell the robot should visit next.  We also had been working in coordinates from 0-8 and 0-10 allowing each possible wall and cell location its own special coordinate.  Because we used this type of coordinate system, we also made a module that would convert the coordinates to char in order to determine information about which available cells the robot had visited.  This module is shown below.  </p>
-                  <code> 
+<p> The second major order of business was to create data structures that would have the functionality of a set and stack. For the stack, we simply imported an external library to deal with stacks (https://playground.arduino.cc/Code/StackArray). For the set data structure, we created a 1 dimensional array of 20 elements that can handle all 20 possible elements that could theoretically be added to the frontier set. We were able to map the 2d indices of the reachable cells to integers from 1-20 (see code below). In this array, each elements represents a single reachable cell. If a reachable cell is in the frontier set, the value corresponding to this cell in the array would be set to 1. If the cell is not in the frontier set, the value corresponding to this cell in the array would be set to 0. Below are the helper functions we created:</p>
+
+<code>
+<pre>
+ <font color="#00979c">boolean</font> <font color="#000000">containsFrontier</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">coordinate</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;<font color="#5e6d03">if</font> <font color="#000000">(</font><font color="#000000">frontier</font><font color="#000000">[</font><font color="#000000">coordinate</font><font color="#434f54">-</font><font color="#000000">1</font><font color="#000000">]</font> <font color="#434f54">==</font><font color="#000000">1</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#5e6d03">return</font> <font color="#00979c">true</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+ &nbsp;<font color="#5e6d03">return</font> <font color="#00979c">false</font><font color="#000000">;</font>
+ <font color="#000000">}</font>
+
+ <font color="#00979c">void</font> <font color="#000000">addToFrontier</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">coordinate</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;<font color="#5e6d03">if</font> <font color="#000000">(</font><font color="#434f54">!</font><font color="#000000">containsFrontier</font><font color="#000000">(</font><font color="#000000">coordinate</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">frontier</font><font color="#000000">[</font><font color="#000000">coordinate</font><font color="#434f54">-</font><font color="#000000">1</font><font color="#000000">]</font> <font color="#434f54">=</font> <font color="#000000">1</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+ <font color="#000000">}</font>
+
+ <font color="#00979c">void</font> <font color="#000000">removeFromFrontier</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">coordinate</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;<font color="#000000">frontier</font><font color="#000000">[</font><font color="#000000">coordinate</font><font color="#434f54">-</font><font color="#000000">1</font><font color="#000000">]</font> <font color="#434f54">=</font> <font color="#000000">0</font><font color="#000000">;</font>
+ <font color="#000000">}</font>
+
+<font color="#00979c">boolean</font> <font color="#000000">frontierIsEmpty</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;<font color="#5e6d03">for</font> <font color="#000000">(</font><font color="#00979c">int</font> <font color="#000000">i</font> <font color="#434f54">=</font> <font color="#000000">0</font><font color="#000000">;</font> <font color="#000000">i</font><font color="#434f54">&lt;</font><font color="#000000">20</font><font color="#000000">;</font> <font color="#000000">i</font><font color="#434f54">++</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#5e6d03">if</font> <font color="#000000">(</font><font color="#000000">frontier</font><font color="#000000">[</font><font color="#000000">i</font><font color="#000000">]</font> <font color="#434f54">==</font> <font color="#000000">1</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#5e6d03">return</font> <font color="#00979c">false</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">}</font>
+ &nbsp;<font color="#000000">}</font>
+ &nbsp;<font color="#5e6d03">return</font> <font color="#00979c">true</font><font color="#000000">;</font>
+<font color="#000000">}</font>
+
+</pre>
+</code>
+
+<p>Here is how we map the 2d coordinates in the array corresponding to reachable cells to integers numbered 1-20:</p>
+<code>
+ 
 <pre>
  <font color="#00979c">char</font> <font color="#000000">convertCoordsToChar</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">coodinateArray</font><font color="#000000">[</font><font color="#000000">]</font><font color="#000000">)</font><font color="#000000">{</font>
  &nbsp;<font color="#5e6d03">if</font> <font color="#000000">(</font><font color="#000000">coodinateArray</font><font color="#000000">[</font><font color="#000000">0</font><font color="#000000">]</font><font color="#434f54">==</font><font color="#000000">1</font> <font color="#434f54">&&</font> <font color="#000000">coodinateArray</font><font color="#000000">[</font><font color="#000000">1</font><font color="#000000">]</font><font color="#434f54">==</font><font color="#000000">1</font><font color="#000000">)</font><font color="#000000">{</font>
@@ -2403,57 +2466,123 @@ wall detection using short range sensors. </p>
  <font color="#000000">}</font>
 
 </pre>
-                    </code>
-                  
-                  <p> Once we had our code written, we tested it out on the robot.  We created a module that would print the maze and where the robot detected walls in order to debug.  We noticed that soemtimes the robot would think there was a wall next to it when there wasn't, and therefore would miss a portion of the maze.  In addition, when our robot missed the line on a turn, it would run into walls because its coordinates were incorrect as a result of the faulty turn.  In order to fix these issues, we ran extra tests on wall detection and updated the sensitivity values to ensure they were as accurate as possible.  We also edited the turning code to make it more accurate so that our robot would turn correctly at a much higher rate. </p>
-                  <p> After implementing these changes, we saw that our robot was able to navigate through the maze and implement the DFS algorithm mostly correctly!  We discovered one bug that made it so the robot would pop the stack and move into one extra cell after it finished navigating the entire maze.  We fixed this bug by changing the code that caused the robot to pop from the stack and then found that our DFS worked the way we wanted it to. </p>
+</code>
 
 
-                  <h4> Treasure Detection  </h4>
+
+<p> Note that this set data structure has constant time element retrieval, removal, and addition. It also takes constant time to check if the set is empty. This is excellent from a performance standpoint. </p>
+
+<p> In simulation, we never had to worry about physically moving the robot from one cell to another. However, this is a critical consideration on the actual robot. As discussed earlier, we have developed a method for determining a move to make given a new current position. We have written 4 methods that perform the 4 primitive manuevers possible on the robot: moving forwards, going backwards, moving left, and moving right. Each one of these manuevers was represented by a function. Going forwards entailed going from the current junction to the next junction directly in front of the robot. Going backwards entailed first making a U-Turn, and then going to the next junction over. Going left and right involved performing a left/right turn, and then going to the next junction. At each junction, the DFS code was queried, which would generate the next move for the robot to make.  While at a junction, we also had to communicate to the Arduino base-station critical information about the robots position and surroundings. We also had to engage the treasure and wall sensors. If the robot moves to a cell in which it completes the maze traversal, it must stop moving and communicate to the base station that it has completed the traversal. All these considerations are easily understandable from the main <code>loop</code> code, which we've included below</p>
+<code>
+<pre>
+<font color="#00979c">void</font> <font color="#5e6d03">loop</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">{</font>
+
+ &nbsp;<font color="#434f54">//start on 660 Hz Tone OR Button Press</font>
+ &nbsp;&nbsp;<font color="#5e6d03">while</font><font color="#000000">(</font><font color="#434f54">!</font><font color="#000000">startDFS</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">set_motors</font><font color="#000000">(</font><font color="#000000">90</font><font color="#434f54">,</font><font color="#000000">90</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">25</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">startDFS</font> <font color="#434f54">=</font> <font color="#000000">detectStart</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">startDFS</font> <font color="#434f54">|=</font> <font color="#000000">detectButton</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+ &nbsp;<font color="#434f54">//turns light on to tell that we started</font>
+ &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">13</font><font color="#434f54">,</font> <font color="#00979c">HIGH</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">set_motors</font><font color="#000000">(</font><font color="#000000">90</font><font color="#434f54">,</font><font color="#000000">90</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">500</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#d35400">digitalWrite</font><font color="#000000">(</font><font color="#000000">13</font><font color="#434f54">,</font> <font color="#00979c">LOW</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;<font color="#000000">initializeCurrPos</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+
+ &nbsp;<font color="#000000">prevPos</font><font color="#000000">[</font><font color="#000000">0</font><font color="#000000">]</font> <font color="#434f54">=</font> <font color="#000000">currPos</font><font color="#000000">[</font><font color="#000000">0</font><font color="#000000">]</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">prevPos</font><font color="#000000">[</font><font color="#000000">1</font><font color="#000000">]</font> <font color="#434f54">=</font> <font color="#000000">currPos</font><font color="#000000">[</font><font color="#000000">1</font><font color="#000000">]</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">resetMaze</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">initializeOrientation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">addToFrontier</font><font color="#000000">(</font><font color="#000000">convertCoordsToChar</font><font color="#000000">(</font><font color="#000000">currPos</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">visitedStack</font><font color="#434f54">.</font><font color="#d35400">push</font><font color="#000000">(</font><font color="#000000">convertCoordsToChar</font><font color="#000000">(</font><font color="#000000">currPos</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font> &nbsp;
+
+ &nbsp;<font color="#5e6d03">while</font> <font color="#000000">(</font><font color="#00979c">true</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">detectWalls</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">detectTreasures</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">maze</font><font color="#000000">[</font><font color="#000000">currPos</font><font color="#000000">[</font><font color="#000000">0</font><font color="#000000">]</font><font color="#000000">]</font><font color="#000000">[</font><font color="#000000">currPos</font><font color="#000000">[</font><font color="#000000">1</font><font color="#000000">]</font><font color="#000000">]</font> <font color="#434f54">=</font> <font color="#000000">Explored</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">removeFromFrontier</font><font color="#000000">(</font><font color="#000000">convertCoordsToChar</font><font color="#000000">(</font><font color="#000000">currPos</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">addWallsToMaze</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">getReachableCells</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">addUnvisitedSurroundingNodesToFrontier</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#5e6d03">if</font> <font color="#000000">(</font><font color="#000000">frontierIsEmpty</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">doneWithNavigation</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">}</font>
+ &nbsp;&nbsp;&nbsp;<font color="#5e6d03">else</font><font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">recordAndTransmitData</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font> 
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">updateCurrPosAndVisitedSet</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">updateMove</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">performMove</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">}</font>
+
+ &nbsp;<font color="#000000">}</font>
+
+<font color="#000000">}</font>
+
+</pre>
+</code>
+
+<p> Note how the code is executed. The first task that is performed is checking if the 660 Hz has been recieved. If it has, then the maze traversal can begin. As in simulation, the DFS algorithm befins by first initializing the current position. Unlike in simulation, we had to keep track of the previous position for the purpose of deciding how to move the robot. Inside the <code> while </code> loop, the robot detects walls and treasures. The current position is marked as Explored, and the current position is removed from the frontier set. Walls are added to the maze array, reachable cells are recorded, and then unvisited surrounding nodes are added to the frontier (to see how all these functions are implemented, check out the DFS module). If the frontier is empty (the robot finishes traversing the maze), the <code> doneWithNavigation()</code> method is called. This method sets the <code> done </code> variable to 1 (for communication to base station), and initiates the wireless data transfer to the base station. If the maze is not finished being traversed, then the robot initiates a wireless data transfer to the base station, updates the current position and visited set, decides on a move to take, and then calls the <code> performMove </code> to physically execute the move. <p>
 
 
-                  <p>
-                  In a previous lab, our group was able to demonstrate that an analog circuit could be built, in addition to Arduino code, which would be able to detect different frequency treasures. In this lab, we took this a step further by demonstrating that this functionality can be achieved on our PCB, with multiple IR sensors, and within the framework of the existing Arduino code. One of the first challenges we faced was generating two FFTs—corresponding to the two photoresistors circuits mounted on the robot—and then deciding what treasure is present given the spectrum of both signals. We decided that in order to improve accuracy, we would take 30 frequency samples. In other words, each time the robot wanted to determine if a treasure was present in its vicinity, it would have to generate 30 unique FFTs for each IR sensor, corresponding to 30 time-domain samples of the input data for each sensor. We would identify the dominant frequency present in each sample in the same manner as in a previous lab. However, instead of simply returning what the frequency detected in a single voltage sample is, we would look at the frequencies that were most frequently represented among the 30 spectra. The Arduino code would determine that no treasure was in its immediate vicinity if no dominant IR frequency was dected for both sensors. The Arduino code would determine that a 7 kHz signal was present if one of the sensors detected a 7 Khz signal for most of its samples, and the other one detected no frequency for one of its samples, or vice-versa. A similar process was employed for 12 kHz and 17 Khz signals. This procedure ensures more reliable data. 
-                  <br />
-                  Below is a video of the robot detecting frequencies:
-                  <br />
-                  </p>
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/OME9VeLte6U" frameborder="0" allowfullscreen></iframe>
+
+
+
+
+
+
+                
 
 
                   <h3>Verilog & Wireless Communication Updates</h3>
                   
                   <p> Implementing the base station was a culmination of work done over multiple different lab sessions. To get receive radio transmissions from the robot, we connrected a tranceiver to the arduino on the robot, as well as to an arduino that outputs the received information to the FPGA to simulate via physical connections. </p> 
 
-                  <p>
-                    The robot transmit maze information to the base station in between moves. We decided that it would be most efficient to send the data in the form of a <code> word </code>. An Arduino <code>word</code> is a 16-bit data structure (see the next section for how we decided to encode the maze data within this <code>word</code>. 16 bits is enough bits to encode all the information we send to the base station. We chose a compact data structure for wireless transmission since this will ensure greater reliability, as opposed to sending over many bytes of data. The only downside to this method was that it involved greater work on the part of the Arduino on the robot, since it had to assemble the <code>word</code> that is being sent over. To do this, we first assembled a <code>String</code> representing the <code>word</code>.This made it easy to concatenate strings representing different components of the data, and then concatenate them. 
-                  </p>
+                  
 
                   <p> The base station arduino recieves a 16 bit word from the robot that describes the current position of the robot, as well as data about any adjacent walls and treasures.  The base station takes this word, and converts it into a string of length 16 with the same information.  The code for this conversion is shown below: </p>
                   <code>
                     
-String disassembleWord(word data) {
-  String stringToReturn;
-  for (int i = 0; i < 16; i++) {
-    int bitIndex = 15 - i;
-    stringToReturn += String(bitRead(data, bitIndex));
-  }
-  return stringToReturn;
-}
-    
+<pre>
+
+<font color="#00979c">String</font> <font color="#000000">disassembleWord</font><font color="#000000">(</font><font color="#00979c">word</font> <font color="#000000">data</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;<font color="#00979c">String</font> <font color="#000000">stringToReturn</font><font color="#000000">;</font>
+ &nbsp;<font color="#5e6d03">for</font> <font color="#000000">(</font><font color="#00979c">int</font> <font color="#000000">i</font> <font color="#434f54">=</font> <font color="#000000">0</font><font color="#000000">;</font> <font color="#000000">i</font> <font color="#434f54">&lt;</font> <font color="#000000">16</font><font color="#000000">;</font> <font color="#000000">i</font><font color="#434f54">++</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;<font color="#00979c">int</font> <font color="#000000">bitIndex</font> <font color="#434f54">=</font> <font color="#000000">15</font> <font color="#434f54">-</font> <font color="#000000">i</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;<font color="#000000">stringToReturn</font> <font color="#434f54">+=</font> <font color="#00979c">String</font><font color="#000000">(</font><font color="#d35400">bitRead</font><font color="#000000">(</font><font color="#000000">data</font><font color="#434f54">,</font> <font color="#000000">bitIndex</font><font color="#000000">)</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+ &nbsp;<font color="#5e6d03">return</font> <font color="#000000">stringToReturn</font><font color="#000000">;</font>
+<font color="#000000">}</font>
+
+</pre>
                          </code>
                     <p> We then decode the information from this string and write the data to output pins that will communicate with the FPGA.  To do this, we made an indication bit that would be zero when we were communicating information about walls and treasures, and one when we were communicating information about the position of the robot.  In our arduino code, we wrote this indication bit high, and sent out a byte of data about the position of the robot.  We then set a valid bit low and then high after a delay to give time for all our inputs to change before verilog updated the inputs on the FPGA on the rising edge of this valid bit.  We did the same thing for the walls and treasures, setting indication bit low, sending the relevant data from the string, and then setting valid low and high after a delay </p>
 
                   <p> The base station arduino receives a 16 bit word from the robot's arduino. It converts the transmitted word into a string and takes the information about the location of the bot and information about the walls and treasures in the maze from the appropriate indexes of the string. The arduino which is wired so that it is able to transmit 8 bits at any instance to the FPGA, sends two different types of information bytes--location information and treasure and wall information. The arduino writes digital pins to be either high or low depending on location or if there are walls or treasures detected by the bot. This is a diagram of how the byte is organized: </p>
+
 
                   <img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
 
                   <p>Here's our robot navigating through a maze successfully!</p>
                   <iframe width="560" height="315" src="hhttps://youtu.be/ciePGvYAfIA" frameborder="0" allowfullscreen></iframe>
 
+ <h4> Milestone 4 Reflections </h4>
+
+ <p>
+Although we weren't able to integrate all necessary parts of this lab for Milestone 4, we came very close (I'm being genuine, here)! The robot is easily able to traverse a maze and signal when it finishes. The treasure detection works as intended. The robot is able to send accurate maze data to the base station. The robot is also able to respond to the starting tone. Given time constraints, we weren't able to completely finish the FPGA/Base Station side of the code, though we came very close and are confident that we will be able to complete this portion of the project by the competition. Here's a video of our robot successfully traversing a maze and stopping when it's done. </p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/17Ptt6pHfHU" frameborder="0" allowfullscreen></iframe>
+
+
+
+
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
                     Close Page</button>
+
+                   
+
                 </div>
               </div>
             </div>
