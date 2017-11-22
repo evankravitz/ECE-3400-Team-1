@@ -2317,6 +2317,19 @@ wall detection using short range sensors. </p>
                   
                   <p> Once we had our code written, we tested it out on the robot.  We created a module that would print the maze and where the robot detected walls in order to debug.  We noticed that soemtimes the robot would think there was a wall next to it when there wasn't, and therefore would miss a portion of the maze.  In addition, when our robot missed the line on a turn, it would run into walls because its coordinates were incorrect as a result of the faulty turn.  In order to fix these issues, we ran extra tests on wall detection and updated the sensitivity values to ensure they were as accurate as possible.  We also edited the turning code to make it more accurate so that our robot would turn correctly at a much higher rate. </p>
                   <p> After implementing these changes, we saw that our robot was able to navigate through the maze and implement the DFS algorithm mostly correctly!  We discovered one bug that made it so the robot would pop the stack and move into one extra cell after it finished navigating the entire maze.  We fixed this bug by changing the code that caused the robot to pop from the stack and then found that our DFS worked the way we wanted it to. </p>
+
+
+                  <h4> Treasure Detection  </h4>
+
+                  In a previous lab, our group was able to demonstrate that an analog circuit could be built, in addition to Arduino code, which would be able to detect different frequency treasures. In this lab, we took this a step further by demonstrating that this functionality can be achieved on our PCB, with multiple IR sensors, and within the framework of the existing Arduino code. One of the first challenges we faced was generating two FFTs—corresponding to the two photoresistors circuits mounted on the robot—and then deciding what treasure is present given the spectrum of both signals. We decided that in order to improve accuracy, we would take 30 frequency samples. In other words, each time the robot wanted to determine if a treasure was present in its vicinity, it would have to generate 30 unique FFTs for each IR sensor, corresponding to 30 time-domain samples of the input data for each sensor. We would identify the dominant frequency present in each sample in the same manner as in a previous lab. However, instead of simply returning what the frequency detected in a single voltage sample is, we would look at the frequencies that were most frequently represented among the 30 spectra. The Arduino code would determine that no treasure was in its immediate vicinity if no dominant IR frequency was dected for both sensors. The Arduino code would determine that a 7 kHz signal was present if one of the sensors detected a 7 Khz signal for most of its samples, and the other one detected no frequency for one of its samples, or vice-versa. A similar process was employed for 12 kHz and 17 Khz signals. This procedure ensures more reliable data. 
+
+                  Below is a video of the robot detecting frequencies:
+
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/OME9VeLte6U" frameborder="0" allowfullscreen></iframe>
+
+
+
+
                   <h3>Verilog & Wireless Communication Updates</h3>
                   
                   <p> Implementing the base station was a culmination of work done over multiple different lab sessions. To get receive radio transmissions from the robot, we connrected a tranceiver to the arduino on the robot, as well as to an arduino that outputs the received information to the FPGA to simulate via physical connections. </p> 
