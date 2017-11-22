@@ -2225,7 +2225,7 @@ wall detection using short range sensors. </p>
                       <ul>Wiring up our IR phototransistors and their amplifiers</ul>
                       <ul>Wiring up our microphone</ul>
 
-                    <p>We began dealing with these issues by working on a new protoboard. This protoboard would include a new set of power rails, as well as a manual start button and a Schmitt trigger for the back line sensor. We designed the Schmitt trigger to go high at 4V, and go low and 3V, thus making it easy for us to read whether the line sensor was over white or black (see the schematic below). Our manual reset button is just a button wired between 3V and a digital input pin with a resistor in series. We put two power rails on either side of the protoboard for ease of wiring. This ended up being a huge issue, because we used some pretty terrible header pins. In order to actually get stable connections, we needed to solder the connections. See below for pictures of the protoboard and the Schmitt trigger diagram.</p>
+                    <p>We began dealing with these issues by working on a new protoboard. This protoboard would include a new set of power rails, as well as a manual start button and a Schmitt trigger for the back line sensor. We designed the Schmitt trigger to go high at 4V, and go low and 3V, thus making it easy for us to read whether the line sensor was over white or black (see the schematic below). Our manual reset button is just a button wired between 5V and a digital input pin with a pull-down resistor to ground. We put two power rails on either side of the protoboard for ease of wiring. This ended up being a huge issue, because we used some pretty terrible header pins. In order to actually get stable connections, we needed to solder the connections. See below for pictures of the protoboard and the Schmitt trigger diagram.</p>
 
                     <img class="img-fluid img-centered" src="./resources/schmitt_trigger" alt=""> <br>
                     <p>R1=10kΩ, R2=50kΩ, R3=25kΩ, R4=50kΩ</p>
@@ -2391,9 +2391,34 @@ wall detection using short range sensors. </p>
 </pre>
                     </code>
                   
-                  <p> Once we had our code written, we tested it out on the robot.  We created a module that would print the maze and where the robot detected walls in order to debug.  We noticed that soemtimes the robot would think there was a wall next to it when there wasn't, and therefore would miss a portion of the maze.  In addition, when our robot missed the line on a turn, it would run into walls because its coordinates were incorrect as a result of the faulty turn.  In order to fix these issues, we ran extra tests on wall detection and updated the sensitivity values to ensure they were as accurate as possible.  We also edited the turning code to make it more accurate so that our robot would turn correctly at a much higher rate. </p>
+                  <p> Once we had our code written, we tested it out on the robot.  We created a module that would print the maze and where the robot detected walls in order to debug.  We noticed that sometimes the robot would think there was a wall next to it when there wasn't, and therefore would miss a portion of the maze.  In addition, when our robot missed the line on a turn, it would run into walls because its coordinates were incorrect as a result of the faulty turn.  In order to fix these issues, we ran extra tests on wall detection and updated the sensitivity values to ensure they were as accurate as possible.  We also edited the turning code to make it more accurate so that our robot would turn correctly at a much higher rate. </p>
                   <p> After implementing these changes, we saw that our robot was able to navigate through the maze and implement the DFS algorithm mostly correctly!  We discovered one bug that made it so the robot would pop the stack and move into one extra cell after it finished navigating the entire maze.  We fixed this bug by changing the code that caused the robot to pop from the stack and then found that our DFS worked the way we wanted it to. </p>
 
+
+                  <h4> Start Detection </h4>
+
+                  <p>
+                  Since we already had all the hardware components attached, we decided to implement start detection on the robot. First, we worked on the manual start with a button. Our first issue was that the button would write "HIGH" frequently when the button was not actually pressed. However, once we grounded the button correctly with a pull-down resistor, this problem was remedied. Next, we tried implementing the FFT to detect the 660 Hz signal. In order to take up less memory, we changed the FFT from a 256-point FFT to a 128-point FFT. With the lower number of samples, we were still able to accurately detect a 660 Hz tone by checking the 10th bin on the FFT. We created two functions called `detectButton()` and `detectStart()`, which when called, checks the button and the microphone respectively, and returns true only if the button is pressed or the 660 Hz tone is being played.
+                  </p>
+                  <p>
+                  Finally, we implemented our `detectButton()` and `detectStart()` code with the rest of our DFS. While, the button code integrated relatively easily, we had trouble including the microphone code due to the nature of the FFT process. There were two problematic lines of code in our FFT algorithm. We were writing `TIMSK0 = 0;` which turns off timer0 for lower jitter and `ADMUX = 0x40;` which uses adc0. This caused problems with our delays, which were dependent on the timer, and our wall sensing which needed the analog-to-digital converter. In order to resolve this issue, we saved the settings for these registers in a local variable at the beginning of the FFT algorithm, then wrote to the registers in the regular fashion. Then, after the FFT was calculated, we wrote back the saved register settings so it did not interfere with the rest of the code. Once this was fixed, we were able to implement start detection by using the following while loop at the beginning of our code:
+                  </p>
+                  <code>
+<pre>
+ &nbsp;<font color="#434f54">//start on 660 Hz Tone OR Button Press</font>
+ &nbsp;&nbsp;<font color="#5e6d03">while</font><font color="#000000">(</font><font color="#434f54">!</font><font color="#000000">startDFS</font><font color="#000000">)</font> <font color="#000000">{</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">set_motors</font><font color="#000000">(</font><font color="#000000">90</font><font color="#434f54">,</font><font color="#000000">90</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#d35400">delay</font><font color="#000000">(</font><font color="#000000">25</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">startDFS</font> <font color="#434f54">=</font> <font color="#000000">detectStart</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#000000">startDFS</font> <font color="#434f54">|=</font> <font color="#000000">detectButton</font><font color="#000000">(</font><font color="#000000">)</font><font color="#000000">;</font>
+ &nbsp;<font color="#000000">}</font>
+
+</pre>
+				</code>
+
+				<p>
+				Here's a video of our robot detecting both the 660 Hz signal and the manual button press to start navigating the maze, and then completing the DFS. <b> WE NEED THAT NICE VIDEO HERE THANKS <b>
+				</p>
 
                   <h4> Treasure Detection  </h4>
 
@@ -2405,7 +2430,6 @@ wall detection using short range sensors. </p>
                   <br />
                   </p>
                   <iframe width="560" height="315" src="https://www.youtube.com/embed/OME9VeLte6U" frameborder="0" allowfullscreen></iframe>
-
 
 
 
