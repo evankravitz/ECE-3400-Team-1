@@ -1,90 +1,42 @@
-#include <StackArray.h>
-#define Unexplored 0
-#define Explored 1
-#define Wall 2
-
-#define North 0
-#define East 1
-#define South 2
-#define West 3
-
-#define Left 3 
-#define Right 1
-#define Straight 0
-#define Backwards 2
-
-
-
-void setup(){
-  
-}
-
-
-char currentOrientation; //We'll create some way of computing the current orientation later
-
-char maze [9] [11];
-char currPos[2]; 
-char frontier[20]; 
-StackArray <char> visitedStack;
-char reachableCells[4];
-char wallsRelativeDirs[2];
-char possibleWallPosition[2];
-char prevPos[2];
-char moveToPerform;
-
-
 void resetMaze() {
   // Resets the arduino's underlying maze to be completely unexplored
   for (int i=0; i<11; i++){
     for (int j= 0; j<9; j++){
       maze[j][i]= Unexplored; 
-      
     }
   }
  }
 
-
-
-
- void loop(){
-  prevPos[0] = currPos[0];
-  prevPos[1] = currPos[1];
-  resetMaze();
-  initializeCurrPos();
-  addToFrontier(convertCoordsToChar(currPos));
-  visitedStack.push(convertCoordsToChar(currPos));
-  while (!frontierIsEmpty()){
-    maze[currPos[0]][currPos[1]] = Explored;
-    removeFromFrontier(convertCoordsToChar(currPos));
-    addWallsToMaze();
-    getReachableCells();
-    addUnvisitedSurroundingNodesToFrontier();
-    updateCurrPosAndVisitedSet();
-    if (!frontierIsEmpty()){
-      addWallsToMaze();
-      getReachableCells();
-      addUnvisitedSurroundingNodesToFrontier();
-    }
-   updateMove();
-   performMove();
-  
-  }
-  doneWithNavigation();
-  
-  
- }
-
- void performMove(){
-  
- }
 
 void doneWithNavigation(){
-  
+  delay(100000000);
+}
+
+void printMaze(){
+  Serial.println("Start Maze vvvvvvvvv");
+  for (int y = 0; y < 11; y++){
+    Serial.println("");
+    Serial.println("____________________");
+    for (int x = 0; x<9; x++){
+      Serial.print("||");
+      Serial.print((int)maze[x][y]);
+    }
+  }
+  Serial.println("");
+  Serial.println("End Maze^^^^^");
 }
 
 void updateMove(){
-  int dx = currPos[0] - prevPos[0];
-  int dy = currPos[1] - prevPos[1];
+//  Serial.println("FKSHKJLHFD");
+//  Serial.println((int)currPos[0]);
+//  Serial.println((int)currPos[1]);
+//  Serial.println((int)prevPos[0]);
+//  Serial.println((int)prevPos[1]);
+//  Serial.println("FKSHKJLHFD");
+//  Serial.println((int) currPos[0]);
+//  Serial.println((int) currPos[1]);
+  int dx = (int)currPos[0] - (int)prevPos[0];
+  int dy = (int)currPos[1] - (int)prevPos[1];
   if ((dx == 2 && currentOrientation==East) //displace east, facing east
      || (dy == -2 && currentOrientation==North) //displace north, facing north
      || (dx == -2 && currentOrientation==West) //displace west, facing west
@@ -105,8 +57,11 @@ void updateMove(){
      {
         moveToPerform = Backwards;
   }
+    else if (dy ==0 && dx == 0){
+      moveToPerform = Stop;
+    }
   else{
-    moveToPerform == Left;
+    moveToPerform = Left;
   }
 
   
@@ -149,35 +104,42 @@ char generateNewDirection(char currOrientation, char displacementOrientation){
   
 }
 void getReachableCells(){
-  getAdjacentWall(0); //in front
+  for (int i = 0; i<4; i++){
+    reachableCells[i] = 0;
+  }
+  getAdjacentWall(Straight); //in front
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
-    reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
-    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCellArray[0] = currPos[0] + 2*((int)possibleWallPosition[0] - (int)currPos[0]);
+    reachableCellArray[1] = currPos[1] + 2*((int)possibleWallPosition[1] - (int) currPos[1]);
+
     reachableCells[0] = convertCoordsToChar(reachableCellArray);
   }
-  getAdjacentWall(1); //right
+  getAdjacentWall(Right); //right
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
     reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
-    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCellArray[1] = currPos[1] + 2*(possibleWallPosition[1] - currPos[1]);
     reachableCells[1] = convertCoordsToChar(reachableCellArray);
   }
-  getAdjacentWall(2); //left
+  getAdjacentWall(Left); //left
   if (maze[possibleWallPosition[0]][possibleWallPosition[1]] != Wall){
     char reachableCellArray[2]; 
     reachableCellArray[0] = currPos[0] + 2*(possibleWallPosition[0] - currPos[0]);
-    reachableCellArray[1] = currPos[0] + 2*(possibleWallPosition[1] - currPos[1]);
+    reachableCellArray[1] = currPos[1] + 2*(possibleWallPosition[1] - currPos[1]);
     reachableCells[2] = convertCoordsToChar(reachableCellArray);
   }
-  reachableCells[3] = convertCoordsToChar(prevPos);
-  
+  //reachableCells[3] = convertCoordsToChar(prevPos);
   
 }
+
 void getAdjacentWall(char dir){
   possibleWallPosition[0] = currPos[0];
   possibleWallPosition[1] = currPos[1];
   char directionToGo = generateNewDirection(currentOrientation, dir);
+//  Serial.print("Current orientation:"); Serial.println((int)currentOrientation);
+//  Serial.print("Displacement direction WTR current orientation"); Serial.println((int) dir);
+//  Serial.print("Direction to go:"); Serial.println((int)directionToGo);
   //go straight
   if (directionToGo == North){ 
     possibleWallPosition[1] = currPos[1] -1;
@@ -205,9 +167,21 @@ void updateCurrPosAndVisitedSet(){
   for (int i = 0; i<4; i++){
     if (reachableCells[i]!=0){
       //conversion between int coordinates to array coordinates
+      
       int ypos = 2*((reachableCells[i]-1)/4)+1;
       int xpos = 2*((reachableCells[i]-1)%4)+1;
-      if (maze[xpos][ypos] == Explored){
+//      Serial.print("Reachable Cell:");
+//      Serial.println((int) reachableCells[i]);
+//      Serial.print("Xpos");
+//      Serial.println(xpos);
+//      Serial.print("Ypos");
+//      Serial.println(ypos);    
+//       
+
+      if (maze[xpos][ypos] == Unexplored){
+//        Serial.println((int)reachableCells[i]);
+//        Serial.println(xpos);
+//        Serial.println(ypos);
         foundUnexplored = true;
         newCurrPos[0] = xpos; newCurrPos[1] = ypos;
         break;
@@ -215,9 +189,11 @@ void updateCurrPosAndVisitedSet(){
     }
   }
   if (!foundUnexplored){
+//    Serial.print("Last visited (popped):");
     char lastVisited = visitedStack.pop();
-    int newYpos = 2*((reachableCells[i]-1)/4)+1;
-    int newXpos = 2*((reachableCells[i]-1)%4)+1;
+//    Serial.print("Last visited (popped):"); Serial.println((int)lastVisited);
+    int newYpos = 2*((lastVisited-1)/4)+1;
+    int newXpos = 2*((lastVisited-1)%4)+1;
     newCurrPos[0] = newXpos;
     newCurrPos[1] = newYpos;
   }
@@ -228,32 +204,47 @@ void updateCurrPosAndVisitedSet(){
   prevPos[1] = currPos[1];
   currPos[0] = newCurrPos[0];
   currPos[1] = newCurrPos[1];
+//  Serial.println((int) currPos[0]);
+//  Serial.println((int) currPos[1]);
+//  Serial.println("SFKJSHFKSL");
+//  Serial.println((int) prevPos[0]);
+//  Serial.println((int) prevPos[1]);
+
+
 }
 
-void getWalls(){
-  
-}
+
 void addWallsToMaze(){
-  getWalls(); //this method will be defined somewhere. 
+  //detectWalls(); //this method will be defined somewhere. 
   char wallCoord[2];
-  for (int i = 0; i<3; i++){
-  
-    if (wallsRelativeDirs[i] == 0){  // there's a wall ther
-      if (i ==0){
-        getAdjacentWall(3);
-      }
-      if (i==1){
-        getAdjacentWall(0);
-      }
-      else{
-        getAdjacentWall(1);
-      }
-    }
+//  Serial.print("Wall Left:"); Serial.println(wallLeft);
+//  Serial.print("Wall Mid:"); Serial.println(wallMid);
+//  Serial.print("Wall Right:"); Serial.println(wallRight);
+
+  if (wallLeft){
+    getAdjacentWall(Left);
+//    Serial.print("Possible Wall Position Left Sensor X:"); Serial.println((int)possibleWallPosition[0]);
+//    Serial.print("Possible Wall Position Left Sensor Y:"); Serial.println((int)possibleWallPosition[1]);
     maze[possibleWallPosition[0]][possibleWallPosition[1]] = Wall;
+  }
+  if (wallMid){
+    getAdjacentWall(Straight);
+//    Serial.print("Possible Wall Position Middle Sensor X:"); Serial.println((int)possibleWallPosition[0]);
+//    Serial.print("Possible Wall Position Middle Sensor Y:"); Serial.println((int)possibleWallPosition[1]);
+    maze[possibleWallPosition[0]][possibleWallPosition[1]] = Wall;
+
+  }
+  if (wallRight){
+    getAdjacentWall(Right);
+    maze[possibleWallPosition[0]][possibleWallPosition[1]] = Wall;
+
   }
   
 }
 
+void initializeOrientation(){
+  currentOrientation = North;
+}
 void addUnvisitedSurroundingNodesToFrontier(){
   for (int i = 0; i<4; i++){
     if (reachableCells[i]!=0){
@@ -360,5 +351,14 @@ boolean frontierIsEmpty(){
   }
   return true;
 }
-  
 
+void printFrontier(){
+  Serial.println("Begin printing frontier");
+  for (int i = 0; i<20; i++){
+    if (frontier[i]==1){
+      Serial.println(i+1);
+    }
+  }
+ Serial.println("Done printing frontier");
+
+}

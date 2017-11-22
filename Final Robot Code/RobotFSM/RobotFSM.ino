@@ -80,7 +80,7 @@ int position =0;
 int error =0;
 unsigned int sensors[3];
 boolean isJunction;
-boolean passed = false;
+boolean sameJunct = false;
 int junkSensor =0;
 
 //IMPROVEMENTS? range of no correction 900-1100? different KP and KD for neg/pos error? percent correction tracking? 
@@ -137,21 +137,21 @@ void loop() {
   
   //START state: waits until startSignal returns TRUE, then enters JUNCTION state
   if (state == START) {
-    //Serial.println("START");
+//    Serial.println("START");
     //if (detectStart()) {
-      state = JUNCTION;
+      state = BETWEEN;
     //}
   }
 
   //JUNCTION state: detects walls and treasures, chooses next direction to move
   if (state == JUNCTION) {
-    //Serial.println("JUNCTION");
+//    Serial.println("JUNCTION");
 
     //byte treasure = detectTreasure(); //gets a string for treasure at junction
 
-    //stop();
+    stop();
     detectWalls();
-
+    
     //delay(1000);
 
     if (!wallRight){
@@ -161,13 +161,19 @@ void loop() {
     }
     else if (!wallMid) {
       //Serial.println("Choose mid");
-      state = BETWEEN;
+      //state = BETWEEN;
     }
     else if (!wallLeft) {
       //Serial.println("Choose left");
       turnLeft();
       stop();
      
+    }
+    else if (wallRight && wallMid && wallLeft) {
+      turnRight();
+      stop();
+      turnRight();
+      stop();
     }
     else {
       turnRight();
@@ -181,7 +187,15 @@ void loop() {
   //BETWEEN state: follows a line until it reaches the next junction
 
   if (state == BETWEEN) {
-    //Serial.println("BETWEEN");
+//    Serial.println("BETWEEN");
+//    goStraight();
+//    delay(100);
+    while(analogRead(A0)>700 && sameJunct){ 
+      goStraight();
+    }
+    sameJunct = false;
+    digitalWrite(13, LOW);
+    
     position = qtrrc.readLine(sensors);
     junkSensor = analogRead(A0);
     
@@ -189,6 +203,7 @@ void loop() {
     junction();
     if (isJunction) {
       state = JUNCTION;
+      digitalWrite(13, HIGH);
     }
     else  {
       //Serial.println("Go straight");
