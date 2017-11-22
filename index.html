@@ -2245,22 +2245,14 @@ wall detection using short range sensors. </p>
                     <img class="img-fluid img-centered" src="./resources/robotm4.JPG" alt=""> <br>
 
                   <h3>DFS Integration</h3>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                  <b>Evan?</b>
 
-                  <h3>Verilog & Wireless Communication Updates</h3>
-                  <b>Katherine?</b>
-=======
                     <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation.  To implement this algorithm in real life, we needed to convert the Java algorithm into Arduino code and use the modules we had already written for the robot such as goStraight(), turnRight(), turnLeft() etc. to cause the robot to implement the DFS algorithm while traversing the maze. </p>
                     <p> In order to do this, we needed to add some features to the algorithm.  For example, we needed a way to keep track of the direction the robot was facing so that if, for example, the robot detected a wall on one of its sensors, we would be able to know the direction the robot was facing and determine if the wall was along the north, south, west, or east of the maze.  </p>
                     <p> To implement this change, we added a module called generateNewDirection.  This module takes in two char inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the direction the robot should turn.  An example block of the code that would indicate the robot's next move would be to the North is shown below </p>
-=======
-                    <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation. There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Thirdly, we needed to have reliable code to perform different maneuver. Fortunately, we were able to implement all three of these. <p>
+
+                    <p> There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Thirdly, we needed to have reliable code to perform different maneuver. Fortunately, we were able to implement all three of these. <p>
 
                     <p> One of the ways in which we kept track of orientation involved adding a module called <code> generateNewDirection</code>.  This module takes in two <code>char</code> inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the resultant direction. This was particularly useful in translating relative wall data from the robot into array indices, which was also used in determining reachable cells for a given robot location. Below is code that we developed that would achieve this functionality </p>
->>>>>>> bf7b75b0077d20593a6d2ca81563cb586e231da2
-                    
                       <code>
                    <pre>
 <font color="#00979c">char</font> <font color="#000000">generateNewDirection</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">currOrientation</font><font color="#434f54">,</font> <font color="#00979c">char</font> <font color="#000000">displacementOrientation</font><font color="#000000">)</font><font color="#000000">{</font>
@@ -2429,8 +2421,6 @@ wall detection using short range sensors. </p>
                   <iframe width="560" height="315" src="https://www.youtube.com/embed/OME9VeLte6U" frameborder="0" allowfullscreen></iframe>
 
 
-
-
                   <h3>Verilog & Wireless Communication Updates</h3>
                   
                   <p> Implementing the base station was a culmination of work done over multiple different lab sessions. To get receive radio transmissions from the robot, we connrected a tranceiver to the arduino on the robot, as well as to an arduino that outputs the received information to the FPGA to simulate via physical connections. </p> 
@@ -2457,7 +2447,9 @@ String disassembleWord(word data) {
                   <p> The base station arduino receives a 16 bit word from the robot's arduino. It converts the transmitted word into a string and takes the information about the location of the bot and information about the walls and treasures in the maze from the appropriate indexes of the string. The arduino which is wired so that it is able to transmit 8 bits at any instance to the FPGA, sends two different types of information bytes--location information and treasure and wall information. The arduino writes digital pins to be either high or low depending on location or if there are walls or treasures detected by the bot. This is a diagram of how the byte is organized: </p>
 
                   <img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
->>>>>>> d7f537c35d4775479cacaa28cb22530e071d0f95
+
+                  <p>Here's our robot navigating through a maze successfully!</p>
+                  <iframe width="560" height="315" src="hhttps://youtu.be/ciePGvYAfIA" frameborder="0" allowfullscreen></iframe>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
