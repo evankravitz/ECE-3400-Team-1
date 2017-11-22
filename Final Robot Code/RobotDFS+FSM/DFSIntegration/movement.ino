@@ -111,18 +111,21 @@ void performMove(){
 
 void moveLeft(){
  turnLeft();
+ recordAndTrasmitDataAtTurningJunction();
  stop();
  moveStraight();
 }
 
 void moveRight(){
   turnRight();
+  recordAndTrasmitDataAtTurningJunction();
   stop();
   moveStraight();
 }
 
 void moveBackwards(){
   turnLeft();
+  recordAndTrasmitDataAtTurningJunction();
   stop();
   turnLeft();
   stop();
