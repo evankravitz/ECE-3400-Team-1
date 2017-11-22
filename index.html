@@ -2268,11 +2268,10 @@ wall detection using short range sensors. </p>
 
                   <h4>DFS Integration</h4>
 
-                    <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation. There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Fortunately, we were able to implement all three of these. <p>
+                    <p> We already had a working DFS Java algorithm for the Milestone 3 robot simulation. There were a couple of important tasks that we had to take care of in order to have the robot perform the DFS. Firstly, we needed to keep track of the orientation of the robot with respect to the coordinate system of the array. This is important because we need some way to map relative wall values to actual elements in the array. Secondly, we needed to utilize data structures that are present in the standard Java SDK but not in Arduino. Fortunately, we were able to implement these functionalities. <p>
 
                     <p> One of the ways in which we kept track of orientation involved adding a module called <code> generateNewDirection</code>.  This module takes in two <code>char</code> inputs: one representing the current orientation of the robot, and one representing the displacement direction. Using these two inputs, this module would output the resultant direction. This was particularly useful in translating relative wall data from the robot into array indices, which was also used in determining reachable cells for a given robot location. Below is code that we developed that would achieve this functionality </p>
                     
->>>>>>> 2455d0484f890eda368d56aab0b9114d2b1bab61
                       <code>
                    <pre>
 <font color="#00979c">char</font> <font color="#000000">generateNewDirection</font><font color="#000000">(</font><font color="#00979c">char</font> <font color="#000000">currOrientation</font><font color="#434f54">,</font> <font color="#00979c">char</font> <font color="#000000">displacementOrientation</font><font color="#000000">)</font><font color="#000000">{</font>
@@ -2554,12 +2553,10 @@ wall detection using short range sensors. </p>
 
 
                   <img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
-<<<<<<< Updated upstream
 
                   <p>Here's our robot navigating through a maze successfully!</p>
                   <iframe width="560" height="315" src="hhttps://youtu.be/ciePGvYAfIA" frameborder="0" allowfullscreen></iframe>
-=======
->>>>>>> Stashed changes
+
 
  <h4> Milestone 4 Reflections </h4>
 
