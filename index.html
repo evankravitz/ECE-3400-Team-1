@@ -778,15 +778,9 @@ void loop() {<br>
 
 <li>Pin 13 corresponds to an led output on the Arduino Uno. Below is a video of the Arduino Uno illuminating pin 13 in response to the 7 kHz signal. Note that the pin illuminates when the treasure is brought within ~6 in. of the transistor, but turns off once it is out of range. </li> <br>
 
-
-<video width="460" height="270" controls preload> 
-    <source src="./resources/irlightdetection.mp4"></source> 
-</video>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XL-vrNMunB4" frameborder="0" allowfullscreen></iframe>
 
 <li>We will need to modify the circuit to include a band pass filter in order to better detect multiple discrete frequencies (multiple treasures). </li><br>
-
-
 
 <h4 class = "text-center">Acoustic Team:</h4>
 <p class = "text-center">TJ, Frannie, and Katherine</p>
@@ -848,9 +842,9 @@ void loop() {<br>
 <img class="img-fluid img-centered" src="./resources/lab2_acoustic_data4.png" alt="">
 
 <li>Once we built the circuit, we checked to see if it was working as expected.  We found a free online tone generator as shown below.  We then played the tone off a computer next to the circuit and observed the results using an oscilloscope. Our general set-up can be seen in this video below: </li> <br>
-<video width="460" height="270" controls preload> 
-    <source src="resources/IMG_0196.mp4"></source> 
-</video>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/V_nuNBzZ2WA" frameborder="0" allowfullscreen></iframe>
+
 
 <li>The oscilloscope showed that it was taking in data from the acoustics in the room, and generating a wave of frequency 660 Hz when the tone was played next to the circuit, as shown in the photo of the oscilloscope screen below.</li><br>
 <img class="img-fluid img-centered" src="./resources/lab2_acoustic_data5.png" alt="">
@@ -876,10 +870,8 @@ void start() {<br>
 </code> <br>
 
 <li>Below is a video of the arduino LED responding to a 660 Hz signal: </li>
-<video width="460" height="270" controls preload> 
-    <source src="resources/IMG_0198.mp4"></source> 
-</video>
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AGRt7vsQew4" frameborder="0" allowfullscreen></iframe>
 
 <h5 class = "text-left"> Distinguishing between 585 Hz and 735 Hz:</h5>
 
@@ -899,9 +891,9 @@ if (fft_log_out[4] > 120) {<br>
 </code><br>
 
 <li>Since the oscilloscope input worked, we also wanted to try an audio input. We played the 585 Hz tone, then the 735 Hz tone, and finally the 660 Hz tone which causes the LED to light up:</li><br>
-<video width="460" height="270" controls preload> 
-    <source src="./resources/lab2_tones.mov"></source> 
-</video> <br> <br>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/532djUzTYos" frameborder="0" allowfullscreen></iframe>
+
 
 <h5 class = "text-left">Amplifier Circuit</h5>
 
