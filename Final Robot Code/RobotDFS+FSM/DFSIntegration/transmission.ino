@@ -1,23 +1,29 @@
 unsigned long started_waiting_at;
 
 void recordAndTrasmitDataAtTurningJunction(){
-  detectTreasures();
-  char savedCurrPos[2];
-  savedCurrPos[0] = currPos[0];   savedCurrPos[1] = currPos[1];
-  currPos[0] = prevPos[0]; currPos[1]=prevPos[1];
-  recordAndTransmitData();
-  currPos[0] = savedCurrPos[0];  currPos[1] = savedCurrPos[1];
+  if (treasure==0){
+    detectTreasures();
+    char savedCurrPos[2];
+    savedCurrPos[0] = currPos[0];   savedCurrPos[1] = currPos[1];
+    currPos[0] = prevPos[0]; currPos[1]=prevPos[1];
+    recordAndTransmitData();
+    //detectTreasures();
+    currPos[0] = savedCurrPos[0];  currPos[1] = savedCurrPos[1];
+  }
+
 
   
 }
 
 void recordAndTransmitData(){
-//  unsigned long startTime = millis();
-  String stringToSend = assembleWordString();
-  word wordToSend = assembleWord(stringToSend);
-  boolean successfullySent = false;
-  while (!successfullySent){
-    successfullySent = sendPacket(wordToSend);
+  if (doTransmission){
+  //  unsigned long startTime = millis();
+    String stringToSend = assembleWordString();
+    word wordToSend = assembleWord(stringToSend);
+    boolean successfullySent = false;
+    while (!successfullySent){
+      successfullySent = sendPacket(wordToSend);
+    }
   }
   
 }
@@ -43,10 +49,10 @@ String assembleWordString(){
   String doneString = assembleDoneString();
   String wallsString = assembleWallsString();
   String treasuresString = assembleTreasuresString();
-  String indication1 = "0"; String indication2 = "1";
+  String indication1 = "1"; String indication2 = "1";
   String valid1 = "1"; String valid2 = "1";
-
-  return indication1+xCoordString+yCoordString+doneString+valid1+indication2+wallsString+treasuresString+valid2;
+  String stringToSend = indication1+xCoordString+yCoordString+doneString+valid1+indication2+wallsString+treasuresString+valid2;
+  return stringToSend;
 }
 
 
@@ -75,13 +81,13 @@ String assembleWallsString(){
     stringToReturn.setCharAt(0, '1');
   }
   if (maze[currPos[0]+1][currPos[1]] == Wall){ //east wall
-    stringToReturn.setCharAt(1, '1');
+    stringToReturn.setCharAt(3, '1');
   }
   if (maze[currPos[0]-1][currPos[1]] == Wall){ //west wall
-    stringToReturn.setCharAt(2, '1');
+    stringToReturn.setCharAt(1, '1');
   }
   if (maze[currPos[0]][currPos[1]+1] == Wall){ //south wall
-    stringToReturn.setCharAt(3, '1');
+    stringToReturn.setCharAt(2, '1');
   }
   return stringToReturn;
 }

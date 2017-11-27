@@ -1,6 +1,6 @@
 void stop(){
   set_motors(90,90);
-  delay(500);
+  delay(150);
 }
 
 void goStraight(){
@@ -111,22 +111,22 @@ void performMove(){
 
 void moveLeft(){
  turnLeft();
- recordAndTrasmitDataAtTurningJunction();
  stop();
+ recordAndTrasmitDataAtTurningJunction();
  moveStraight();
 }
 
 void moveRight(){
   turnRight();
-  recordAndTrasmitDataAtTurningJunction();
   stop();
+  recordAndTrasmitDataAtTurningJunction();
   moveStraight();
 }
 
 void moveBackwards(){
   turnLeft();
-  recordAndTrasmitDataAtTurningJunction();
   stop();
+  recordAndTrasmitDataAtTurningJunction();
   turnLeft();
   stop();
   moveStraight();
@@ -149,7 +149,7 @@ void moveStraight(){
     error = position - 1000;
     junction();
     if (isJunction) {
-      set_motors(90,90);
+      stop();
       digitalWrite(13, HIGH);
       
     }

@@ -1,14 +1,21 @@
 
 void detectTreasures(){
-   
-  boolean successfullyRecordFrequency = false;
-  while (!successfullyRecordFrequency){
+   servoL.detach();
+   servoR.detach();
+   boolean successfullyRecordFrequency = false;
+   while (!successfullyRecordFrequency){
     noTreasure1 = 0;  sevenKHZTreasure1 = 0;  twelveKHZTreasure1 = 0;  seventeenKHZTreasure1 = 0;
     noTreasure2 = 0;  sevenKHZTreasure2 = 0;  twelveKHZTreasure2 = 0;  seventeenKHZTreasure2 = 0;
     readTreasures();
     successfullyRecordFrequency=selectLargestTreasureAndUpdateTreasureVariables();
   }
-
+//    Serial.print("Treasure frequency = "); Serial.println((int)treasure);
+//    Serial.print("Current x position = "); Serial.println((int) (currPos[0]-1)/2);
+//    Serial.print("Current y position = "); Serial.println((int) (currPos[1]-1)/2);
+//    Serial.println("  ");
+    
+    servoL.attach(3);
+    servoR.attach(6);
 
 }
 
@@ -130,12 +137,11 @@ int updateFFTArrayAndFindFrequencyDetector1(){
     char tempADMUX = ADMUX; // use adc0: analog A0
     char tempDIDR0 = DIDR0;
 
-    servoL.detach();
-    servoR.detach();
+ 
     
     ADCSRA = 0xe5;
     set_motors(90,90);
-    TIMSK0 = 0; // turn off timer0 for lower jitter
+     TIMSK0 = 0; // turn off timer0 for lower jitter
     ADMUX = B01000010; // A2--analog pin 2
     DIDR0 = 0x01; // turn off the digital input for adc0
     cli();  // UDRE interrupt slows this way down on arduino1.0
@@ -160,8 +166,7 @@ int updateFFTArrayAndFindFrequencyDetector1(){
     TIMSK0 = tempTIMSK0; // turn off timer0 for lower jitter
     ADMUX = tempADMUX; // use adc0: analog A0
     DIDR0 = tempDIDR0;
-    servoL.attach(3);
-    servoR.attach(6);
+
 
    if (detectedFrequency(7E3, fft_log_out)){
        return 7;
@@ -189,12 +194,12 @@ int updateFFTArrayAndFindFrequencyDetector2(){
     char tempADMUX = ADMUX; // use adc0: analog A0
     char tempDIDR0 = DIDR0;
 
-    servoL.detach();
-    servoR.detach();
+    //servoL.detach();
+    //servoR.detach();
     
     ADCSRA = 0xe5;
 
-    TIMSK0 = 0; // turn off timer0 for lower jitter
+   // TIMSK0 = 0; // turn off timer0 for lower jitter
     ADMUX = B01000001; // A2--analog pin 2
     DIDR0 = 0x01; // turn off the digital input for adc0
 
@@ -222,8 +227,8 @@ int updateFFTArrayAndFindFrequencyDetector2(){
     ADMUX = tempADMUX; // use adc0: analog A0
     DIDR0 = tempDIDR0;
    
-  servoL.attach(3);
-  servoR.attach(6);
+  //servoL.attach(3);
+  //servoR.attach(6);
    if (detectedFrequency(7E3, fft_log_out)){
        return 7;
     }

@@ -9,8 +9,11 @@ void resetMaze() {
 
 
 void doneWithNavigation(){
+  done = 1;
+  turnLeft();
+  stop();
+  detectTreasures();
   while (true){
-    done = 1;
     recordAndTransmitData();
   }
 }
@@ -30,14 +33,7 @@ void printMaze(){
 }
 
 void updateMove(){
-//  Serial.println("FKSHKJLHFD");
-//  Serial.println((int)currPos[0]);
-//  Serial.println((int)currPos[1]);
-//  Serial.println((int)prevPos[0]);
-//  Serial.println((int)prevPos[1]);
-//  Serial.println("FKSHKJLHFD");
-//  Serial.println((int) currPos[0]);
-//  Serial.println((int) currPos[1]);
+  
   int dx = (int)currPos[0] - (int)prevPos[0];
   int dy = (int)currPos[1] - (int)prevPos[1];
   if ((dx == 2 && currentOrientation==East) //displace east, facing east

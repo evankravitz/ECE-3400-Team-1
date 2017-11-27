@@ -124,7 +124,7 @@ char prevPos[2];
 char moveToPerform;
 char done = 0;
 
-
+boolean doTransmission = true;
 void setup(){
   
   //radio setup:
@@ -137,7 +137,7 @@ void setup(){
   radio.setChannel(0x50);
   // set the power
   // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setPALevel(RF24_PA_HIGH);
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
   radio.setDataRate(RF24_1MBPS);
 
@@ -180,6 +180,7 @@ void setup(){
   
 }
 
+
 void loop(){
 
   //start on 660 Hz Tone OR Button Press
@@ -194,16 +195,17 @@ void loop(){
   set_motors(90,90);
   delay(500);
   digitalWrite(13, LOW);
-  
+  initializeCurrPos();
+
   prevPos[0] = currPos[0];
   prevPos[1] = currPos[1];
   resetMaze();
-  initializeCurrPos();
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
 
-  while (true){
+
+while (true){
     detectWalls();
     detectTreasures();
     maze[currPos[0]][currPos[1]] = Explored;
@@ -222,5 +224,6 @@ void loop(){
     }
 
   }
+
 
 }
