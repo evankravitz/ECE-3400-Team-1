@@ -1515,9 +1515,7 @@ radio.setDataRate(RF24_2MBPS);
 
 <p>Here is a video of one arduino sending the entire maze to another: </p><br>
 
-<video width="460" height="270" controls preload> 
-    <source src="resources/maze.mp4"></source> 
-</video>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y53XXv9cR8I" frameborder="0" allowfullscreen></iframe>
 
 <h6> For sending and receiving maze updates via individual coordinate points: </h6>
 <p>When sending maze updates, one arduino sent a 1x3 array of unsigned chars--the first two chars being the maze coordinates, and the third being new information that corresponded with that data point. The second arduino had a 5x5 maze array initialized on it so that the correct coordinate could be updated to reflect the incoming information as it was received. </p><br>
@@ -1539,10 +1537,7 @@ maze[updates[0]][updates[1]]=updates[2];<br>
 
 <p>Here is a video of the maze updates being sent from one Arduino to another: </p><br>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/updates.mp4"></source> 
-</video><br>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dLW_6F20Opo" frameborder="0" allowfullscreen></iframe>
 
 <h5> Sending information from base station to FPGA </h5>
 
@@ -1698,9 +1693,8 @@ end
 
  <p>Here is a video of this incrementation: </p> <br>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/first.mp4"></source> 
-</video><br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/FGF4jDiJQ2Y" frameborder="0" allowfullscreen></iframe>
+
 
 <h5> FPGA Communication with Arduino</h5><br>
 
@@ -1741,9 +1735,7 @@ endmodule
 
 <p>We were able to successfully communicate information wirelessly from one Arduino to another, then display it on a screen using the FPGA. See the below video:
 </p><br>
-<video width="460" height="270" controls preload> 
-    <source src="./resources/second.mp4"></source> 
-</video><br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2UJ1r2kLUo0" frameborder="0" allowfullscreen></iframe>
  
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
@@ -2013,10 +2005,7 @@ void loop() { <br>
 <p>Here's a video of Evan demonstrating the functionality of the circuit and Arduino code:
 </p>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/Treasure_Detection.mp4"></source> 
-</video> <br>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/w5iABs7IJ5A" frameborder="0" allowfullscreen></iframe>
 
 <h4 class='text-left'>Distance Sensing</h4>
 
@@ -2065,9 +2054,7 @@ wall detection using short range sensors. </p>
 <code><br>
 <p>Here is a brief video of the robot with the integrated distance sensor. As it approaches the wall, it turns at the closest junction. </p>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/IMG_0780.mp4"></source> 
-</video> <br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/L3ICUqQ3JeU" frameborder="0" allowfullscreen></iframe>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
@@ -2299,9 +2286,7 @@ wall detection using short range sensors. </p>
                   
                   <p>After implementing the above, and playing around with our servo turn values a bit more, we created a robust turning and wall detection implementation. Here's a video of this implementation:</p>
                   
-                  <video width="460" height="270" controls preload> 
-                      <source src="./resources/face.mp4"></source> 
-                   </video> <br>
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/Gy2xKmc6sWQ" frameborder="0" allowfullscreen></iframe>
 
                   <p>We still need to work out some kinks with left turns, but we are able to navigate the maze! In the future, we will work to implement a more comprehensive maze mapping behavior, which we did not do in this iteration.</p>
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
