@@ -2,7 +2,12 @@ void resetMaze() {
   // Resets the arduino's underlying maze to be completely unexplored
   for (int i=0; i<11; i++){
     for (int j= 0; j<9; j++){
-      maze[j][i]= Unexplored; 
+      if (i==0 || j==0 || j==8 || i==10){
+        maze[j][i] = Wall;
+      }
+      else{
+        maze[j][i]= Unexplored; 
+      }
     }
   }
  }
@@ -17,6 +22,8 @@ void doneWithNavigation(){
     recordAndTransmitData();
   }
 }
+
+
 
 void printMaze(){
   Serial.println("Start Maze vvvvvvvvv");
