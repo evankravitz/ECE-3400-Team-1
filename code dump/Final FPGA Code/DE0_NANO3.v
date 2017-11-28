@@ -44,7 +44,7 @@ module DE0_NANO(
 	 localparam red = 8'b11100000;  // 7kHz treasure Freq (2'b01)
 	 localparam blue = 8'b00110011; //12kHz treasure Freq (2'b10)
 	 localparam green = 8'b01010001; // 17 kHZ treasure Freq (2'b11)
-	 localparam CLKDIVIDER_B_SIN = 25000000 / 800 / 256;
+	 localparam CLKDIVIDER_B_SIN = 25000000 / 800 ;
 	 
 	 //=======================================================
 	 //  PORT declarations
@@ -114,15 +114,20 @@ module DE0_NANO(
 		else begin
 		currentGrid <= grid1[GRID_X][GRID_Y];
  
-			if (PIXEL_COORD_X<=(10'd4+(GRID_X*10'd96)) && PIXEL_COORD_X>=(GRID_X*10'd96) && currentGrid[6] == 1'b1) begin  //right
+			if (PIXEL_COORD_X<=(10'd4+(GRID_X*10'd96)) && PIXEL_COORD_X>=(GRID_X*10'd96) && currentGrid[6] == 1'b1) begin  //left
 				PIXEL_COLOR <= black; 
 			end else 
-			if ((PIXEL_COORD_X >=((GRID_X+1)*10'd96)-10'd4) && PIXEL_COORD_X <= ((GRID_X+1)*10'd96) && currentGrid[4] == 1'b1) begin //left
+			if ((PIXEL_COORD_X >=((GRID_X+1)*10'd96)-10'd4) && PIXEL_COORD_X <= ((GRID_X+1)*10'd96) && currentGrid[4] == 1'b1) begin //right
 				PIXEL_COLOR <= black; 
 			end else if (currentGrid[1:0] == 2'b01) begin 
 				PIXEL_COLOR <= pink;
-			end else if (currentGrid[1:0] == currPos && (PIXEL_COORD_X<=((GRID_X+1)*10'd96)-10'd30) && PIXEL_COORD_X >= ((GRID_X*10'd96)+10'd30) && (PIXEL_COORD_Y<=((GRID_Y+1)*10'd96)-10'd30) && PIXEL_COORD_Y >= ((GRID_Y*10'd96)+10'd30))  begin
+			end else if (currentGrid[1:0] == 2'b11 && (PIXEL_COORD_X<=((GRID_X+1)*10'd96)-10'd30) && PIXEL_COORD_X >= ((GRID_X*10'd96)+10'd30) && (PIXEL_COORD_Y<=((GRID_Y+1)*10'd96)-10'd30) && PIXEL_COORD_Y >= ((GRID_Y*10'd96)+10'd30))  begin
+				if (done) begin 
+					PIXEL_COLOR <= black;
+				end else begin
 				PIXEL_COLOR <= magenta;
+				end
+				
 //			end else if (currentGrid[1:0] == currPos) begin 
 //				if (right == 1'b1 && (PIXEL_COORD_X<=(GRID_X*10'd96) + 10'd48) && (PIXEL_COORD_X>=(GRID_X*10'd96))) begin 
 //					PIXEL_COLOR <= pink; 
@@ -178,14 +183,14 @@ module DE0_NANO(
 		
 	end
 	
-	always @ (negedge CLOCK_25) begin  // maybe flashes the bot pixels when done
-		if (done) begin 
-			PIXEL_COLOR <=pink; 
-		end
-	end	
+//	always @ (negedge CLOCK_25) begin  // maybe flashes the bot pixels when done
+//		if (done) begin 
+//			PIXEL_COLOR <=pink; 
+//		end
+//	end	
 
-	 reg [24:0] led_counter; // timer to keep track of when to toggle LED
-	 reg 			led_state;   // 1 is on, 0 is off
+	// reg [24:0] led_counter; // timer to keep track of when to toggle LED
+	// reg 			led_state;   // 1 is on, 0 is off
 	 wire [1:0]	botX;
 	 wire [2:0]	botY;
 	 wire [1:0]	preX;
@@ -240,7 +245,7 @@ module DE0_NANO(
 //	 
 	 localparam explored = 8'b00000001;
 	 localparam unexplored = 8'b00000000;
-	 localparam currPos = 2'b11;
+	 localparam currPos = 8'b00000011;
 
 	 
 	 assign reset = ~KEY[0]; // reset when KEY0 is pressed
@@ -286,12 +291,16 @@ module DE0_NANO(
 		  end
 		  
 		  else begin 
+		  if (preX == botX && preY == botY) begin 
+				grid1[preX][preY] = grid1[preX][preY] & 8'b11111111;
+			end else begin
 			grid1[preX][preY] = grid1[preX][preY] & 8'b11111101;
+			end
 			if (updateType == 1'b0) begin
 				grid1[botX][botY] = grid1[botX][botY] & 8'b11111100;
 				grid1[botX][botY] = grid1[botX][botY] | currPos;
 			end else begin
-				grid1[botX][botY] = {wall,tres,currPos};
+				grid1[botX][botY] = {wall,tres,grid1[botX][botY][1:0]};
 				end 
 		  end
 	 end
