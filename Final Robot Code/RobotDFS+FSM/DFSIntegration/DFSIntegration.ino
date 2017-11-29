@@ -124,7 +124,7 @@ char prevPos[2];
 char moveToPerform;
 char done = 0;
 
-boolean doTransmission = true;
+boolean doTransmission = false;
 void setup(){
   
   //radio setup:
@@ -182,14 +182,18 @@ void setup(){
 
 
 void loop(){
-
+  Serial.println("loop");
   //start on 660 Hz Tone OR Button Press
    while(!startDFS) {
-      set_motors(90,90);
-      delay(25);
-      startDFS = detectStart();
+      //set_motors(90,90);
+      //delay(25);
+      startDFS = detectBetterStart();
+      //startDFS = detectStart();
       startDFS |= detectButton();
   }
+  Serial.println("start");
+  
+  
   //turns light on to tell that we started
   digitalWrite(13, HIGH);
   set_motors(90,90);

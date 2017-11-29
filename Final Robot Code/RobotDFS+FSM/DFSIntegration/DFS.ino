@@ -17,7 +17,7 @@ void checkForTreasureAtBeginning(){
   turnLeft();
   detectTreasures();
   recordAndTransmitData();
-  turnRight();
+  currentOrientation = West;
 }
 
 

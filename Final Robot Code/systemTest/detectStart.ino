@@ -28,10 +28,10 @@ bool detectStart() {
     fft_mag_log(); // take the output of the fft
 
     sei();
-//  Serial.println("start");
-//    for (byte i = 0 ; i < FFT_N/2 ; i++) { 
-//      Serial.println(fft_log_out[i]); // send out the data
-//    }
+  Serial.println("start");
+    for (byte i = 0 ; i < FFT_N/2 ; i++) { 
+      Serial.println(fft_log_out[i]); // send out the data
+    }
     ADCSRA = tempADCSRA;
     TIMSK0 = tempTIMSK0; // turn off timer0 for lower jitter
     ADMUX = tempADMUX; // use adc0: analog A0

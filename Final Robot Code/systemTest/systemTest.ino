@@ -169,7 +169,7 @@ void readMic() {
 }
 
 void testStart() {
-  startDFS = detectButton();
+  startDFS = detectStart();
   if (startDFS == true) {
     digitalWrite(13, HIGH);
   } else {

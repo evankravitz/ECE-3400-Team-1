@@ -30,19 +30,23 @@ void junction(){
 }
 
 void turnLeft(){
-
+  
   leftMotorSpeed = LTurnLw;  //delay(200);
   rightMotorSpeed = LTurnRw;    
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
+  Serial.println("set motors");
  
   position = qtrrc.readLine(sensors);
+  Serial.println("2");
   while(!(digitalRead(7)==LOW)){
      position = qtrrc.readLine(sensors); 
   }
+  Serial.println("3");
   while(digitalRead(7)==LOW && sensors[1] < 900){
     position = qtrrc.readLine(sensors); 
   }
+  Serial.println("4");
   set_motors(90,90);
   delay(25);
   if(digitalRead(7)==LOW){
