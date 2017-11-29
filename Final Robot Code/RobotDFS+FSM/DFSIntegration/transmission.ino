@@ -148,6 +148,16 @@ boolean sendPacket(word data){
    }
   else{
   radio.startListening();
+  unsigned long started_waiting_at = millis();
+  bool timeout = false;
+  while ( ! radio.available() && ! timeout ){
+    if (millis() - started_waiting_at > 200 ){
+       timeout = true;
+    }
+  }
+  if ( timeout ){
+    return false;
+  }
   char recievedData;
   radio.read(&recievedData, sizeof(word));
   if (!recievedData==data){

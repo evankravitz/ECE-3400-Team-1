@@ -13,13 +13,21 @@ void resetMaze() {
  }
 
 
+void checkForTreasureAtBeginning(){
+  turnLeft();
+  detectTreasures();
+  recordAndTransmitData();
+  turnRight();
+}
+
+
 void doneWithNavigation(){
   done = 1;
   turnLeft();
   stop();
   detectTreasures();
+  recordAndTransmitData();
   while (true){
-    recordAndTransmitData();
   }
 }
 

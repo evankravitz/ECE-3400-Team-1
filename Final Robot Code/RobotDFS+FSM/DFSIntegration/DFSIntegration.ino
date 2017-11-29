@@ -203,6 +203,7 @@ void loop(){
   initializeOrientation();
   addToFrontier(convertCoordsToChar(currPos));
   visitedStack.push(convertCoordsToChar(currPos));  
+  checkForTreasureAtBeginning();
 
 
 while (true){
