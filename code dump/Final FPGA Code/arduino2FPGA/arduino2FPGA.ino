@@ -1,4 +1,3 @@
-
 int delayTime = 600; //ms;
 boolean coordinate;
 boolean top;
@@ -107,7 +106,7 @@ void loop() {
     while (!done)
     {
       // Fetch the payload, and see if this was the last one.
-      done = radio.read( &data, sizeof(word));
+      done = radio.read( &data, sizeof(word) );
       dataString = disassembleWord(data);
       Serial.println(dataString);
       // printf("Got payload %lu...",maze);
@@ -139,17 +138,14 @@ void loop() {
     }
   }
 
-    //xcoord
-    
     digitalWrite(A5, HIGH);
-
     if (dataString.charAt(1) == '0' && dataString.charAt(2) == '0') { //unexplored
       digitalWrite(A4, LOW);
       digitalWrite(7, LOW);
     }
     else if (dataString.charAt(1) == '0' && dataString.charAt(2) == '1') { //unexplored
       digitalWrite(A4, LOW);
-      digitalWrite(7, HIGH);
+      digitalWrite(7, HIGH); 
     }
     else if (dataString.charAt(1) == '1' && dataString.charAt(2) == '0') { //unexplored
       digitalWrite(A4, HIGH);
@@ -159,9 +155,6 @@ void loop() {
       digitalWrite(A4, HIGH);
       digitalWrite(7, HIGH);
     }
-
-
-    
     if (dataString.charAt(3) == '0' && dataString.charAt(4) == '0' && dataString.charAt(5) == '0') {
       digitalWrite(6, LOW);
       digitalWrite(5, LOW);
@@ -187,35 +180,35 @@ void loop() {
       digitalWrite(5, LOW);
       digitalWrite(4, LOW);
     }
-    
     if (dataString.charAt(6) == '1'){
       digitalWrite(3,HIGH);
+    } else {
+      digitalWrite(3,LOW);
     }
-    digitalWrite(2, LOW);
-    delay(delayTime);
-    digitalWrite(2, HIGH);
+      digitalWrite(2, LOW);
+      delay(delayTime);
+      digitalWrite(2, HIGH);
+      delay(delayTime);
 
 
-
-
-    digitalWrite(A5, LOW);
-    if (dataString.charAt(9) == '1') {
+     digitalWrite(A5, LOW);
+    if (dataString.charAt(9) == '1') { // top wall
       digitalWrite(A4, HIGH);
     } else {
       digitalWrite(A4, LOW);
     }
 
-    if (dataString.charAt(11) == '1') {
+    if (dataString.charAt(10) == '1') { // left wall 
       digitalWrite(7, HIGH);
     } else {
       digitalWrite(7, LOW);
     }
-    if (dataString.charAt(12) == '1') {
+    if (dataString.charAt(11) == '1') { // bottom wall
       digitalWrite(6, HIGH);
     } else {
       digitalWrite(6, LOW);
     }
-    if (dataString.charAt(10) == '1') {
+    if (dataString.charAt(12) == '1') { // right wall
       digitalWrite(5, HIGH);
     } else {
       digitalWrite(5, LOW);
@@ -231,8 +224,7 @@ void loop() {
     else if (dataString.charAt(13) == '1' && dataString.charAt(14) == '1') {
       digitalWrite(4, HIGH);
       digitalWrite(3, HIGH);
-    } 
-    else {
+    } else {
       digitalWrite(4, LOW);
       digitalWrite(3, LOW);
     }
@@ -269,7 +261,7 @@ void loop() {
   digitalWrite(2, LOW);
   delay(delayTime);
   digitalWrite(2, HIGH);
-
+  delay(delayTime);
 
 
 }
@@ -282,3 +274,4 @@ String disassembleWord(word data) {
   }
   return stringToReturn;
 }
+    
