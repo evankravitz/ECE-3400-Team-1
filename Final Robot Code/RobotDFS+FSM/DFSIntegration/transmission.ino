@@ -143,31 +143,31 @@ boolean sendPacket(word data){
   radio.stopListening();
   bool ok = radio.write(&data, sizeof(word));
 
-  if (!ok){
-    return false;
-   }
-  else{
+//  if (!ok){
+//    Serial.println("MOMY");
+//    return false;
+//
+//   }
   radio.startListening();
-  unsigned long started_waiting_at = millis();
-  bool timeout = false;
-  while ( ! radio.available() && ! timeout ){
-    if (millis() - started_waiting_at > 200 ){
-       timeout = true;
-    }
-  }
-  if ( timeout ){
-    return false;
-  }
-  char recievedData;
+//  unsigned long started_waiting_at = millis();
+//  bool timeout = false;
+//  while ( ! radio.available() && ! timeout ){
+//    if (millis() - started_waiting_at > 200 ){
+//       timeout = true;
+//    }
+//  }
+//  if ( timeout ){
+//    return false;
+//  }
+  word recievedData;
   radio.read(&recievedData, sizeof(word));
   if (!recievedData==data){
+     //Serial.println("AHAHAH");
      return false;
-     }
-  else{
-     return true;
-      }
+   }
+  return true;
   
-  }
+
   
   
 

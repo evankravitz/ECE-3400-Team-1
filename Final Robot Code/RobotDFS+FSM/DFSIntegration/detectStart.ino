@@ -46,6 +46,27 @@ bool detectStart() {
   }
 }
 
+bool detectBetterStart() {
+  servoL.detach();
+  servoR.detach();
+  int startFreq = 0;
+  for (int k = 0; k<30 ; k++) {
+    if (detectStart()) {
+      startFreq = startFreq+1;
+      //Serial.println(startFreq);
+    }
+  }
+  servoL.attach(3);
+  servoR.attach(6);
+  if (startFreq > 20) {
+    return true;
+  }
+  else {
+    return false;
+  }
+
+}
+
 bool detectButton() {
   int buttonState = digitalRead(buttonPin);
   
