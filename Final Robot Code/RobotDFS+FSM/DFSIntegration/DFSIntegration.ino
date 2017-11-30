@@ -124,7 +124,7 @@ char prevPos[2];
 char moveToPerform;
 char done = 0;
 
-boolean doTransmission = false;
+boolean doTransmission = true;
 void setup(){
   
   //radio setup:

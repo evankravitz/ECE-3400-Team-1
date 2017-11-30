@@ -81,13 +81,13 @@ String assembleWallsString(){
     stringToReturn.setCharAt(0, '1');
   }
   if (maze[currPos[0]+1][currPos[1]] == Wall){ //east wall
-    stringToReturn.setCharAt(3, '1');
-  }
-  if (maze[currPos[0]-1][currPos[1]] == Wall){ //west wall
     stringToReturn.setCharAt(1, '1');
   }
-  if (maze[currPos[0]][currPos[1]+1] == Wall){ //south wall
+  if (maze[currPos[0]-1][currPos[1]] == Wall){ //west wall
     stringToReturn.setCharAt(2, '1');
+  }
+  if (maze[currPos[0]][currPos[1]+1] == Wall){ //south wall
+    stringToReturn.setCharAt(3, '1');
   }
   return stringToReturn;
 }
@@ -143,31 +143,31 @@ boolean sendPacket(word data){
   radio.stopListening();
   bool ok = radio.write(&data, sizeof(word));
 
-  if (!ok){
-    return false;
-   }
-  else{
+//  if (!ok){
+//    Serial.println("MOMY");
+//    return false;
+//
+//   }
   radio.startListening();
-  unsigned long started_waiting_at = millis();
-  bool timeout = false;
-  while ( ! radio.available() && ! timeout ){
-    if (millis() - started_waiting_at > 200 ){
-       timeout = true;
-    }
-  }
-  if ( timeout ){
-    return false;
-  }
-  char recievedData;
+//  unsigned long started_waiting_at = millis();
+//  bool timeout = false;
+//  while ( ! radio.available() && ! timeout ){
+//    if (millis() - started_waiting_at > 200 ){
+//       timeout = true;
+//    }
+//  }
+//  if ( timeout ){
+//    return false;
+//  }
+  word recievedData;
   radio.read(&recievedData, sizeof(word));
   if (!recievedData==data){
+     //Serial.println("AHAHAH");
      return false;
-     }
-  else{
-     return true;
-      }
+   }
+  return true;
   
-  }
+
   
   
 
