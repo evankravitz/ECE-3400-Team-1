@@ -81,13 +81,13 @@ String assembleWallsString(){
     stringToReturn.setCharAt(0, '1');
   }
   if (maze[currPos[0]+1][currPos[1]] == Wall){ //east wall
-    stringToReturn.setCharAt(1, '1');
+    stringToReturn.setCharAt(3, '1');
   }
   if (maze[currPos[0]-1][currPos[1]] == Wall){ //west wall
-    stringToReturn.setCharAt(2, '1');
+    stringToReturn.setCharAt(1, '1');
   }
   if (maze[currPos[0]][currPos[1]+1] == Wall){ //south wall
-    stringToReturn.setCharAt(3, '1');
+    stringToReturn.setCharAt(2, '1');
   }
   return stringToReturn;
 }

@@ -14,8 +14,17 @@ void resetMaze() {
 
 
 void checkForTreasureAtBeginning(){
+  detectTreasures();
+  char firstTreasure = treasure;
   turnLeft();
   detectTreasures();
+  char secondTreasure = treasure;
+  if (firstTreasure == 0 && secondTreasure!=0){
+    treasure = secondTreasure;
+  }
+  else if (firstTreasure != 0 && secondTreasure==0){
+    treasure = firstTreasure;
+  }
   recordAndTransmitData();
   currentOrientation = West;
 }
