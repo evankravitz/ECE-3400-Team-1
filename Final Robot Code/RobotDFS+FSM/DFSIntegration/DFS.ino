@@ -32,9 +32,11 @@ void checkForTreasureAtBeginning(){
 
 void doneWithNavigation(){
   done = 1;
-  turnLeft();
-  stop();
-  detectTreasures();
+  if (treasure == 0) {
+    turnLeft();
+    stop();
+    detectTreasures();
+  }
   recordAndTransmitData();
   while (true){
   }
