@@ -32,9 +32,17 @@ void checkForTreasureAtBeginning(){
 
 void doneWithNavigation(){
   done = 1;
+  char treasureBeforeTurn = treasure;
   turnLeft();
   stop();
   detectTreasures();
+  char treasureAfterTurn = treasure;
+  if (treasureBeforeTurn!=0 && treasureAfterTurn==0){
+    treasure = treasureBeforeTurn;
+  }
+  else if (treasureAfterTurn!=0 && treasureBeforeTurn==0){
+    treasure = treasureAfterTurn;
+  }
   recordAndTransmitData();
   while (true){
   }
