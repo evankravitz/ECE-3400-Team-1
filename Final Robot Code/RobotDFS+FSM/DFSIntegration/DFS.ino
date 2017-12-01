@@ -32,6 +32,7 @@ void checkForTreasureAtBeginning(){
 
 void doneWithNavigation(){
   done = 1;
+<<<<<<< HEAD
   char treasureBeforeTurn = treasure;
   turnLeft();
   stop();
@@ -42,6 +43,12 @@ void doneWithNavigation(){
   }
   else if (treasureAfterTurn!=0 && treasureBeforeTurn==0){
     treasure = treasureAfterTurn;
+=======
+  if (treasure == 0) {
+    turnLeft();
+    stop();
+    detectTreasures();
+>>>>>>> origin/master
   }
   recordAndTransmitData();
   while (true){
