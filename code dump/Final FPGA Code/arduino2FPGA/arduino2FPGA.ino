@@ -137,8 +137,8 @@ void loop() {
       radio.openReadingPipe(1, pipes[0]);
     }
   }
-
-    digitalWrite(A5, HIGH);
+  if (dataString.charAt(0) == '1'){
+    digitalWrite(A5, HIGH);}
     if (dataString.charAt(1) == '0' && dataString.charAt(2) == '0') { //unexplored
       digitalWrite(A4, LOW);
       digitalWrite(7, LOW);
@@ -274,4 +274,3 @@ String disassembleWord(word data) {
   }
   return stringToReturn;
 }
-    
