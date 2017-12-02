@@ -540,14 +540,20 @@
                    <h3>Introduction</h3>
                     <p></p>
 
+                    <p>ADD PICS HERE</p>
+
                    <h3>Physical Robot Design</h3>
-                    <p></p>
+                    <p>Our robot was approximately 16 cm tall, 16 cm wide (20 cm if you include the width added by the treasure sensors), and 19 cm long. Our chassis, wheels, ball caster, and all mounts were the default designs provided to us at the start of the semester (the cad and .stl files necessary to make them are available on the course/TA GitHub). We used the standard servos made available to us (Parallax Continuous Rotation Servos). We added rubber tires to the wheels to increase traction. We spent the majority of time working on the electronic components of the project.</p>
+
+                    <p>We had two separate power sources for our robot (united only by a common ground). A 9V battery powered our Arduino. We mounted it using velcro to some free real estate on our chassis. The Arduino 5V and 3V pins were then used to power much of the circuitry. All the sensors mounted on the PCB and protoboard were powered off of these pins (IR sensors, their corresponding amplifiers, microphone, and the Schmitt trigger). These pins can source at least a few hundred mA of current, and by our calculations we drew much less than that (cumulatively less than 20mA). We also powered our system off of a 5V power bank.  </p>
+
+                    <p>Protoboard and PCB paragraph</p>
 
                    <h3>High-Level Control Algorithm</h3>
                     <p></p>
 
                    <h3>Movement</h3>
-                    <p></p>
+                    <p>*hey whoever's writing this can you make sure to talk about why the line sensors are in the place they are in and how are servos were weird</p>
 
                     <h4>Line Following</h4>
                      <p></p>
@@ -577,7 +583,9 @@
                     <p></p>
 
                    <h3>Results and Conclusions</h3>
-                    <p></p>
+                    <p>Our robot was remarkably successful in its operation. Despite missing the Milestone 4 requirements, our system was fully functional by the Friday before competition. See the first video below for a depiction of that. _______ADD MORE_____</p>
+
+                    <p>Description of how the robot did on the day of competition</p>
 
                  <h2 class="text-center">We Did It!</h2>  
                   <p>Here's a few videos of our robot mapping different mazes. The FPGA is operating independently of any computer.</p>
@@ -865,10 +873,7 @@ void loop() {<br>
 
 <li>Pin 13 corresponds to an led output on the Arduino Uno. Below is a video of the Arduino Uno illuminating pin 13 in response to the 7 kHz signal. Note that the pin illuminates when the treasure is brought within ~6 in. of the transistor, but turns off once it is out of range. </li> <br>
 
-
-<video width="460" height="270" controls preload> 
-    <source src="./resources/irlightdetection.mp4"></source> 
-</video>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XL-vrNMunB4" frameborder="0" allowfullscreen></iframe><br>
 
 
 <li>We will need to modify the circuit to include a band pass filter in order to better detect multiple discrete frequencies (multiple treasures). </li><br>
@@ -935,9 +940,8 @@ void loop() {<br>
 <img class="img-fluid img-centered" src="./resources/lab2_acoustic_data4.png" alt="">
 
 <li>Once we built the circuit, we checked to see if it was working as expected.  We found a free online tone generator as shown below.  We then played the tone off a computer next to the circuit and observed the results using an oscilloscope. Our general set-up can be seen in this video below: </li> <br>
-<video width="460" height="270" controls preload> 
-    <source src="resources/IMG_0196.mp4"></source> 
-</video>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/V_nuNBzZ2WA" frameborder="0" allowfullscreen></iframe><br>
 
 <li>The oscilloscope showed that it was taking in data from the acoustics in the room, and generating a wave of frequency 660 Hz when the tone was played next to the circuit, as shown in the photo of the oscilloscope screen below.</li><br>
 <img class="img-fluid img-centered" src="./resources/lab2_acoustic_data5.png" alt="">
@@ -963,9 +967,8 @@ void start() {<br>
 </code> <br>
 
 <li>Below is a video of the arduino LED responding to a 660 Hz signal: </li>
-<video width="460" height="270" controls preload> 
-    <source src="resources/IMG_0198.mp4"></source> 
-</video>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AGRt7vsQew4" frameborder="0" allowfullscreen></iframe><br>
 
 
 <h5 class = "text-left"> Distinguishing between 585 Hz and 735 Hz:</h5>
@@ -986,9 +989,8 @@ if (fft_log_out[4] > 120) {<br>
 </code><br>
 
 <li>Since the oscilloscope input worked, we also wanted to try an audio input. We played the 585 Hz tone, then the 735 Hz tone, and finally the 660 Hz tone which causes the LED to light up:</li><br>
-<video width="460" height="270" controls preload> 
-    <source src="./resources/lab2_tones.mov"></source> 
-</video> <br> <br>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/532djUzTYos" frameborder="0" allowfullscreen></iframe><br>
 
 <h5 class = "text-left">Amplifier Circuit</h5>
 
