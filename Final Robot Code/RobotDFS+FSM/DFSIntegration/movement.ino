@@ -1,6 +1,6 @@
 void stop(){
   set_motors(90,90);
-  delay(500);
+  delay(150);
 }
 
 void goStraight(){
@@ -30,19 +30,23 @@ void junction(){
 }
 
 void turnLeft(){
-
+  
   leftMotorSpeed = LTurnLw;  //delay(200);
   rightMotorSpeed = LTurnRw;    
 
   set_motors(leftMotorSpeed, rightMotorSpeed);
+  Serial.println("set motors");
  
   position = qtrrc.readLine(sensors);
+  Serial.println("2");
   while(!(digitalRead(7)==LOW)){
      position = qtrrc.readLine(sensors); 
   }
+  Serial.println("3");
   while(digitalRead(7)==LOW && sensors[1] < 900){
     position = qtrrc.readLine(sensors); 
   }
+  Serial.println("4");
   set_motors(90,90);
   delay(25);
   if(digitalRead(7)==LOW){
@@ -112,18 +116,21 @@ void performMove(){
 void moveLeft(){
  turnLeft();
  stop();
+ recordAndTrasmitDataAtTurningJunction();
  moveStraight();
 }
 
 void moveRight(){
   turnRight();
   stop();
+  recordAndTrasmitDataAtTurningJunction();
   moveStraight();
 }
 
 void moveBackwards(){
   turnLeft();
   stop();
+  recordAndTrasmitDataAtTurningJunction();
   turnLeft();
   stop();
   moveStraight();
@@ -146,8 +153,13 @@ void moveStraight(){
     error = position - 1000;
     junction();
     if (isJunction) {
+<<<<<<< HEAD
       set_motors(90,90);
 //      digitalWrite(13, HIGH);
+=======
+      stop();
+      digitalWrite(13, HIGH);
+>>>>>>> 5afb022a18b6626cc7534ac3b28b8ec7b57ce9c0
       
     }
     else  {

@@ -2,18 +2,60 @@ void resetMaze() {
   // Resets the arduino's underlying maze to be completely unexplored
   for (int i=0; i<11; i++){
     for (int j= 0; j<9; j++){
-      maze[j][i]= Unexplored; 
+      if (i==0 || j==0 || j==8 || i==10){
+        maze[j][i] = Wall;
+      }
+      else{
+        maze[j][i]= Unexplored; 
+      }
     }
   }
  }
 
 
+void checkForTreasureAtBeginning(){
+  detectTreasures();
+  char firstTreasure = treasure;
+  turnLeft();
+  detectTreasures();
+  char secondTreasure = treasure;
+  if (firstTreasure == 0 && secondTreasure!=0){
+    treasure = secondTreasure;
+  }
+  else if (firstTreasure != 0 && secondTreasure==0){
+    treasure = firstTreasure;
+  }
+  recordAndTransmitData();
+  currentOrientation = West;
+}
+
+
 void doneWithNavigation(){
+  done = 1;
+<<<<<<< HEAD
+  char treasureBeforeTurn = treasure;
+  turnLeft();
+  stop();
+  detectTreasures();
+  char treasureAfterTurn = treasure;
+  if (treasureBeforeTurn!=0 && treasureAfterTurn==0){
+    treasure = treasureBeforeTurn;
+  }
+  else if (treasureAfterTurn!=0 && treasureBeforeTurn==0){
+    treasure = treasureAfterTurn;
+=======
+  if (treasure == 0) {
+    turnLeft();
+    stop();
+    detectTreasures();
+>>>>>>> origin/master
+  }
+  recordAndTransmitData();
   while (true){
-    done = 1;
-    recordAndTransmitData();
   }
 }
+
+
 
 void printMaze(){
   Serial.println("Start Maze vvvvvvvvv");
@@ -30,14 +72,7 @@ void printMaze(){
 }
 
 void updateMove(){
-//  Serial.println("FKSHKJLHFD");
-//  Serial.println((int)currPos[0]);
-//  Serial.println((int)currPos[1]);
-//  Serial.println((int)prevPos[0]);
-//  Serial.println((int)prevPos[1]);
-//  Serial.println("FKSHKJLHFD");
-//  Serial.println((int) currPos[0]);
-//  Serial.println((int) currPos[1]);
+  
   int dx = (int)currPos[0] - (int)prevPos[0];
   int dy = (int)currPos[1] - (int)prevPos[1];
   if ((dx == 2 && currentOrientation==East) //displace east, facing east
