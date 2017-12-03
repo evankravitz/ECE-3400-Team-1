@@ -550,7 +550,13 @@
                     <p>Protoboard and PCB paragraph</p>
 
                    <h3>High-Level Control Algorithm</h3>
-                    <p></p>
+                    <p>
+                      
+                      Here is a diagram that illustrates how the robot Arduino code works:
+
+                     <img class="img-fluid img-centered" src="./resources/arduinocode_dfs.png" alt=""> <br>
+
+                    </p>
 
                    <h3>Movement</h3>
                     <p>*hey whoever's writing this can you make sure to talk about why the line sensors are in the place they are in and how are servos were weird</p>
@@ -567,17 +573,43 @@
                    	<h4>Wall Detection</h4>
                    	 <p></p>
 
+                     <h4> DFS </h4>
+
+                     <p> At the nucleus of our intelligent physical system is the depth-first-search (DFS) algorithm. The DFS is an algorithm for traversing nodes in some graph. The DFS controls the route the robot takes through the maze. At a very high level, the DFS essentially entails going as deep as possible, in terms of distance from the initial position, until it hits a dead end or cannot go to a new location. If it hits a dead end or cannot go to a new location, it will backtrack to the previous location. Here's a diagram that depicts how the DFS algorithm works:
+
+                      <img class="img-fluid img-centered" src="./resources/dfs_diagram.jpg" alt=""> <br>
+
+                      The DFS cannot begin until the robot acquires information about its surroundings. Once this is done, the DFS begins by marking the current location in the <code> maze </code> array as explored. After this, the DFS algorithm removes the current location from the <code> frontier </code>  set. This is done so that the robot doesn't end up confusing places it has already visited with places it hasn't already visited. After this step, the robot adds unvisited surroundings nodes to the <code> frontier </code>  set. This is done so that the robot knows that there are regions of the maze that it has not yet visited, and are accessible. Next, the algorithm checks if the <code> frontier </code>  set is empty. An empty <code> frontier </code>  set indicates that the robot has visited all reachable cells. If the <code> frontier </code> set is indeed empty, it initiates the code performed when the maze navigation is complete. If the <code> frontier </code>  is not empty (i.e. there are regions of the maze that the robot knows it can visit but hasn't visited yet), the robot will update its current position and <code> visited </code> stack. This step is at the crux of the algorithm. If the robot can move to a spot that it has never visited before, it will move to this spot and push its location to the <code> visited </code> stack. If all the spots it can go to have already been visited, it will pop from the <code> visited </code> stack and set move to this position. </p>
+
+                      <p> This algorithm guarantees that the robot will be able to traverse all reachable cells from the initial position in which it is placed. However, this algorithm makes no guaranetees as to the efficiency of the route taken. </p> 
+
+
+
+
+
                    	<h4>Microphone</h4>
                    	 <p></p>
 
                    	<h4>Treasure Detection</h4>
-                   	 <p></p>
+                   	 <p>Our robot had to be equipped with the ability to accurately detect modulating IR frequencies emitted by "treasures" on the maze walls at junctions. In order to improve the accuracy of the detection, we essentially take 30 samples of the signal coming from the treasure detection circuit, and determine the treasure identity from a vote of all 30 samples. Here's a diagram that depicts this process. 
+
+                     <img class="img-fluid img-centered" src="./resources/treasuredetectiondiagram.png" alt=""> <br> 
+                    The treasure detection querries the analog inputs and generates 30 FFTs and 30 frequency predictions for each input. Afterwards, the program votes on which frequency is dominant. In order for, say, the program to determine that a treasure is not next to it, the plurality of votes from both sensors must indicate that no treasure is nearby. For a 7/12/17 kHz frequency to be determined to be present, the plurality of votes from the left sensor must indicate a 7/12/17 kHz frequency and the plurality of votes from the right sensor must indicate there being no treasure/frequency, or vice-versa. If the vote yields conclusive results, then the robot detection code is terminated and the variable corresponding to the treasure frequency is set appropriately. If the vote is inconclusive (rarely happens), then the 30 samples are reaquirred and the vote is reconducted.
+
+                     </p>
 
                    	<h4>Fast Fourier Transform</h4>
                    	 <p></p>
                    
                    <h3>Radio Communication</h3>
-                    <p></p>
+                   <h4> Robot To Base Station </h4>
+                   <p> In order for the robot to talk to the base station, we had to write code in Arduino that would synethesize information pertaining to its current location and surroundings to the Arduino base station. Here is a diagram depicting the transmission protocol: </p>
+
+                   <img class="img-fluid img-centered" src="./resources/transmissionRobotDiagram.png" alt=""> <br>
+
+                   The transmission begins by synthesizing each individual component into a string form. Once each component is formed into a String, it concatenates the Strings. Then, the String of length 16 is converted to an Arduino Word. Then, the program repeatedly tries to successfully send the packet to the base station until it sends successfully. 
+
+
 
                    <h3>Base Station FPGA</h3>
                     <p></p>
