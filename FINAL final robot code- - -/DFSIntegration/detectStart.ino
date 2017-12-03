@@ -37,7 +37,8 @@ bool detectStart() {
     ADMUX = tempADMUX; // use adc0: analog A0
     DIDR0 = tempDIDR0;
     //detects input on bin 10 and returns TRUE if signal is detected
-    if (fft_log_out[9] > 100) {
+    
+    if (fft_log_out[9] > 120) {
       return true;
     }
     else {
