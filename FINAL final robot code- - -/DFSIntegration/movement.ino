@@ -1,6 +1,6 @@
 void stop(){
   set_motors(90,90);
-  delay(25);
+  delay(50);
 }
 
 void goStraight(){
