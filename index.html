@@ -538,8 +538,25 @@
                 <div class="modal-body">
                  <h2 class="text-center">Final Implemented Design</h2>
                    <h3>Introduction</h3>
-                    <p>The goal of this project was to build an intelligent physical system that can perceive, reason about, and act upon its environment.</p>
+                    <p>The goal of this project was to build an intelligent physical system that can perceive, reason about, and act upon its environment. The system took the form of a maze-mapping robot that can: </p>
 
+                    <ul style="list-style-type:circle">
+                      <li>Start on a 660 Hz tone</li>
+                      <li>Traverse a grid consisting of black lines</li>
+                      <li>Detect and avoid walls</li>
+                      <li>Detect and distinguish treasure of different frequencies (an IR beacon)</li>
+                      <li>Display progress through the maze on a screen</li>
+                      <li>Signal that the robot is finished visually on the screen and with a three-tone audio signal</li>
+                    </ul>
+
+                    <p> Details of the maze specifications and final competition guidelines can be found <a href="https://github.com/CEI-lab/ece3400">here</a> on the course webpage.
+
+                    <p>Thus, our robot met all the criteria of an intelligent physical system.
+                    <ul style="list-style-type:circle">
+                      <li>First, it perceives its environment through an array of different sensors needed to navigate the maze, including microphones, infrared proximity sensors, reflectance sensors and phototransistors.</li>
+                      <li>Second, it reasons about its environment through the code we’ve written and uploaded to the Arduino Uno microcontroller. This includes data processing using Fast Fourier Transforms, updating an internal map of its surroundings stored in a 2-D array, and deciding which location to move to based on a depth-first search algorithm.</li>
+                      <li>Finally, it acts on it environment by moving through and mapping the maze.</li>
+                    </ul>
  
                     <p><b>ADD PICS HERE MICHAEL</b></p>
 
