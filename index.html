@@ -559,7 +559,7 @@
                     </ul>
                     <p> Here's a video of our robot completing a full sucessful run of a maze! </p>
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/MrBVSf_K_ng" frameborder="0" allowfullscreen></iframe><br>
-                    
+
                     <p><b>ADD PICS HERE MICHAEL</b></p>
 
                    <h3>Physical Robot Design</h3>
@@ -616,7 +616,8 @@
 
 
 
-
+                    <h4>Fast Fourier Transform</h4>
+                     <p>In order to extract frequency-domain information from the microphone and phototransistor sensors, we took a Fourier transform of the time-domain signal we were reading from the sensors. We utilized the <a href="http://wiki.openmusiclabs.com/wiki/ArduinoFFT">Fast Fourier Transform library</a> to efficiently analyze the data. The FFT algorithm returns an array where each element refers to the magnitude of the frequency component in that specific frequency bin. Thus, we needed to check the correct bin according to the frequency we wanted to detect. We decided to use a 128-point FFT because it was faster and used much less memory than the 256-point FFT, while still differentiating between the frequencies we were detecting.</p>
 
                    	<h4>Microphone</h4>
                    	 <p></p>
@@ -629,8 +630,6 @@
 
                      </p>
 
-                   	<h4>Fast Fourier Transform</h4>
-                   	 <p></p>
                    
                    <h3>Radio Communication</h3>
                    <h4> Robot To Base Station </h4>
