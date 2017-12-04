@@ -602,7 +602,7 @@
     				  delay(500);</ul>
    				 }    <br>
 			<code> <br>
-	  
+	  		
                    	 <p></p>
 
                      <h4> DFS </h4>
@@ -647,7 +647,56 @@
 			<img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>	
 		  <p> We realized that the robot did not necessarily need to send all 16 bits of this data. For example, the bits corresponding to indication and valid were components strictly relevant to the base-station and FPGA, but we wanted our bytes to remain consistent to avoid confusion, and we thought that the extra few bits of information would not take long to transmit from the robot to the base-station, so we decided to have our robot send all 16 bits of data, where those four bits were essentially don't cares. </p>
 		  <p> Once the base station recieves the 16 bit word from the robot, it decodes it by converting into a string of length 16 with the same information. The code for this conversion is shown below:	</p>
-				<p> After that, we were able to look at individual bits and write highs or lows to the corresponding outputs.  An example of this is shown below: </p>
+				<code>
+				String disassembleWord(word data) {
+  				String stringToReturn;
+ 				 for (int i = 0; i < 16; i++) {
+ 				   int bitIndex = 15 - i;
+    				stringToReturn += String(bitRead(data, bitIndex));
+  				}
+  				return stringToReturn;
+				}
+				</code> <br>
+				<p> After that, we were able to look at the values of individual characters in the string and write highs or lows to the corresponding outputs.  The code block that writes information to the FPGA about walls and treasures is shown below: </p>
+    <code>  digitalWrite(A5, LOW); // indication bit
+    if (dataString.charAt(9) == '1') { // top wall
+      digitalWrite(A4, HIGH);
+    } else {
+      digitalWrite(A4, LOW);
+    }
+
+    if (dataString.charAt(10) == '1') { // left wall 
+      digitalWrite(7, HIGH);
+    } else {
+      digitalWrite(7, LOW);
+    }
+    if (dataString.charAt(11) == '1') { // bottom wall
+      digitalWrite(6, HIGH);
+    } else {
+      digitalWrite(6, LOW);
+    }
+    if (dataString.charAt(12) == '1') { // right wall
+      digitalWrite(5, HIGH);
+    } else {
+      digitalWrite(5, LOW);
+    }
+    if (dataString.charAt(13) == '0' && dataString.charAt(14) == '1') {
+      digitalWrite(4, LOW);
+      digitalWrite(3, HIGH);
+    }
+    else if (dataString.charAt(13) == '1' && dataString.charAt(14) == '0') {
+      digitalWrite(4, HIGH);
+      digitalWrite(3, LOW);
+    }
+    else if (dataString.charAt(13) == '1' && dataString.charAt(14) == '1') {
+      digitalWrite(4, HIGH);
+      digitalWrite(3, HIGH);
+    } else {
+      digitalWrite(4, LOW);
+      digitalWrite(3, LOW);
+    }
+	    </code> <br>
+  
 
                    <h3>Results and Conclusions</h3>
                     <p>Our robot was remarkably successful in its operation. Despite missing the Milestone 4 requirements, our system was fully functional by the Friday before competition. See the first video below for a depiction of that. _______ADD MORE_____</p>
