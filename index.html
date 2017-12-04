@@ -63,7 +63,7 @@
           <div class="intro-lead-in">Bringing Destruction and Chaos to All of Mankind, It's...</div>
           <div class="intro-heading text-uppercase">Team One: The One-Ders!</div>
           <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#labs">Click Here To Eat<br>Our Robot's Dust</a>
-                 <div class = "text-center"> yo we're actually like 90% sure that our robot turns correctly now</div>
+                 <div class = "text-center"> We are sure that our robot turns correctly now, and it is beautiful.</div>
         </div>
 
       </div>
@@ -696,7 +696,45 @@
       digitalWrite(3, LOW);<br>
     }<br>
 	    </code> <br>
-  
+				<p> These arduino outputs were wired to the FPGA, which looked at the indication bit, and updated the information about walls, treasures, and position.   The code for this is shown below:  </p>
+				<img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
+                      <code> 
+                   <br> always @ (posedge valid) begin <br> 
+                      <ul> preX = robotX;<br>
+                          preY = robotY;<br>
+<br>
+                          if (arduinoInput[6] == 1'b1) begin<br>
+                            <ul>updateType = 1'b0;<br>
+                            robotX = arduinoInput[5:4];<br>
+                            robotY = arduinoInput[3:1];<br>
+                            done = arduinoInput[0]; </ul><br>
+                          end<br>
+                          <br>if (arduinoInput[6] == 1'b0) begin<br>
+                            <ul>updateType = 1'b1;<br>
+                            walls = arduinoInput[5:2];<br>
+                            treasure = arduinoInput[1:0];</ul><br>
+                          end </ul><br>
+                      end </code><br>
+				
+				
+  <img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
+                      <code> 
+                   <br> always @ (posedge valid) begin <br> 
+                      <ul> preX = robotX;<br>
+                          preY = robotY;<br>
+<br>
+                          if (arduinoInput[6] == 1'b1) begin<br>
+                            <ul>updateType = 1'b0;<br>
+                            robotX = arduinoInput[5:4];<br>
+                            robotY = arduinoInput[3:1];<br>
+                            done = arduinoInput[0]; </ul><br>
+                          end<br>
+                          <br>if (arduinoInput[6] == 1'b0) begin<br>
+                            <ul>updateType = 1'b1;<br>
+                            walls = arduinoInput[5:2];<br>
+                            treasure = arduinoInput[1:0];</ul><br>
+                          end </ul><br>
+                      end </code><br>
 
                    <h3>Results and Conclusions</h3>
                     <p>Our robot was remarkably successful in its operation. Despite missing the Milestone 4 requirements, our system was fully functional by the Friday before competition. See the first video below for a depiction of that. _______ADD MORE_____</p>
@@ -2917,7 +2955,7 @@ wall detection using short range sensors. </p>
 
 
 
-                  <p> From there the FPGA has to update the grid based on changes in input. If new location information comes in, the coordinate specified in the transmitted byte must have its color updated to reflect the movement of the robot. At reset, every coordinate is assigned an 8'b0 to represent that no updates from the robot have been received yet. The FPGA has been programmed to store the information in each coordinate of the grid in this manner: 
+                  <p> From there, the FPGA has to update the grid based on changes in input. If new location information comes in, the coordinate specified in the transmitted byte must have its color updated to reflect the movement of the robot. At reset, every coordinate is assigned an 8'b0 to represent that no updates from the robot have been received yet. The FPGA has been programmed to store the information in each coordinate of the grid in this manner: 
 
                   <img class="img-fluid img-centered" src="./resources/verilogdiagram.jpg" alt=""> <br>
 
