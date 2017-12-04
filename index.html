@@ -538,9 +538,28 @@
                 <div class="modal-body">
                  <h2 class="text-center">Final Implemented Design</h2>
                    <h3>Introduction</h3>
-                    <p>The goal of this project was to build an intelligent physical system that can perceive, reason about, and act upon its environment.</p>
+                    <p>The goal of this project was to build an intelligent physical system that can perceive, reason about, and act upon its environment. The system took the form of a maze-mapping robot that can: </p>
 
- 
+                    <ul style="list-style-type:circle">
+                      <li>Start on a 660 Hz tone</li>
+                      <li>Traverse a grid consisting of black lines</li>
+                      <li>Detect and avoid walls</li>
+                      <li>Detect and distinguish treasure of different frequencies (an IR beacon)</li>
+                      <li>Display progress through the maze on a screen</li>
+                      <li>Signal that the robot is finished visually on the screen and with a three-tone audio signal</li>
+                    </ul>
+
+                    <p> Details of the maze specifications and final competition guidelines can be found <a href="https://github.com/CEI-lab/ece3400">here</a> on the course webpage.
+
+                    <p>Thus, our robot met all the criteria of an intelligent physical system.
+                    <ul style="list-style-type:circle">
+                      <li>First, it perceives its environment through an array of different sensors needed to navigate the maze, including microphones, infrared proximity sensors, reflectance sensors and phototransistors.</li>
+                      <li>Second, it reasons about its environment through the code we’ve written and uploaded to the Arduino Uno microcontroller. This includes data processing using Fast Fourier Transforms, updating an internal map of its surroundings stored in a 2-D array, and deciding which location to move to based on a depth-first search algorithm.</li>
+                      <li>Finally, it acts on it environment by moving through and mapping the maze.</li>
+                    </ul>
+                    <p> Here's a video of our robot completing a full sucessful run of a maze! </p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/MrBVSf_K_ng" frameborder="0" allowfullscreen></iframe><br>
+
                     <p><b>ADD PICS HERE MICHAEL</b></p>
 
                    <h3>Physical Robot Design</h3>
@@ -572,6 +591,17 @@
                     <p></p>
 
                    	<h4>Wall Detection</h4>
+			<p> At the very top level of our final algorith is wall detection.  We started working with the distance sensors in Milestone two, first by collecting data from the long range and short range sensors.  We wired the sensors up to a simple circuit and wrote basic code in Arduino to display the values when a wall was placed varying distances away from the sensors.  After analyzing the data, we decided that because the long range sensors were a lot more unpredictable in determining how close a wall is within one grid-space of the maze, we would use the short range sensors.  We looked at the graphs we collected of the values from the sensors when the wall was placed 10 - 20 cm away, and decided that our threshold sensor value would be 100.  That is to say, when the sensor outputted a number above 100, we would determine that there was a wall within one grid space of the robot. </p>  
+			<p> As our design grew more complicated, and we started to integrate the DFS algorithm for traversing the maze, we realized just how important accuracy of wall detection really needed to be.  While watching the robot move through the grid, we noticed that sometimes the robot would not behave as we would expect, moving into places it had already been, ignoring main parts of the maze, and even running itself into walls.  After noticiing these strange behaviors, we decided we needed to take a second look at wall detection.  We collected more data from the robot, this time taking a careful look at each individual left, right, and middle sensors not simply as generic short-range distance sensors, but as individual pieces of hardware.  From this closer look, we were able to determine 3 different sensitivity values for each sensor that would help us more accurately predict when a wall was to the front, left, or right of the robot.  Once we added these updated values to our algorithm, our robot's movement through the maze significantly improved. </p>
+			<code>
+    			if (distanceValue > 100) {<br>
+     			 <ul>wall = true;<br>
+     				 servoL.write(90);<br>
+    				  servoR.write(90);<br>
+    				  delay(500);</ul>
+   				 }    <br>
+			<code><br>
+	  
                    	 <p></p>
 
                      <h4> DFS </h4>
@@ -586,7 +616,8 @@
 
 
 
-
+                    <h4>Fast Fourier Transform</h4>
+                     <p>In order to extract frequency-domain information from the microphone and phototransistor sensors, we took a Fourier transform of the time-domain signal we were reading from the sensors. We utilized the <a href="http://wiki.openmusiclabs.com/wiki/ArduinoFFT">Fast Fourier Transform library</a> to efficiently analyze the data. The FFT algorithm returns an array where each element refers to the magnitude of the frequency component in that specific frequency bin. Thus, we needed to check the correct bin according to the frequency we wanted to detect. We decided to use a 128-point FFT because it was faster and used much less memory than the 256-point FFT, while still differentiating between the frequencies we were detecting.</p>
 
                    	<h4>Microphone</h4>
                    	 <p></p>
@@ -599,8 +630,6 @@
 
                      </p>
 
-                   	<h4>Fast Fourier Transform</h4>
-                   	 <p></p>
                    
                    <h3>Radio Communication</h3>
                    <h4> Robot To Base Station </h4>
@@ -622,8 +651,6 @@
 
                  <h2 class="text-center">We Did It!</h2>  
                   <p>Here's a few videos of our robot mapping different mazes. The FPGA is operating independently of any computer.</p><br>
-
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/MrBVSf_K_ng" frameborder="0" allowfullscreen></iframe><br>
 
                   <iframe width="560" height="315" src="https://www.youtube.com/embed/_xUV_7hdpxc" frameborder="0" allowfullscreen></iframe><br>
 

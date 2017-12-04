@@ -140,8 +140,9 @@ String assembleDoneString(){
 
 
 boolean sendPacket(word data){
+  radio.enableDynamicAck();
   radio.stopListening();
-  bool ok = radio.write(&data, sizeof(word));
+  radio.startFastWrite(&data, sizeof(word), 0 , 1);
 
 //  if (!ok){
 //    Serial.println("MOMY");

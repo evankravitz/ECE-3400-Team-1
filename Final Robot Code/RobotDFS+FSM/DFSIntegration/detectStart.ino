@@ -37,6 +37,7 @@ bool detectStart() {
     ADMUX = tempADMUX; // use adc0: analog A0
     DIDR0 = tempDIDR0;
     //detects input on bin 10 and returns TRUE if signal is detected
+<<<<<<< HEAD
     if (fft_log_out[9] > 100) {
       Serial.println("sound!");
       return true;
@@ -44,6 +45,9 @@ bool detectStart() {
     else {
       return false;
     }
+=======
+    return detectedFrequency(660, fft_log_out);
+>>>>>>> 44537bbc1ef20707a72fea4aad15b957dea18666
   }
 }
 
