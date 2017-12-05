@@ -145,7 +145,7 @@ void setup(){
   // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
   radio.setPALevel(RF24_PA_HIGH);
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
-  radio.setDataRate(RF24_1MBPS);
+  radio.setDataRate(RF24_2MBPS);
 
   radio.openWritingPipe(pipes[0]);
  radio.openReadingPipe(1,pipes[1]);

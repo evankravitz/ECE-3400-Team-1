@@ -38,7 +38,7 @@ bool detectStart() {
     DIDR0 = tempDIDR0;
     //detects input on bin 10 and returns TRUE if signal is detected
     
-    if (fft_log_out[9] > 120) {
+    if (fft_log_out[9] > 140) {
       return true;
     }
     else {
