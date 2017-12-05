@@ -560,7 +560,9 @@
                     <p> Here's a video of our robot completing a full sucessful run of a maze! </p>
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/MrBVSf_K_ng" frameborder="0" allowfullscreen></iframe><br>
 
-                    <p><b>ADD PICS HERE MICHAEL</b></p>
+                    <img class="img-fluid img-centered" src="./resources/front_bot.JPG" alt=""> <br>
+                    <img class="img-fluid img-centered" src="./resources/side_bot.JPG" alt=""> <br>
+                    <img class="img-fluid img-centered" src="./resources/back_bot.JPG" alt=""> <br>
 
                    <h3>Physical Robot Design</h3>
                     <p>Our robot was approximately 16 cm tall, 16 cm wide (20 cm if you include the width added by the treasure sensors), and 19 cm long. Our chassis, wheels, ball caster, and all mounts were the default designs provided to us at the start of the semester (the cad and .stl files necessary to make them are available on the <a href="https://github.com/CEI-lab/ece3400">course/TA GitHub</a>). We used the standard servos made available to us (Parallax Continuous Rotation Servos). We added rubber tires to the wheels to increase traction. We spent the majority of time working on the electronic components of the project.</p>
@@ -660,6 +662,9 @@
 
                    
                    <h3>Radio Communication</h3>
+
+                   <img class="img-fluid img-centered" src="./resources/BaseStation.JPG" alt=""> <br>
+
                    <h4> Robot To Base Station </h4>
                    <p> In order for the robot to talk to the base station, we had to write code in Arduino that would synethesize information pertaining to its current location and surroundings to the Arduino base station. Here is a diagram depicting the transmission protocol: </p>
 
@@ -752,7 +757,15 @@
 
                     <p>Going into the competition, we had two known bugs. The first was that the wireless communication would occasionally drop a packet. As a result, very rarely (&lt;1% of all transmissions), we would get an empty white square. This could have been prevented by waiting for confirmation message from the second Arduino, but this made our robot significantly slower. The second was that very rarely, a fake wall would be detected - i.e. - the robot would pass an open square, and detect and display a wall there. This was extremely problematic, because it could completely ruin a run of a maze. Both of these issues, while serious, did not happen with much frequency, so we decided to live with them and restart the robot if either happened in competition.</p>
 
-                    <p>Description of how the robot did on the day of competition</p>
+                    <p>Competition day was extremely exciting and satisfying. Several minutes before our first round, a terrible accident had occurred. Our robot, sitting on a table, had detected a 660Hz tone playing from a speaker several meters away and started, crashing to the ground. A quick inspection determined that the damage was not insignificant: Our ball caster mount had broke near where it was mounted to the robot. We ran up to the lab to get a replacement, but it was not necessary. We retightened the screw, which ran through both pieces, and reinforced the joint with much duct tape. A quick test revealed that the system still worked. Our first run was fairly successful: We completed the maze in 90 seconds, with one false start due the cheering and whooping that occurred, and missing one treasure. The missed treasure deduction was later removed because the treasure was improperly placed. Check out the video below.</p>
+
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/r2DVtFhCniE" frameborder="0" allowfullscreen></iframe><br>
+
+                    <p>The second round was much more successful. In order to combat the false start problem, we raised the threshold for the start detection slightly (from 120 units to 140). We finished the maze in 100 seconds (the fastest in our heat!), detecting all treasures and walls successfully. We moved on to the final round!!! We were extremely nervous, because from our observations we were the fourth fastest robot in the final. However, one robot that was faster than ours went off line, and required a reset. This lead us to a third place finish!!!!! We also won the 'Best Team Spirit' Award!</p>
+
+                   <img class="img-fluid img-centered" src="./resources/TeamPhoto.JPG" alt=""> <br>
+
+                    <p>We are extremely proud of our work, our robot, and our team. We'd like to thank Kirsten, Chris, and every TA that helped us over the course of the semester. Go Team One!</p>
 
                  <h2 class="text-center">We Did It!</h2>  
 
