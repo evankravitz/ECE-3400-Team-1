@@ -667,7 +667,7 @@
 				} <br>
 				</code> <br>
 				<p> After that, we were able to look at the values of individual characters in the string and write highs or lows to the corresponding outputs.  The code block that writes information to the FPGA about walls and treasures is shown below: </p>
-    <code>  digitalWrite(A5, LOW); // indication bit
+    <code>  digitalWrite(A5, LOW); // indication bit <br>
     if (dataString.charAt(9) == '1') { <br> // top wall
       digitalWrite(A4, HIGH); <br>
     } else {<br>
@@ -706,7 +706,7 @@
     }<br>
 	    </code> <br>
 				<p> These arduino outputs were wired to the FPGA, which looked at the indication bit, and updated the information about walls, treasures, and position.   The code for this is shown below:  </p>
-				<img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
+				
                       <code> 
                    <br> always @ (posedge valid) begin <br> 
                       <ul> preX = robotX;<br>
@@ -726,24 +726,8 @@
                       end </code><br>
 				
 				
-  <img class="img-fluid img-centered" src="./resources/bitdiagram.jpg" alt=""> <br>
-                      <code> 
-                   <br> always @ (posedge valid) begin <br> 
-                      <ul> preX = robotX;<br>
-                          preY = robotY;<br>
-<br>
-                          if (arduinoInput[6] == 1'b1) begin<br>
-                            <ul>updateType = 1'b0;<br>
-                            robotX = arduinoInput[5:4];<br>
-                            robotY = arduinoInput[3:1];<br>
-                            done = arduinoInput[0]; </ul><br>
-                          end<br>
-                          <br>if (arduinoInput[6] == 1'b0) begin<br>
-                            <ul>updateType = 1'b1;<br>
-                            walls = arduinoInput[5:2];<br>
-                            treasure = arduinoInput[1:0];</ul><br>
-                          end </ul><br>
-                      end </code><br>
+  
+                    
 
                    <h3>Results and Conclusions</h3>
                     <p>Our robot was remarkably successful in its operation. Despite missing the Milestone 4 requirements, our system was fully functional by the Friday before competition. See the first video below for a depiction of that. _______ADD MORE_____</p>
