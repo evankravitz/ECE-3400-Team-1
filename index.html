@@ -628,9 +628,9 @@
 
                    	 <p>By taking a FFT, we were able to distinguish the frequency content of the audio signal from the microphone. The following graph is a FFT of a 660 Hz tone.</p>
 
-                   	 <p>Thus, to implement start detection, we just needed to check if bin 10 is above a certain threshold. However, this simple implementation caused our robot to false start if it heard any signal with a large enough ~660 Hz component. To account for this, we took 30 FFTs in a row, and only start the robot if 20 of the 30 FFTs returned a magnitude above the threshold. While this helped make our start detection more immune to outside noise, it was not completely flawless because we did have a false start during the final competition when there was loud cheering. To make our start detection less sensitive, we could have taken more than 30 FFT samples because the start tones generally lasted for a long period of time.</p>
+                     <img class="img-fluid img-centered" src="./resources/FFT_660.png" alt=""> <br>
 
-                   	 <img class="img-fluid img-centered" src="./resources/FFT_660.png" alt=""> <br>
+                   	 <p>Thus, to implement start detection, we just needed to check if bin 10 is above a certain threshold. However, this simple implementation caused our robot to false start if it heard any signal with a large enough ~660 Hz component. To account for this, we took 30 FFTs in a row, and only start the robot if 20 of the 30 FFTs returned a magnitude above the threshold. While this helped make our start detection more immune to outside noise, it was not completely flawless because we did have a false start during the final competition when there was loud cheering. To make our start detection less sensitive, we could have taken more than 30 FFT samples because the start tones generally lasted for a long period of time.</p>
 
                    	<h4>Treasure Detection</h4>
                    	 <p>Our robot had to be equipped with the ability to accurately detect modulating IR frequencies emitted by "treasures" on the maze walls at junctions. In order to improve the accuracy of the detection, we essentially take 30 samples of the signal coming from the treasure detection circuit, and determine the treasure identity from a vote of all 30 samples. Here's a diagram that depicts this process. 
