@@ -601,7 +601,7 @@
     				  servoR.write(90);<br>
     				  delay(500);</ul>
    				 }    <br>
-			<code> <br>
+			</code> <br>
 	  		
 			<p> As our design grew more complicated, and we started to integrate the DFS algorithm for traversing the maze, we realized just how important accuracy of wall detection really needed to be.  While watching the robot move through the grid, we noticed that sometimes the robot would not behave as we would expect, moving into places it had already been, ignoring main parts of the maze, and even running itself into walls.  After noticiing these strange behaviors, we decided we needed to take a second look at wall detection.  We collected more data from the robot, this time taking a careful look at each individual left, right, and middle sensors not simply as generic short-range distance sensors, but as individual pieces of hardware.  From this closer look, we were able to determine 3 different sensitivity values for each sensor that would help us more accurately predict when a wall was to the front, left, or right of the robot.  Once we added these updated values to our algorithm, our robot's movement through the maze significantly improved. </p>
 			
