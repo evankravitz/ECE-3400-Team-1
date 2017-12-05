@@ -731,14 +731,13 @@
                     
 
                    <h3>Results and Conclusions</h3>
-                    <p>Our robot was remarkably successful in its operation. Despite missing the Milestone 4 requirements, our system was fully functional by the Friday before competition. See the first video below for a depiction of that. _______ADD MORE_____</p>
+                    <p>Our robot was remarkably successful in its operation. Despite missing the Milestone 4 requirements, our system was fully functional by the Friday before competition. The video above shows a complete run of the maze, with all functionality working, that was taken in lab several days before the competition. We were extremely pleased with how the robot turned out. Last minute testing revealed that our robot was fairly resilient.</p>
+
+                    <p>Going into the competition, we had two known bugs. The first was that the wireless communication would occasionally drop a packet. As a result, very rarely (&lt;1% of all transmissions), we would get an empty white square. This could have been prevented by waiting for confirmation message from the second Arduino, but this made our robot significantly slower. The second was that very rarely, a fake wall would be detected - i.e. - the robot would pass an open square, and detect and display a wall there. This was extremely problematic, because it could completely ruin a run of a maze. Both of these issues, while serious, did not happen with much frequency, so we decided to live with them and restart the robot if either happened in competition.</p>
 
                     <p>Description of how the robot did on the day of competition</p>
 
                  <h2 class="text-center">We Did It!</h2>  
-                  <p>Here's a few videos of our robot mapping different mazes. The FPGA is operating independently of any computer.</p><br>
-
-                  <iframe width="560" height="315" src="https://www.youtube.com/embed/_xUV_7hdpxc" frameborder="0" allowfullscreen></iframe><br>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
