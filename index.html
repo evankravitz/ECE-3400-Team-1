@@ -576,6 +576,31 @@
 
                     <p>We had two separate power sources for our robot (united only by a common ground). A 9V battery powered our Arduino. We mounted it using velcro to some free real estate on our chassis. The Arduino 5V and 3V pins were then used to power much of the circuitry. All the sensors mounted on the PCB and protoboard were powered off of these pins (IR sensors, their corresponding amplifiers, microphone, and the Schmitt trigger). These pins can source at least a few hundred mA of current, and by our calculations we drew much less than that (cumulatively less than 20mA). We also powered our system off of a 5V power bank. We temporarily placed the power bank underneath the Arduino (raised on makeshift stilts). We built around it, and this became its final position on the robot. A USB cable fed the power to two power rails positioned on either side of the protoboard. While we did have header pins soldered onto these power rails, they proved to be an extremely ineffective variety that led to many loose wires and much frustration. We bypassed these headers by simply soldering the power lines of the line sensors, servos, and wall sensors. While this removed much of our ability to make changes to the robot, we did this at a very late stage in the process, so it did not end up being a problem. Rather, because there were two power rails, it allowed us to clean up wiring significantly.</p>
 
+                    <p>The physical pin assignments for the Arduino Uno were as follows:</p>
+                    <ul>
+                    	<li>Digital Pins:<li>
+                    		<ul>
+                    			<li>0-1: TX/RX (Did not use)</li>
+                    			<li>2: Left line sensor</li>
+                    			<li>3: Left Servo</li>
+                    			<li>4: Right line sensor</li>
+                    			<li>5: Middle line sensor</li>
+                    			<li>6: Right servo</li>
+                    			<li>7: Junction line sensor (through Schmitt Trigger)</li>
+                    			<li>8: Manual start button</li>
+                    			<li>9-13: Nordic radio</li>
+                    		</ul>
+                    	<li>Analog Pins:<li>
+                    		<ul>
+                    			<li>A0: Microphone</li>
+                    			<li>A1: Left treasure detector</li>
+                    			<li>A2: Right treasure detector</li>
+                    			<li>A3: Right wall sensor</li>
+                    			<li>A4: Front wall sensor</li>
+                    			<li>A5: Left wall sensor</li>
+                    		</ul>
+                    </ul>
+
                     <p>As one can see from the images above, we had two additional boards for circuitry - a protoboard and a PCB. The protoboard had three 'systems' on it. It had a Schmitt Trigger, which converted the analog input from the junction line sensor into a digital signal (see the Milestone 4 page for a full description of the circuit). It also had a manual start button, which simply connected 3.3V to an input pin (with a resistor in series, of course) creating an active high button we could poll. Finally, it had screw terminals for the 5V power bank to connect to. These fed into a set of power rails on either side.</p>
 
                     <img class="img-fluid img-centered" src="./resources/top_bot.JPG" alt=""> <br>
