@@ -768,7 +768,7 @@
 
         <p>Our primary focus was providing better on-screen transitions so that the square that was supposed to symbolize our robot looked like it was smoothly traversing across the grid. At the beginning, because of the way our robot turns from junction-to-junction, two packets of information would convey the same location information back to the base-station, making the robot icon to blink in place on the screen. This made it a little harder to keep your eye on the robot, so we had the FPGA check that the new "current location" information was not the same as the previous location recorded in order to make sure that it wouldn't attempt to redraw (causing the blink) the robot in the same place. </p>
 
-        <p> As you can see in the image below, there were still some kinks in our FPGA code. If you look closely, the monitor displays a small offset where the simulated walls don't quite meet. We had fixed this bug at one point, but upon switching to another monitor, were incapable of reproducing the same product. Besides the slight rightward shift, the FPGA also had small glitches, that were annoying though not detrimental to the overall real-time mapping of the maze. 
+        <p> As you can see in the image below, there were still some kinks in our FPGA code. If you look closely, the monitor displays a small offset where the simulated walls don't quite meet. We had fixed this bug at one point, but upon switching to another monitor, were incapable of reproducing the same product. Besides the slight rightward shift, the FPGA also had small glitches, that were annoying though not detrimental to the overall real-time mapping of the maze. </p>
 
 
           <img class="img-fluid img-centered" src="./resources/fpgascreen.jpg" alt=""> <br>
