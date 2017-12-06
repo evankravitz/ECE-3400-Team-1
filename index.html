@@ -647,7 +647,7 @@
 
                       <img class="img-fluid img-centered" src="./resources/dfs_diagram.jpg" alt=""> <br>
 
-                      The DFS cannot begin until the robot acquires information about its surroundings. Once this is done, the DFS begins by marking the current location in the <code> maze </code> array as explored. After this, the DFS algorithm removes the current location from the <code> frontier </code>  set. This is done so that the robot doesn't end up confusing places it has already visited with places it hasn't already visited. After this step, the robot adds unvisited surroundings nodes to the <code> frontier </code>  set. This is done so that the robot knows that there are regions of the maze that it has not yet visited, and are accessible. Next, the algorithm checks if the <code> frontier </code>  set is empty. An empty <code> frontier </code>  set indicates that the robot has visited all reachable cells. If the <code> frontier </code> set is indeed empty, it initiates the code performed when the maze navigation is complete. If the <code> frontier </code>  is not empty (i.e. there are regions of the maze that the robot knows it can visit but hasn't visited yet), the robot will update its current position and <code> visited </code> stack. This step is at the crux of the algorithm. If the robot can move to a spot that it has never visited before, it will move to this spot and push its location to the <code> visited </code> stack. If all the spots it can go to have already been visited, it will pop from the <code> visited </code> stack and move to this position. </p>
+                      The DFS cannot begin until the robot acquires information about its surroundings. Once this is done, the DFS begins by marking the current location in the <code> maze </code> array as explored. After this, the DFS algorithm removes the current location from the <code> frontier </code>  set. This is done so that the robot doesn't end up confusing places it has already visited with places it hasn't already visited. After this step, the robot adds unvisited surroundings nodes to the <code> frontier </code>  set. This is done so that the robot knows that there are regions of the maze that it has not yet visited, and are accessible. Next, the algorithm checks if the <code> frontier </code>  set is empty. An empty <code> frontier </code>  set indicates that the robot has visited all reachable cells. If the <code> frontier </code> set is indeed empty, it initiates the code performed when the maze navigation is complete. If the <code> frontier </code>  is not empty (i.e. there are regions of the maze that the robot knows it can visit but hasn't visited yet), the robot will update its current position and <code> visited </code> stack. This step is at the crux of the algorithm. If the robot can move to a spot that it has never visited before, it will move to this spot and push its location to the <code> visited </code> stack. If all the spots it can go to have already been visited, it will pop from the <code> visited </code> stack and set move to this position. </p>
 
                       <p> This algorithm guarantees that the robot will be able to traverse all reachable cells from the initial position in which it is placed. However, this algorithm makes no guaranetees as to the efficiency of the route taken. </p> 
 
@@ -671,7 +671,7 @@
                      <p>Our robot had to be equipped with the ability to accurately detect modulating IR frequencies emitted by "treasures" on the maze walls at junctions. In order to improve the accuracy of the detection, we essentially take 30 samples of the signal coming from the treasure detection circuit, and determine the treasure identity from a vote of all 30 samples. Here's a diagram that depicts this process. 
 
                      <img class="img-fluid img-centered" src="./resources/treasuredetectiondiagram.png" alt=""> <br> 
-                    The treasure detection querries the analog inputs and generates 30 FFTs and 30 frequency predictions for each input. Afterwards, the program votes on which frequency is dominant. In order for, say, the program to determine that a treasure is not next to it, the plurality of votes from both sensors must indicate that no treasure is nearby. For a 7/12/17 kHz frequency to be determined to be present, the plurality of votes from the left sensor must indicate a 7/12/17 kHz frequency and the plurality of votes from the right sensor must indicate there being no treasure/frequency, or vice-versa. If the vote yields conclusive results, then the robot detection code is terminated and the variable corresponding to the treasure frequency is set appropriately. If the vote is inconclusive (rarely happens), then the 30 samples are re-acquired and the vote is reconducted.
+                    The treasure detection querries the analog inputs and generates 30 FFTs and 30 frequency predictions for each input. Afterwards, the program votes on which frequency is dominant. In order for, say, the program to determine that a treasure is not next to it, the plurality of votes from both sensors must indicate that no treasure is nearby. For a 7/12/17 kHz frequency to be determined to be present, the plurality of votes from the left sensor must indicate a 7/12/17 kHz frequency and the plurality of votes from the right sensor must indicate there being no treasure/frequency, or vice-versa. If the vote yields conclusive results, then the robot detection code is terminated and the variable corresponding to the treasure frequency is set appropriately. If the vote is inconclusive (rarely happens), then the 30 samples are reaquirred and the vote is reconducted.
 
                      </p>
 
@@ -681,7 +681,7 @@
                    <img class="img-fluid img-centered" src="./resources/BaseStation.JPG" alt=""> <br>
 
                    <h4> Robot To Base Station </h4>
-                   <p> In order for the robot to talk to the base station, we had to write code in Arduino that would synethesize information pertaining to its current location and surroundings and send it to the Arduino base station. Here is a diagram depicting the transmission protocol: </p>
+                   <p> In order for the robot to talk to the base station, we had to write code in Arduino that would synethesize information pertaining to its current location and surroundings to the Arduino base station. Here is a diagram depicting the transmission protocol: </p>
 
                    <img class="img-fluid img-centered" src="./resources/transmissionRobotDiagram.png" alt=""> <br>
 
@@ -762,7 +762,17 @@
                             treasure = arduinoInput[1:0];</ul><br>
                           end </ul><br>
                       end </code><br>
-        
+       <p> The final FPGA display did not end up being much different than the implementation seen in Milestone 4. The same overall structure applies--black lines represent walls, light pink squares are explored spaces, white squares are unexplored, a smaller magenta square in the middle of a square represents the current location of our robot, a small red mark on a square indicates a 7 Hz treasure, a small green mark indicates a 12 Hz treasure, and a small blue mark indicates a 17 Hz treasure. At the end, when our robot is done exploring the maze (or all that it was capable of accessing), the robot icon is turned black and three tones play on the speakers. Any squares that are still white at that point represent unreachable areas on the map. </p>
+
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/-Qsh83evmcE" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+
+        <p>Our primary focus was providing better on-screen transitions so that the square that was supposed to symbolize our robot looked like it was smoothly traversing across the grid. At the beginning, because of the way our robot turns from junction-to-junction, two packets of information would convey the same location information back to the base-station, making the robot icon to blink in place on the screen. This made it a little harder to keep your eye on the robot, so we had the FPGA check that the new "current location" information was not the same as the previous location recorded in order to make sure that it wouldn't attempt to redraw (causing the blink) the robot in the same place. </p>
+
+        <p> As you can see in the image below, there were still some kinks in our FPGA code. If you look closely, the monitor displays a small offset where the simulated walls don't quite meet. We had fixed this bug at one point, but upon switching to another monitor, were incapable of reproducing the same product. Besides the slight rightward shift, the FPGA also had small glitches, that were annoying though not detrimental to the overall real-time mapping of the maze. 
+
+
+          <img class="img-fluid img-centered" src="./resources/fpgapreview.jpg" alt=""> <br>
+
         
   
                     
@@ -1797,9 +1807,7 @@ radio.setDataRate(RF24_2MBPS);
 
 <p>Here is a video of one arduino sending the entire maze to another: </p><br>
 
-<video width="460" height="270" controls preload> 
-    <source src="resources/maze.mp4"></source> 
-</video>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/y53XXv9cR8I" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
 <h6> For sending and receiving maze updates via individual coordinate points: </h6>
 <p>When sending maze updates, one arduino sent a 1x3 array of unsigned chars--the first two chars being the maze coordinates, and the third being new information that corresponded with that data point. The second arduino had a 5x5 maze array initialized on it so that the correct coordinate could be updated to reflect the incoming information as it was received. </p><br>
@@ -1821,9 +1829,7 @@ maze[updates[0]][updates[1]]=updates[2];<br>
 
 <p>Here is a video of the maze updates being sent from one Arduino to another: </p><br>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/updates.mp4"></source> 
-</video><br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_tgkwoed0Dw" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
 
 <h5> Sending information from base station to FPGA </h5>
@@ -1980,9 +1986,7 @@ end
 
  <p>Here is a video of this incrementation: </p> <br>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/first.mp4"></source> 
-</video><br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JUII_ee_oFA" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
 <h5> FPGA Communication with Arduino</h5><br>
 
@@ -2023,9 +2027,7 @@ endmodule
 
 <p>We were able to successfully communicate information wirelessly from one Arduino to another, then display it on a screen using the FPGA. See the below video:
 </p><br>
-<video width="460" height="270" controls preload> 
-    <source src="./resources/second.mp4"></source> 
-</video><br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/t0cLDFkS9FU" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
  
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
@@ -2295,9 +2297,7 @@ void loop() { <br>
 <p>Here's a video of Evan demonstrating the functionality of the circuit and Arduino code:
 </p>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/Treasure_Detection.mp4"></source> 
-</video> <br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/w5iABs7IJ5A" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe> <br>
 
 
 <h4 class='text-left'>Distance Sensing</h4>
@@ -2347,9 +2347,7 @@ wall detection using short range sensors. </p>
 <code><br>
 <p>Here is a brief video of the robot with the integrated distance sensor. As it approaches the wall, it turns at the closest junction. </p>
 
-<video width="460" height="270" controls preload> 
-    <source src="./resources/IMG_0780.mp4"></source> 
-</video> <br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Q4XXFkIMMbo" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe> <br>
 
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
                     <i class="fa fa-times"></i>
@@ -2465,7 +2463,7 @@ wall detection using short range sensors. </p>
                       There are important considerations to keep in mind as we implement this algorithm in Arduino. Most importantly, we have severe memory restrictions in Arduino. We won't have the luxury of using memory-intensive objects to store maze data. This means that instead of using Strings and integers, which take several bytes to encode, we will likely just use Char's, which are encoded in 1 byte. We will also have to deal with the fact that Arduino doesn't come with Stacks or Set data structures, so we will have to either import an external library that implements these objects, or create our own implementation. Another thing to keep in mind is how the robot will detect its surroundings. It won't simply check values in an array. Instead, it will only be able to tell if there's a wall right next to it. We will have to create a system for translating the presence of walls next to the robot into coordinates in the maze. </p>
 
                       <h4> Video of simulation </h4>
-                      <iframe width="560" height="315" src="https://www.youtube.com/embed/hnOv52taBwk" frameborder="0" allowfullscreen></iframe>
+                      <iframe width="560" height="315" src="https://www.youtube.com/embed/hnOv52taBwk" frameborder="0" allowfullscreen></iframe> <br>
 
                   <h3>Physical Implementation</h3>
                     <p>Moving out of the realm of simulation, our team needed to put in a lot of work to properly get our robot 
@@ -2581,9 +2579,8 @@ wall detection using short range sensors. </p>
                   
                   <p>After implementing the above, and playing around with our servo turn values a bit more, we created a robust turning and wall detection implementation. Here's a video of this implementation:</p>
                   
-                  <video width="460" height="270" controls preload> 
-                      <source src="./resources/face.mp4"></source> 
-                   </video> <br>
+
+                  <iframe width="560" height="315" src="https://www.youtube.com/embed/NQ4lBzG8pRw" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
                   <p>We still need to work out some kinks with left turns, but we are able to navigate the maze! In the future, we will work to implement a more comprehensive maze mapping behavior, which we did not do in this iteration.</p>
                   <button class="btn btn-primary" data-dismiss="modal" type="button">
