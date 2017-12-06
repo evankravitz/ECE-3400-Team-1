@@ -671,7 +671,7 @@
                      <p>Our robot had to be equipped with the ability to accurately detect modulating IR frequencies emitted by "treasures" on the maze walls at junctions. In order to improve the accuracy of the detection, we essentially take 30 samples of the signal coming from the treasure detection circuit, and determine the treasure identity from a vote of all 30 samples. Here's a diagram that depicts this process. 
 
                      <img class="img-fluid img-centered" src="./resources/treasuredetectiondiagram.png" alt=""> <br> 
-                    The treasure detection querries the analog inputs and generates 30 FFTs and 30 frequency predictions for each input. Afterwards, the program votes on which frequency is dominant. In order for, say, the program to determine that a treasure is not next to it, the plurality of votes from both sensors must indicate that no treasure is nearby. For a 7/12/17 kHz frequency to be determined to be present, the plurality of votes from the left sensor must indicate a 7/12/17 kHz frequency and the plurality of votes from the right sensor must indicate there being no treasure/frequency, or vice-versa. If the vote yields conclusive results, then the robot detection code is terminated and the variable corresponding to the treasure frequency is set appropriately. If the vote is inconclusive (rarely happens), then the 30 samples are reaquirred and the vote is reconducted.
+                    The treasure detection querries the analog inputs and generates 30 FFTs and 30 frequency predictions for each input. Afterwards, the program votes on which frequency is dominant. In order for, say, the program to determine that a treasure is not next to it, the plurality of votes from both sensors must indicate that no treasure is nearby. For a 7/12/17 kHz frequency to be determined to be present, the plurality of votes from the left sensor must indicate a 7/12/17 kHz frequency and the plurality of votes from the right sensor must indicate there being no treasure/frequency, or vice-versa. If the vote yields conclusive results, then the robot detection code is terminated and the variable corresponding to the treasure frequency is set appropriately. If the vote is inconclusive (rarely happens), then the 30 samples are re-acquired and the vote is reconducted.
 
                      </p>
 
@@ -681,7 +681,7 @@
                    <img class="img-fluid img-centered" src="./resources/BaseStation.JPG" alt=""> <br>
 
                    <h4> Robot To Base Station </h4>
-                   <p> In order for the robot to talk to the base station, we had to write code in Arduino that would synethesize information pertaining to its current location and surroundings to the Arduino base station. Here is a diagram depicting the transmission protocol: </p>
+                   <p> In order for the robot to talk to the base station, we had to write code in Arduino that would synethesize information pertaining to its current location and surroundings and send it to the Arduino base station. Here is a diagram depicting the transmission protocol: </p>
 
                    <img class="img-fluid img-centered" src="./resources/transmissionRobotDiagram.png" alt=""> <br>
 
